@@ -24,28 +24,28 @@ const Section3 = () => {
       <Grid container spacing={3}>
         {/* WEEKLY SALE CHART */}
         <Grid item xl={3} lg={3} md={6} xs={12}>
-          <Card2 title="Weekly Sales" percentage="25.25%" amount={currency(10240, 0)}>
+          <Card2 title="주간 판매량" percentage="25.25%" amount={currency(10240, 0)}>
             <ReactApexChart type="bar" height={100} series={series} options={options.weeklyChartOptions(theme)} />
           </Card2>
         </Grid>
 
         {/* PRODUCT SHARE CHART */}
         <Grid item xl={3} lg={3} md={6} xs={12}>
-          <Card2 title="Product Share" percentage="10.25%" amount="39.56%">
+          <Card2 title="상품 평균가격" percentage="10.25%" amount="39.56%">
             <ReactApexChart height={130} series={[75]} type="radialBar" options={options.productShareChartOptions(theme)} />
           </Card2>
         </Grid>
 
         {/* TOTAL ORDERS CHART */}
         <Grid item xl={3} lg={3} md={6} xs={12}>
-          <Card2 title="Total Order" percentage="2.65%" amount={currency(12260, 0)}>
+          <Card2 title="전체 주문건수" percentage="2.65%" amount={currency(12260, 0)}>
             <ReactApexChart type="area" height={80} series={totalOrderseries} options={options.totalOrderChartOptions(theme)} />
           </Card2>
         </Grid>
 
         {/* MARKET SHARE CHART */}
         <Grid item xl={3} lg={3} md={6} xs={12}>
-          <Card2 title="Market Share" percentage="2.65%" amount={currency(14260, 0)}>
+          <Card2 title="수수료 매출 금액" percentage="2.65%" amount={currency(14260, 0)}>
             <ReactApexChart height={130} type="radialBar" series={[44, 55, 67]} options={options.marketShareChartOptions(theme)} />
           </Card2>
         </Grid>

@@ -45,7 +45,6 @@ const CategoryMenu = ({
       onClick: toggleMenu,
       className: `${children.props.className}`
     })}
-
       <CategoryMenuCard open={open} />
     </Wrapper>;
 };

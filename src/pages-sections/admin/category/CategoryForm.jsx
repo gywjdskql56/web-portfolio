@@ -44,20 +44,20 @@ const CategoryForm = props => {
       }) => <form onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid item sm={6} xs={12}>
-                <TextField fullWidth name="name" label="Name" color="info" size="medium" placeholder="Name" value={values.name} onBlur={handleBlur} onChange={handleChange} error={!!touched.name && !!errors.name} helperText={touched.name && errors.name} />
+                <TextField fullWidth name="name" label="카테고리명" color="info" size="medium" placeholder="카테고리명" value={values.name} onBlur={handleBlur} onChange={handleChange} error={!!touched.name && !!errors.name} helperText={touched.name && errors.name} />
               </Grid>
 
               <Grid item sm={6} xs={12}>
-                <TextField select fullWidth color="info" size="medium" name="parent" onBlur={handleBlur} value={values.parent} onChange={handleChange} placeholder="Parent Category" label="Select Parent Category" SelectProps={{
+                <TextField select fullWidth color="info" size="medium" name="parent" onBlur={handleBlur} value={values.parent} onChange={handleChange} placeholder="상위 카테고리" label="상위 카테고리를 선택해주세요." SelectProps={{
               multiple: true
             }}>
-                  <MenuItem value="electronics">Electronics</MenuItem>
-                  <MenuItem value="fashion">Fashion</MenuItem>
+                  <MenuItem value="electronics">패키지</MenuItem>
+                  <MenuItem value="fashion">병원만</MenuItem>
                 </TextField>
               </Grid>
 
               <Grid item xs={12}>
-                <DropZone title="Drop & drag category image" onChange={files => handleChangeDropZone(files)} />
+                <DropZone title="카테고리 이미지를 업로드해주세요." onChange={files => handleChangeDropZone(files)} />
 
                 <FlexBox flexDirection="row" mt={2} flexWrap="wrap" gap={1}>
                   {files.map((file, index) => {
@@ -70,7 +70,7 @@ const CategoryForm = props => {
               </Grid>
 
               <Grid item sm={6} xs={12}>
-                <FormControlLabel label="Featured Category" control={<Checkbox color="info" name="featured" onBlur={handleBlur} onChange={handleChange} value={values.featured} />} />
+                <FormControlLabel label="추천 카테고리" control={<Checkbox color="info" name="featured" onBlur={handleBlur} onChange={handleChange} value={values.featured} />} />
               </Grid>
 
               {/* <Grid item sm={6} xs={12}>
@@ -92,7 +92,7 @@ const CategoryForm = props => {
 
               <Grid item xs={12}>
                 <Button variant="contained" color="info" type="submit">
-                  Save category
+                  저장
                 </Button>
               </Grid>
             </Grid>

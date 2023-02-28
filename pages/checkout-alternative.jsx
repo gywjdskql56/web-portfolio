@@ -1,10 +1,10 @@
 import { Container, Grid } from "@mui/material";
-import ShopLayout2 from "components/layouts/ShopLayout2";
+import ShopLayout1 from "components/layouts/ShopLayout1";
 import SEO from "components/SEO";
 import CheckoutForm2 from "pages-sections/checkout/CheckoutForm2";
 import CheckoutSummary2 from "pages-sections/checkout/CheckoutSummary2";
 const CheckoutAlternative = () => {
-  return <ShopLayout2>
+  return <ShopLayout1>
       <SEO title="Checkout alternative" />
       <Container sx={{
       my: "1.5rem"
@@ -19,6 +19,6 @@ const CheckoutAlternative = () => {
           </Grid>
         </Grid>
       </Container>
-    </ShopLayout2>;
+    </ShopLayout1>;
 };
 export default CheckoutAlternative;

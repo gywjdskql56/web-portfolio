@@ -44,10 +44,10 @@ const ProductForm = props => {
       }) => <form onSubmit={handleSubmit}>
             <Grid container spacing={3}>
               <Grid item sm={6} xs={12}>
-                <TextField fullWidth name="name" label="Name" color="info" size="medium" placeholder="Name" value={values.name} onBlur={handleBlur} onChange={handleChange} error={!!touched.name && !!errors.name} helperText={touched.name && errors.name} />
+                <TextField fullWidth name="name" label="상품명" color="info" size="medium" placeholder="상품명" value={values.name} onBlur={handleBlur} onChange={handleChange} error={!!touched.name && !!errors.name} helperText={touched.name && errors.name} />
               </Grid>
               <Grid item sm={6} xs={12}>
-                <TextField select fullWidth color="info" size="medium" name="category" onBlur={handleBlur} placeholder="Category" onChange={handleChange} value={values.category} label="Select Category" SelectProps={{
+                <TextField select fullWidth color="info" size="medium" name="category" onBlur={handleBlur} placeholder="카테고리" onChange={handleChange} value={values.category} label="카테고리를 선택해주세요." SelectProps={{
               multiple: true
             }} error={!!touched.category && !!errors.category} helperText={touched.category && errors.category}>
                   <MenuItem value="electronics">Electronics</MenuItem>
@@ -69,24 +69,24 @@ const ProductForm = props => {
               </Grid>
 
               <Grid item xs={12}>
-                <TextField rows={6} multiline fullWidth color="info" size="medium" name="description" label="Description" onBlur={handleBlur} onChange={handleChange} placeholder="Description" value={values.description} error={!!touched.description && !!errors.description} helperText={touched.description && errors.description} />
+                <TextField rows={6} multiline fullWidth color="info" size="medium" name="description" label="상품 상세 설명" onBlur={handleBlur} onChange={handleChange} placeholder="Description" value={values.description} error={!!touched.description && !!errors.description} helperText={touched.description && errors.description} />
               </Grid>
               <Grid item sm={6} xs={12}>
-                <TextField fullWidth name="stock" color="info" size="medium" label="Stock" placeholder="Stock" onBlur={handleBlur} value={values.stock} onChange={handleChange} error={!!touched.stock && !!errors.stock} helperText={touched.stock && errors.stock} />
+                <TextField fullWidth name="stock" color="info" size="medium" label="수량" placeholder="수량" onBlur={handleBlur} value={values.stock} onChange={handleChange} error={!!touched.stock && !!errors.stock} helperText={touched.stock && errors.stock} />
               </Grid>
               <Grid item sm={6} xs={12}>
-                <TextField fullWidth name="tags" label="Tags" color="info" size="medium" placeholder="Tags" onBlur={handleBlur} value={values.tags} onChange={handleChange} error={!!touched.tags && !!errors.tags} helperText={touched.tags && errors.tags} />
+                <TextField fullWidth name="tags" label="태그" color="info" size="medium" placeholder="태그" onBlur={handleBlur} value={values.tags} onChange={handleChange} error={!!touched.tags && !!errors.tags} helperText={touched.tags && errors.tags} />
               </Grid>
               <Grid item sm={6} xs={12}>
-                <TextField fullWidth name="price" color="info" size="medium" type="number" onBlur={handleBlur} value={values.price} label="Regular Price" onChange={handleChange} placeholder="Regular Price" error={!!touched.price && !!errors.price} helperText={touched.price && errors.price} />
+                <TextField fullWidth name="price" color="info" size="medium" type="number" onBlur={handleBlur} value={values.price} label="정가" onChange={handleChange} placeholder="Regular Price" error={!!touched.price && !!errors.price} helperText={touched.price && errors.price} />
               </Grid>
               <Grid item sm={6} xs={12}>
-                <TextField fullWidth color="info" size="medium" type="number" name="sale_price" label="Sale Price" onBlur={handleBlur} onChange={handleChange} placeholder="Sale Price" value={values.sale_price} error={!!touched.sale_price && !!errors.sale_price} helperText={touched.sale_price && errors.sale_price} />
+                <TextField fullWidth color="info" size="medium" type="number" name="sale_price" label="판매 가격" onBlur={handleBlur} onChange={handleChange} placeholder="Sale Price" value={values.sale_price} error={!!touched.sale_price && !!errors.sale_price} helperText={touched.sale_price && errors.sale_price} />
               </Grid>
 
               <Grid item sm={6} xs={12}>
                 <Button variant="contained" color="info" type="submit">
-                  Save product
+                  저장하기
                 </Button>
               </Grid>
             </Grid>

@@ -8,7 +8,7 @@ const StyledBox = styled(FlexBetween)(({
   theme
 }) => ({
   ".title": {
-    fontSize: 50,
+    fontSize: 40,
     marginTop: 0,
     lineHeight: 1.2,
     marginBottom: "1.35rem"
@@ -54,7 +54,7 @@ const CarouselCard1 = ({
   buttonLik,
   buttonText,
   description,
-  buttonColor = "primary"
+  buttonColor = "info"
 }) => {
   return <StyledBox>
       <Grid container spacing={3} alignItems="center" justifyContent="center">

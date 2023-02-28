@@ -64,7 +64,7 @@ export default function AccountSetting() {
     console.log(values.city);
   };
   return <Box py={4}>
-      <H3 mb={2}>Account Setting</H3>
+      <H3 mb={2}>계정 설정</H3>
 
       <Card sx={{
       p: 4
@@ -106,33 +106,33 @@ export default function AccountSetting() {
               <Box mb={4}>
                 <Grid container spacing={3}>
                   <Grid item md={6} xs={12}>
-                    <TextField fullWidth color="info" size="medium" name="first_name" label="First Name" onBlur={handleBlur} onChange={handleChange} value={values.first_name} error={!!touched.first_name && !!errors.first_name} helperText={touched.first_name && errors.first_name} />
+                    <TextField fullWidth color="info" size="medium" name="first_name" label="이름" onBlur={handleBlur} onChange={handleChange} value={values.first_name} error={!!touched.first_name && !!errors.first_name} helperText={touched.first_name && errors.first_name} />
                   </Grid>
 
                   <Grid item md={6} xs={12}>
-                    <TextField fullWidth color="info" size="medium" name="last_name" label="Last Name" onBlur={handleBlur} onChange={handleChange} value={values.last_name} error={!!touched.last_name && !!errors.last_name} helperText={touched.last_name && errors.last_name} />
+                    <TextField fullWidth color="info" size="medium" name="last_name" label="성" onBlur={handleBlur} onChange={handleChange} value={values.last_name} error={!!touched.last_name && !!errors.last_name} helperText={touched.last_name && errors.last_name} />
                   </Grid>
 
                   <Grid item md={6} xs={12}>
-                    <TextField fullWidth color="info" name="email" type="email" label="Email" size="medium" onBlur={handleBlur} value={values.email} onChange={handleChange} error={!!touched.email && !!errors.email} helperText={touched.email && errors.email} />
+                    <TextField fullWidth color="info" name="email" type="email" label="이메일" size="medium" onBlur={handleBlur} value={values.email} onChange={handleChange} error={!!touched.email && !!errors.email} helperText={touched.email && errors.email} />
                   </Grid>
 
                   <Grid item md={6} xs={12}>
-                    <TextField fullWidth type="tel" color="info" size="medium" name="contact" label="Phone" onBlur={handleBlur} value={values.contact} onChange={handleChange} error={!!touched.contact && !!errors.contact} helperText={touched.contact && errors.contact} />
+                    <TextField fullWidth type="tel" color="info" size="medium" name="contact" label="휴대폰번호" onBlur={handleBlur} value={values.contact} onChange={handleChange} error={!!touched.contact && !!errors.contact} helperText={touched.contact && errors.contact} />
                   </Grid>
 
                   <Grid item md={6} xs={12}>
-                    <Autocomplete fullWidth disablePortal options={countryList} value={values.country} getOptionLabel={option => option.label} onChange={(_, value) => setFieldValue("country", value)} renderInput={params => <TextField color="info" label="Country" variant="outlined" placeholder="Select Country" error={!!touched.country && !!errors.country} helperText={touched.country && errors.country} {...params} size="medium" />} />
+                    <Autocomplete fullWidth disablePortal options={countryList} value={values.country} getOptionLabel={option => option.label} onChange={(_, value) => setFieldValue("country", value)} renderInput={params => <TextField color="info" label="나라" variant="outlined" placeholder="Select Country" error={!!touched.country && !!errors.country} helperText={touched.country && errors.country} {...params} size="medium" />} />
                   </Grid>
 
                   <Grid item md={6} xs={12}>
-                    <TextField fullWidth name="city" label="City" color="info" size="medium" onBlur={handleBlur} value={values.city} onChange={handleChange} error={!!touched.city && !!errors.city} helperText={touched.city && errors.city} />
+                    <TextField fullWidth name="city" label="도시" color="info" size="medium" onBlur={handleBlur} value={values.city} onChange={handleChange} error={!!touched.city && !!errors.city} helperText={touched.city && errors.city} />
                   </Grid>
                 </Grid>
               </Box>
 
               <Button type="submit" variant="contained" color="info">
-                Save Changes
+                저장
               </Button>
             </form>}
         </Formik>

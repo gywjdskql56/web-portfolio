@@ -12,13 +12,13 @@ const OrderRow = ({
 }) => {
   const getColor = status => {
     switch (status) {
-      case "Pending":
+      case "주문 접수":
         return "secondary";
-      case "Processing":
+      case "주문처리중":
         return "secondary";
-      case "Delivered":
+      case "예약확정":
         return "success";
-      case "Cancelled":
+      case "주문취소":
         return "error";
       default:
         return "";
@@ -44,7 +44,7 @@ const OrderRow = ({
           </Box>
 
           <Typography className="pre" m={0.75} textAlign="left">
-            {format(new Date(order.createdAt), "MMM dd, yyyy")}
+            {format(new Date(order.createdAt), "yyyy-MM-dd")}
           </Typography>
 
           <Typography m={0.75} textAlign="left">

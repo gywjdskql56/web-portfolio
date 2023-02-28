@@ -52,46 +52,46 @@ export const productReviews = [{
 // refund request list
 export const refundRequest = [{
   orderNo: "6ed34Edf65d",
-  shopName: "Shopify Store",
+  shopName: "하나투어",
   amount: 250,
-  status: "Accepted",
-  name: "Samsung Galaxy-M1",
-  image: "/assets/images/products/samsung.png"
+  status: "입금완료",
+  name: "상품명",
+  image: "/assets/images/products/Package/img_8.png"
 }, {
   orderNo: "6ed34Edf65d",
-  shopName: "Shopify Store",
+  shopName: "하나투어",
   amount: 250,
-  status: "Accepted",
-  name: "Tomatto",
-  image: "/assets/images/products/tomato.png"
+  status: "입금완료",
+  name: "상품명",
+  image: "/assets/images/products/Package/img_8.png"
 }, {
   orderNo: "6ed34Edf65d",
-  shopName: "Shopify Store",
+  shopName: "하나투어",
   amount: 24,
-  status: "Pending",
-  name: "Boston Round Cream Pack",
-  image: "/assets/images/products/beauty-cream.png"
+  status: "요청확인중",
+  name: "상품명",
+  image: "/assets/images/products/Package/img_8.png"
 }, {
   orderNo: "6ed34Edf65d",
-  shopName: "Shopify Store",
+  shopName: "하나투어",
   amount: 250,
-  status: "Processing",
-  name: "Woman Party Dress",
-  image: "/assets/images/products/red-dress.png"
+  status: "처리진행중",
+  name: "상품명",
+  image: "/assets/images/products/Package/img_8.png"
 }, {
   orderNo: "6ed34Edf65d",
-  shopName: "Shopify Store",
+  shopName: "하나투어",
   amount: 250,
-  status: "Accepted",
-  name: "White Tops",
-  image: "/assets/images/products/white-tops.png"
+  status: "입금완료",
+  name: "상품명",
+  image: "/assets/images/products/Package/img_8.png"
 }, {
   orderNo: "6ed34Edf65d",
-  shopName: "Shopify Store",
+  shopName: "하나투어",
   amount: 450,
-  status: "Processing",
-  name: "Casual Shirt for Man",
-  image: "/assets/images/products/formal-shirt.png"
+  status: "처리진행중",
+  name: "상품명",
+  image: "/assets/images/products/Package/img_8.png"
 }];
 
 // payout request list
@@ -99,54 +99,54 @@ export const payoutRequests = [{
   no: 1,
   amount: 1200,
   date: "20-04-2022",
-  status: "Accepted",
-  message: "I am requested to payout this amount of money."
+  status: "입금완료",
+  message: "대금 요청드립니다."
 }, {
   no: 2,
   amount: 250,
   date: "19-04-2022",
-  status: "Pending",
-  message: "I am requested to payout this amount of money."
+  status: "요청확인중",
+  message: "대금 요청드립니다."
 }, {
   no: 3,
   amount: 9300,
   date: "17-04-2022",
-  status: "Processing",
-  message: "I am requested to payout this amount of money."
+  status: "입금처리중",
+  message: "대금 요청드립니다."
 }, {
   no: 4,
   amount: 2200,
   date: "14-04-2022",
-  status: "Pending",
-  message: "I am requested to payout this amount of money."
+  status: "요청확인중",
+  message: "대금 요청드립니다."
 }, {
   no: 5,
   amount: 700,
   date: "08-04-2022",
-  status: "Accepted",
-  message: "I am requested to payout this amount of money."
+  status: "입금완료",
+  message: "대금 요청드립니다."
 }, {
   no: 6,
   amount: 930,
   date: "01-04-2022",
-  status: "Pending",
-  message: "I am requested to payout this amount of money."
+  status: "요청확인중",
+  message: "대금 요청드립니다."
 }, {
   no: 7,
   amount: 450,
   date: "26-03-2022",
-  status: "Processing",
-  message: "I am requested to payout this amount of money."
+  status: "입금처리중",
+  message: "대금 요청드립니다."
 }, {
   no: 8,
   amount: 360,
   date: "16-03-2022",
-  status: "Accepted",
-  message: "I am requested to payout this amount of money."
+  status: "입금완료",
+  message: "대금 요청드립니다."
 }, {
   no: 9,
   amount: 120,
   date: "12-03-2022",
-  status: "Pending",
-  message: "I am requested to payout this amount of money."
+  status: "요청확인중",
+  message: "대금 요청드립니다."
 }];

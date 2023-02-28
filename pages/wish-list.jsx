@@ -24,23 +24,24 @@ const WishList = props => {
     setCurrentPage(page);
     router.push(`?page=${page}`);
   };
+  const productPartial = productDatabase.slice(0,1);
 
   // SECTION HEADER TITLE LINK
   const HEADER_BUTTON = <Button color="primary" sx={{
     px: 4,
     bgcolor: "primary.light"
   }}>
-      Add All to Cart
+      장바구니에 모두 추가하기
     </Button>;
   return <CustomerDashboardLayout>
       <SEO title="Wishlist" />
 
       {/* TOP HEADER AREA */}
-      <UserDashboardHeader icon={Favorite} title="My Wish List" button={HEADER_BUTTON} navigation={<CustomerDashboardNavigation />} />
+      <UserDashboardHeader icon={Favorite} title="위시리스트" button={HEADER_BUTTON} navigation={<CustomerDashboardNavigation />} />
 
       {/* PRODUCT LIST AREA */}
       <Grid container spacing={3}>
-        {products.map(item => <Grid item lg={4} sm={6} xs={12} key={item.id}>
+        {productPartial.map(item => <Grid item lg={4} sm={6} xs={12} key={item.id}>
             <ProductCard1 id={item.id} slug={item.slug} title={item.title} price={item.price} rating={item.rating} imgUrl={item.thumbnail} discount={item.discount} />
           </Grid>)}
       </Grid>

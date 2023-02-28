@@ -19,7 +19,9 @@ import MobileMenu from "components/navbar/MobileMenu";
 import { FlexBetween, FlexBox } from "components/flex-box";
 import CategoryMenu from "components/categories/CategoryMenu";
 import ShoppingBagOutlined from "components/icons/ShoppingBagOutlined";
-import { Tab } from '@headlessui/react'
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+
 
 // styled component
 export const HeaderWrapper = styled(Box)(({
@@ -36,7 +38,7 @@ export const HeaderWrapper = styled(Box)(({
 }));
 const StyledContainer = styled(Container)({
   gap: 2,
-  height: "100%",
+  height: "50%",
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between"
@@ -63,6 +65,10 @@ const Header = ({
   const toggleDialog = () => setDialogOpen(!dialogOpen);
   const toggleSidenav = () => setSidenavOpen(!sidenavOpen);
   const toggleSearchBar = () => setSearchBarOpen(!searchBarOpen);
+  const [value, setValue] = useState('one');
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   // LOGIN AND MINICART DRAWER
   const DIALOG_DRAWER = <Fragment>
@@ -96,81 +102,25 @@ const Header = ({
             {/* MIDDLE CONTENT - LOGO */}
             <Link href="/">
               <a>
-                <Image height={44} src="/assets/images/bazaar-black-sm.svg" alt="logo" />
+                <Image height={44} src="/assets/images/magi_logo.png" alt="logo" />
               </a>
             </Link>
-
-            {/* RIGHT CONTENT - LOGIN, CART, SEARCH BUTTON */}
-            <FlexBox justifyContent="end" flex={1}>
-              <Box component={IconButton} onClick={toggleSearchBar}>
-                <Icon.Search sx={ICON_STYLE} />
-              </Box>
-
-              <Box component={IconButton} onClick={toggleDialog}>
-                <Icon.User sx={ICON_STYLE} />
-              </Box>
-
-              <Box component={IconButton} onClick={toggleSidenav}>
-                <Badge badgeContent={state.cart.length} color="primary">
-                  <Icon.CartBag sx={ICON_STYLE} />
-                </Badge>
-              </Box>
-            </FlexBox>
-          </FlexBetween>
-
-          {/* SEARCH FORM DRAWER */}
-          <Drawer open={searchBarOpen} anchor="top" onClose={toggleSearchBar} sx={{
-          zIndex: 9999
-        }}>
-            <Box sx={{
-            width: "auto",
-            padding: 2,
-            height: "100vh"
-          }}>
-              <FlexBetween mb={1}>
-                <Paragraph>Search to Bazaar</Paragraph>
-
-                <IconButton onClick={toggleSearchBar}>
-                  <Clear />
-                </IconButton>
-              </FlexBetween>
-
-              {/* CATEGORY BASED SEARCH FORM */}
-              {searchInput}
-            </Box>
-          </Drawer>
-
-          {/* LOGIN FORM DIALOG AND CART SIDE BAR  */}
-          {DIALOG_DRAWER}
+           </FlexBetween>
         </StyledContainer>
-{/*       <div className="w-full max-w-md px-2 py-16 sm:px-0"> */}
-{/*         <Tab.Group> */}
-{/*           <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1"> */}
-{/*             <Tab>Tab 1</Tab> */}
-{/*             <Tab>Tab 2</Tab> */}
-{/*             <Tab>Tab 3</Tab> */}
-{/*           </Tab.List> */}
-{/*           <Tab.Panels> */}
-{/*             <Tab.Panel>Content 1</Tab.Panel> */}
-{/*             <Tab.Panel>Content 2</Tab.Panel> */}
-{/*             <Tab.Panel>Content 3</Tab.Panel> */}
-{/*           </Tab.Panels> */}
-{/*         </Tab.Group> */}
-{/*       </div> */}
       </HeaderWrapper>;
   }
   return <HeaderWrapper className={clsx(className)}>
       <StyledContainer>
         {/* LEFT CONTENT - LOGO AND CATEGORY */}
-        <FlexBox mr={2} minWidth="170px" alignItems="center">
-          <Link href="/">
+        <FlexBox mr={2} minWidth="150px" alignItems="center">
+          <Link href="/home">
             <a>
-              <Image height={44} src="/assets/images/logo2.svg" alt="logo" />
+              <Image height={44} src="/assets/images/magi_logo.png" alt="logo" />
             </a>
           </Link>
 
           {/* SHOW DROP DOWN CATEGORY BUTTON WHEN HEADER FIXED */}
-          {isFixed && <CategoryMenu>
+          {/* {isFixed && <CategoryMenu>
               <FlexBox color="grey.600" alignItems="center" ml={2}>
                 <Button color="inherit">
                   <Category fontSize="small" color="inherit" />
@@ -178,15 +128,15 @@ const Header = ({
                 </Button>
               </FlexBox>
             </CategoryMenu>}
-        </FlexBox>
+        </FlexBox>*/}
 
         {/* SEARCH FORM */}
-        <FlexBox justifyContent="center" flex="1 1 0">
+        {/* <FlexBox justifyContent="center" flex="1 1 0">
           {searchInput}
-        </FlexBox>
+        </FlexBox>*/}
 
         {/* LOGIN AND CART BUTTON */}
-        <FlexBox gap={1.5} alignItems="center">
+        {/* <FlexBox gap={1.5} alignItems="center">
           <Box component={IconButton} p={1.25} bgcolor="grey.200" onClick={toggleDialog}>
             <PersonOutline />
           </Box>
@@ -195,26 +145,13 @@ const Header = ({
             <Box p={1.25} bgcolor="grey.200" component={IconButton} onClick={toggleSidenav}>
               <ShoppingBagOutlined />
             </Box>
-          </Badge>
-        </FlexBox>
+          </Badge>*/}
+
 
         {/* LOGIN FORM DIALOG AND CART SIDE BAR  */}
-        {DIALOG_DRAWER}
-      </StyledContainer>
-{/*       <div className="w-full max-w-md px-2 py-16 sm:px-0"> */}
-{/*         <Tab.Group> */}
-{/*           <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1"> */}
-{/*             <Tab>Tab 1</Tab> */}
-{/*             <Tab>Tab 2</Tab> */}
-{/*             <Tab>Tab 3</Tab> */}
-{/*           </Tab.List> */}
-{/*           <Tab.Panels> */}
-{/*             <Tab.Panel>Content 1</Tab.Panel> */}
-{/*             <Tab.Panel>Content 2</Tab.Panel> */}
-{/*             <Tab.Panel>Content 3</Tab.Panel> */}
-{/*           </Tab.Panels> */}
-{/*         </Tab.Group> */}
-{/*       </div> */}
+       {/*{DIALOG_DRAWER}*/}
+         </FlexBox>
+        </StyledContainer>
     </HeaderWrapper>;
 };
 export default Header;

@@ -65,7 +65,7 @@ const SearchInputWithCategory = () => {
   return <Box position="relative" flex="1 1 0" maxWidth="670px" mx="auto" {...{
     ref: parentRef
   }}>
-      <TextField fullWidth variant="outlined" placeholder="Searching for..." onChange={handleSearch} InputProps={{
+      <TextField fullWidth variant="outlined" placeholder="원하시는 수술명(시술명), 지역, 병원 등을 입력하세요" onChange={handleSearch} InputProps={{
       sx: {
         height: 44,
         paddingRight: 0,

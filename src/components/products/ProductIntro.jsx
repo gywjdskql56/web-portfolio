@@ -85,12 +85,12 @@ const ProductIntro = ({
           <H1 mb={1}>{title}</H1>
 
           <FlexBox alignItems="center" mb={1}>
-            <Box>Brand:</Box>
-            <H6>Xiaomi</H6>
+            <Box>판매사:</Box>
+            <H6>하나투어</H6>
           </FlexBox>
 
           <FlexBox alignItems="center" mb={2}>
-            <Box lineHeight="1">Rated:</Box>
+            <Box lineHeight="1">후기:</Box>
             <Box mx={1} lineHeight="1">
               <BazaarRating color="warn" fontSize="1.25rem" value={4} readOnly />
             </Box>
@@ -114,7 +114,7 @@ const ProductIntro = ({
             <H2 color="primary.main" mb={0.5} lineHeight="1">
               {currency(price)}
             </H2>
-            <Box color="inherit">Stock Available</Box>
+            <Box color="inherit">다른 화폐로 결제 가능</Box>
           </Box>
 
           {!cartItem?.qty ? <Button color="primary" variant="contained" onClick={handleCartAmountChange(1)} sx={{
@@ -122,7 +122,7 @@ const ProductIntro = ({
           px: "1.75rem",
           height: 40
         }}>
-              Add to Cart
+              장바구니에 추가하기
             </Button> : <FlexBox alignItems="center" mb={4.5}>
               <Button size="small" sx={{
             p: 1
@@ -142,10 +142,10 @@ const ProductIntro = ({
             </FlexBox>}
 
           <FlexBox alignItems="center" mb={2}>
-            <Box>Sold By:</Box>
+            <Box>판매사 홈페이지:</Box>
             <Link href="/shops/scarlett-beauty" passHref>
               <a>
-                <H6 ml={1}>Mobile Store</H6>
+                <H6 ml={1}>하나투어 바로가기</H6>
               </a>
             </Link>
           </FlexBox>

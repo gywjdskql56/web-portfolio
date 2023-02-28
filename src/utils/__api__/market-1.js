@@ -47,6 +47,7 @@ const getCategories = async () => {
   const response = await axios.get("/api/market-1/bottom-categories");
   return response.data;
 };
+
 const getMoreItems = async () => {
   const response = await axios.get("/api/market-1/get-more-items");
   return response.data;

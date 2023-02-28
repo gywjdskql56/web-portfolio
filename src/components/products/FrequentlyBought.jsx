@@ -24,7 +24,7 @@ const FrequentlyBought = ({
   productsData
 }) => {
   return <WrapperBox mb={7.5}>
-      <H3 mb={3}>Frequently Bought Together</H3>
+      <H3 mb={3}>함께 많이 구매하시는 상품</H3>
 
       <FlexBox className="card-holder" flexWrap="wrap" m={-1}>
         {productsData.map((item, ind) => <Fragment key={item.id}>
@@ -58,16 +58,16 @@ const FrequentlyBought = ({
         <FlexRowCenter m={1} minWidth={300} minHeight={200} border="1px solid" borderRadius="8px" className="gray-box" borderColor="grey.400" flexDirection="column">
           <H3 color="primary.main">{currency(2500)}</H3>
           <Span mb={2} fontWeight="600" color="grey.600">
-            Save {currency(500)}
+            {currency(500)}가 할인됩니다.
           </Span>
 
           <FlexBox gap={1.5}>
             <Button variant="contained" color="primary">
-              Add to Cart
+              장바구니에 추가하기
             </Button>
 
             <Button variant="outlined" color="primary">
-              Add to List
+              위시리스트에 추가하기
             </Button>
           </FlexBox>
         </FlexRowCenter>

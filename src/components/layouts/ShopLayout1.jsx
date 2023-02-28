@@ -3,6 +3,7 @@ import Sticky from "components/Sticky";
 import Topbar from "components/Topbar";
 import { Footer1 } from "components/footer";
 import Header from "components/header/Header";
+import MenuTab from "components/tab/Tab";
 import Navbar from "components/navbar/Navbar";
 import { MobileNavigationBar } from "components/mobile-navigation";
 import SearchInputWithCategory from "components/search-box/SearchInputWithCategory";
@@ -32,23 +33,29 @@ const ShopLayout1 = ({
   const toggleIsFixed = useCallback(fixed => setIsFixed(fixed), []);
   return <Fragment>
       {/* TOPBAR */}
-      {showTopbar && <Topbar bgColor={topbarBgColor} />}
+      {/*{showTopbar && <Topbar bgColor={topbarBgColor} />}*/}
 
       {/* HEADER */}
+      <Sticky fixedOn={0} onSticky={toggleIsFixed} scrollDistance={200}>
+         <Header isFixed={isFixed} searchInput={<SearchInputWithCategory />} />
+      </Sticky>
+
+      {/* TAB */}
+
       <Sticky fixedOn={0} onSticky={toggleIsFixed} scrollDistance={300}>
-        <Header isFixed={isFixed} searchInput={<SearchInputWithCategory />} />
+        <MenuTab isFixed={isFixed} searchInput={<SearchInputWithCategory />} />
       </Sticky>
 
       <div className="section-after-sticky">
         {/* NAVIGATION BAR */}
-        {showNavbar && <Navbar elevation={0} border={1} />}
+         {/*{showNavbar && <Navbar elevation={0} border={1} />}*/}
 
         {/* BODY CONTENT */}
         {children}
       </div>
 
       {/* SMALL DEVICE BOTTOM NAVIGATION */}
-      <MobileNavigationBar />
+      {/*<MobileNavigationBar />*/}
 
       {/* FOOTER */}
       <Footer1 />

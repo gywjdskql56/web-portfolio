@@ -1,135 +1,55 @@
 import duotone from "components/icons/duotone";
 export const navigations = [{
   type: "label",
-  label: "Admin"
+  label: "판매사"
 }, {
-  name: "Dashboard",
+  name: "현황표",
   icon: duotone.Dashboard,
   path: "/vendor/dashboard"
-}, {
-  name: "Products",
-  icon: duotone.Products,
-  children: [{
-    name: "Product List",
-    path: "/admin/products"
-  }, {
-    name: "Create Product",
-    path: "/admin/products/create"
-  }, {
-    name: "Review",
-    path: "/admin/product-reviews"
-  }]
-}, {
-  name: "Categories",
-  icon: duotone.Accounts,
-  children: [{
-    name: "Category List",
-    path: "/admin/categories"
-  }, {
-    name: "Create Category",
-    path: "/admin/categories/create"
-  }]
-}, {
-  name: "Brands",
-  icon: duotone.Apps,
-  children: [{
-    name: "Brand List",
-    path: "/admin/brands"
-  }, {
-    name: "Create Brand",
-    path: "/admin/brands/create"
-  }]
-}, {
-  name: "Orders",
-  icon: duotone.Order,
-  children: [{
-    name: "Order List",
-    path: "/admin/orders"
-  }, {
-    name: "Order Details",
-    path: "/admin/orders/f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8"
-  }]
-}, {
-  name: "Customers",
-  icon: duotone.Customers,
-  path: "/admin/customers"
-}, {
-  name: "Refunds",
-  icon: duotone.Refund,
-  children: [{
-    name: "Refund Request",
-    path: "/admin/refund-request"
-  }, {
-    name: "Refund Settings",
-    path: "/admin/refund-setting"
-  }]
-}, {
-  name: "Sellers",
-  icon: duotone.Seller,
-  children: [{
-    name: "Seller List",
-    path: "/admin/sellers"
-  }, {
-    name: "Seller Package",
-    path: "/admin/seller-package"
-  }, {
-    name: "Package Payments",
-    path: "/admin/package-payment"
-  }, {
-    name: "Earning History",
-    path: "/admin/earning-history"
-  }, {
-    name: "Payouts",
-    path: "/admin/payouts"
-  }, {
-    name: "Payout Request",
-    path: "/admin/payout-request"
-  }]
-}, {
-  type: "label",
-  label: "Vendor"
-}, {
-  name: "Earnings",
+},{
+  name: "매출",
   icon: duotone.ProjectChart,
   children: [{
-    name: "Earning History",
+    name: "매출 내역",
     path: "/vendor/earning-history"
   }, {
-    name: "Payouts",
+    name: "대금결제",
     path: "/vendor/payouts"
   }, {
-    name: "Payout Request",
+    name: "대금결제 요청",
     path: "/vendor/payout-requests"
   }, {
-    name: "Payout Settings",
+    name: "대금결제 설정",
     path: "/vendor/payout-settings"
   }]
 }, {
-  name: "Refund Request",
+  name: "환불 요청",
   icon: duotone.Refund,
   path: "/vendor/refund-request"
 }, {
-  name: "Reviews",
+  name: "리뷰",
   icon: duotone.Review,
   path: "/vendor/reviews"
 }, {
-  name: "Shop Setting",
+  name: "판매사 세팅",
   icon: duotone.SiteSetting,
   path: "/vendor/shop-settings"
 }, {
-  name: "Support Tickets",
+  name: "고객센터 관리",
   icon: duotone.ElementHub,
   path: "/vendor/support-tickets"
 }, {
-  name: "Account Setting",
+  name: "계정 관리",
   icon: duotone.AccountSetting,
   path: "/vendor/account-setting"
-}, {
-  name: "Site Setting",
-  icon: duotone.SiteSetting,
-  path: "/vendor/site-settings"
-}, {
-  name: "Logout",
+},
+//{
+//  name: "사이트 관리",
+//  icon: duotone.SiteSetting,
+//  path: "/vendor/site-settings"
+//},
+{
+  name: "로그아웃",
   icon: duotone.Session,
   path: "/"
 }];

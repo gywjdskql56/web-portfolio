@@ -79,12 +79,12 @@ const DataListTable = ({
                     <StyledTableCell align="left">{product}</StyledTableCell>
 
                     <StyledTableCell align="left">
-                      <StatusWrapper gap={1} alignItems="center" payment={payment === "Pending" ? 1 : 0}>
+                      <StatusWrapper gap={1} alignItems="center" payment={payment === "주문확인중" ? 1 : 0}>
                         <Box>{payment}</Box>
-                        {payment === "Pending" && <Reload sx={{
+                        {payment === "주문확인중" && <Reload sx={{
                     fontSize: 13
                   }} />}
-                        {payment !== "Pending" && <Done sx={{
+                        {payment !== "주문확인중" && <Done sx={{
                     fontSize: 13
                   }} />}
                       </StatusWrapper>

@@ -12,27 +12,27 @@ import api from "utils/__api__/dashboard";
 import { currency } from "lib";
 const tableHeading = [{
   id: "no",
-  label: "No",
+  label: "일련번호",
   align: "left"
 }, {
   id: "orderNo",
-  label: "Order No",
+  label: "주문 수",
   align: "left"
 }, {
   id: "adminCommission",
-  label: "Admin Commission",
+  label: "수수료율",
   align: "center"
 }, {
   id: "earning",
-  label: "Your Earning",
+  label: "순수익",
   align: "center"
 }, {
   id: "date",
-  label: "Date",
+  label: "날짜",
   align: "left"
 }, {
   id: "action",
-  label: "Action",
+  label: "수정/삭제",
   align: "center"
 }];
 
@@ -60,7 +60,7 @@ export default function EarningHistory({
     defaultSort: "no"
   });
   return <Box py={4}>
-      <H3 mb={2}>Earning History</H3>
+      <H3 mb={2}>매출 내역</H3>
 
       <Card>
         <Scrollbar>

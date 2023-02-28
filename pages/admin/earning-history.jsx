@@ -3,7 +3,7 @@ import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableHeader from "components/data-table/TableHeader";
 import TablePagination from "components/data-table/TablePagination";
-import VendorDashboardLayout from "components/layouts/vendor-dashboard";
+import AdminDashboardLayout from "components/layouts/admin-dashboard";
 import Scrollbar from "components/Scrollbar";
 import { H3 } from "components/Typography";
 import useMuiTable from "hooks/useMuiTable";
@@ -44,7 +44,7 @@ const tableHeading = [{
 
 // =============================================================================
 EarningHistory.getLayout = function getLayout(page) {
-  return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
+  return <AdminDashboardLayout>{page}</AdminDashboardLayout>;
 };
 // =============================================================================
 
@@ -66,7 +66,7 @@ export default function EarningHistory({
     defaultSort: "no"
   });
   return <Box py={4}>
-      <H3 mb={2}>Earning History</H3>
+      <H3 mb={2}>매출 내역</H3>
 
       <Card>
         <Scrollbar>

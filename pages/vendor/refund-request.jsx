@@ -12,27 +12,27 @@ import api from "utils/__api__/vendor";
 // table column list
 const tableHeading = [{
   id: "orderNo",
-  label: "Order No",
+  label: "주문번호",
   align: "left"
 }, {
   id: "shopName",
-  label: "Shop Name",
+  label: "판매사",
   align: "left"
 }, {
   id: "product",
-  label: "Product Details",
+  label: "상품 정보",
   align: "left"
 }, {
   id: "amount",
-  label: "Amount",
+  label: "금액",
   align: "left"
 }, {
   id: "status",
-  label: "Status",
+  label: "처리상태",
   align: "left"
 }, {
   id: "action",
-  label: "Action",
+  label: "수정/삭제",
   align: "center"
 }];
 
@@ -59,7 +59,7 @@ export default function RefundRequest({
     listData: requests
   });
   return <Box py={4}>
-      <H3 mb={2}>Refund Request</H3>
+      <H3 mb={2}>환불 요청</H3>
 
       <Card>
         <Scrollbar>

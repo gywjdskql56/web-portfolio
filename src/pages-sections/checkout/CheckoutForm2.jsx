@@ -106,19 +106,19 @@ const CheckoutForm2 = () => {
           <Card1 sx={{
         mb: 3
       }}>
-            <Heading number={1} title="Delivery Date and Time" />
+            <Heading number={1} title="방문 희망 날짜와 시간" />
 
             <Box mb={3.5}>
               <Grid container spacing={3}>
                 <Grid item sm={6} xs={12}>
-                  <TextField select fullWidth type="text" name="date" label="Delivery Date" onChange={handleChange} value={values.date} error={!!touched.date && !!errors.date} helperText={touched.date && errors.date}>
+                  <TextField select fullWidth type="text" name="date" label="방문 희망 날짜" onChange={handleChange} value={values.date} error={!!touched.date && !!errors.date} helperText={touched.date && errors.date}>
                     {dateList.map(item => <MenuItem value={item.value} key={item.label}>
                         {item.label}
                       </MenuItem>)}
                   </TextField>
                 </Grid>
                 <Grid item sm={6} xs={12}>
-                  <TextField select fullWidth type="text" name="time" label="Delivery Time" onChange={handleChange} value={values.time} error={!!touched.time && !!errors.time} helperText={touched.time && errors.time}>
+                  <TextField select fullWidth type="text" name="time" label="방문 희망 시간" onChange={handleChange} value={values.time} error={!!touched.time && !!errors.time} helperText={touched.time && errors.time}>
                     {timeList.map(item => <MenuItem value={item.value} key={item.value}>
                         {item.value}
                       </MenuItem>)}
@@ -128,7 +128,7 @@ const CheckoutForm2 = () => {
             </Box>
           </Card1>
 
-          <Card1 sx={{
+{/*          <Card1 sx={{
         mb: 3
       }}>
             <FlexBetween>
@@ -177,30 +177,30 @@ const CheckoutForm2 = () => {
                   </Card>
                 </Grid>)}
             </Grid>
-          </Card1>
+          </Card1>*/}
 
           <Card1 sx={{
         mb: 3
       }}>
-            <Heading number={3} title="Payment Details" />
+            <Heading number={2} title="결제" />
 
             <Box mb={3.5}>
-              <Typography mb={1.5}>Enter Card Information</Typography>
+              <Typography mb={1.5}>카드 정보를 입력하세요.</Typography>
               <Grid container spacing={3}>
                 <Grid item sm={6} xs={12}>
-                  <TextField fullWidth type="text" name="cardHolderName" onChange={handleChange} label="Enter Your Name" value={values.cardHolderName} error={!!touched.cardHolderName && !!errors.cardHolderName} helperText={touched.cardHolderName && errors.cardHolderName} />
+                  <TextField fullWidth type="text" name="cardHolderName" onChange={handleChange} label="이름" value={values.cardHolderName} error={!!touched.cardHolderName && !!errors.cardHolderName} helperText={touched.cardHolderName && errors.cardHolderName} />
                 </Grid>
                 <Grid item sm={6} xs={12}>
-                  <TextField fullWidth type="number" name="cardNumber" onChange={handleChange} label="Enter Your Card Number" value={values.cardNumber} error={!!touched.cardNumber && !!errors.cardNumber} helperText={touched.cardNumber && errors.cardNumber} />
+                  <TextField fullWidth type="number" name="cardNumber" onChange={handleChange} label="카드번호" value={values.cardNumber} error={!!touched.cardNumber && !!errors.cardNumber} helperText={touched.cardNumber && errors.cardNumber} />
                 </Grid>
                 <Grid item sm={12} xs={12}>
                   <Box display="flex" justifyContent="space-between">
-                    <TextField select fullWidth type="number" name="cardMonth" onChange={handleChange} label="Expire Card Month" value={values.cardMonth} error={!!touched.cardMonth && !!errors.cardMonth} helperText={touched.cardMonth && errors.cardMonth}>
+                    <TextField select fullWidth type="number" name="cardMonth" onChange={handleChange} label="카드 만료월" value={values.cardMonth} error={!!touched.cardMonth && !!errors.cardMonth} helperText={touched.cardMonth && errors.cardMonth}>
                       {months.map(item => <MenuItem value={item} key={item}>
                           {item}
                         </MenuItem>)}
                     </TextField>
-                    <TextField select fullWidth type="number" name="cardYear" onChange={handleChange} label="Expire Card Year" value={values.cardYear} error={!!touched.cardYear && !!errors.cardYear} helperText={touched.cardYear && errors.cardYear} sx={{
+                    <TextField select fullWidth type="number" name="cardYear" onChange={handleChange} label="카드 만료연도" value={values.cardYear} error={!!touched.cardYear && !!errors.cardYear} helperText={touched.cardYear && errors.cardYear} sx={{
                   mx: 3
                 }}>
                       {years.map(item => <MenuItem value={item} key={item}>
@@ -213,11 +213,11 @@ const CheckoutForm2 = () => {
               </Grid>
               <FormControlLabel sx={{
             mt: 1
-          }} control={<Checkbox />} label="Save this card" />
+          }} control={<Checkbox />} label="이 카드정보 저장하기" />
             </Box>
 
             <Box>
-              <Typography mb={1.5}>Saved Cards</Typography>
+              <Typography mb={1.5}>저장된 카드 불러오기</Typography>
 
               <Grid container spacing={3}>
                 {paymentMethodList.map(item => <Grid item md={4} sm={6} xs={12} key={item.last4Digits}>
@@ -247,20 +247,20 @@ const CheckoutForm2 = () => {
           mt: 3,
           lineHeight: 1
         }} onClick={toggleHasVoucher}>
-              I have a voucher
+              바우처가 있습니다.
             </Button>
 
             {hasVoucher && <FlexBox mt={3} gap={2} maxWidth="400px">
-                <TextField fullWidth name="voucher" value={values.voucher} onChange={handleChange} placeholder="Enter voucher code here" />
+                <TextField fullWidth name="voucher" value={values.voucher} onChange={handleChange} placeholder="바우처 번호" />
                 <Button variant="contained" color="primary" type="button">
-                  Apply
+                  적용
                 </Button>
               </FlexBox>}
 
             <Button fullWidth type="submit" color="primary" variant="contained" sx={{
           mt: 3
         }}>
-              Place Order
+              결제하기
             </Button>
           </Card1>
         </form>}

@@ -9,7 +9,7 @@ import { FlexRowCenter } from "components/flex-box";
 
 const AvailableShops = () => {
   return <Box mb={7.5}>
-      <H3 mb={3}>Also Available at</H3>
+      <H3 mb={3}>같은 지역에서 즐길거리</H3>
 
       <Grid container spacing={4}>
         {shopList.map(item => <Grid item lg={2} md={3} sm={4} xs={12} key={item.name}>
@@ -31,13 +31,13 @@ const AvailableShops = () => {
     </Box>;
 };
 const shopList = [{
-  name: "Tech Friend",
+  name: "자전거 투어",
   imgUrl: "/assets/images/faces/propic.png"
 }, {
-  name: "Smart Shop",
+  name: "송도 아울렛",
   imgUrl: "/assets/images/faces/propic(1).png"
 }, {
-  name: "Gadget 360",
+  name: "카페거리",
   imgUrl: "/assets/images/faces/propic(8).png"
 }];
 export default AvailableShops;

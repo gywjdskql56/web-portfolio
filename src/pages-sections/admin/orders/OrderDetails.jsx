@@ -16,12 +16,12 @@ const OrderDetails = ({
       }}>
           <FlexBox alignItems="center" gap={4}>
             <Paragraph>
-              <Span color="grey.600">Order ID:</Span> {order.id}
+              <Span color="grey.600">주문번호:</Span> {order.id}
             </Paragraph>
 
             <Paragraph>
-              <Span color="grey.600">Placed on:</Span>{" "}
-              {format(new Date(order.createdAt), "dd MMM, yyyy")}
+              <Span color="grey.600">주문일시:</Span>{" "}
+              {format(new Date(order.createdAt), "yyyy-MM-dd")}
             </Paragraph>
           </FlexBox>
 
@@ -29,18 +29,18 @@ const OrderDetails = ({
           sm: "row",
           xs: "column"
         }}>
-            <TextField fullWidth color="info" size="medium" variant="outlined" label="Add Product" placeholder="Type product name" />
+            <TextField fullWidth color="info" size="medium" variant="outlined" label="상품명" placeholder="상품명을 입력하세요." />
 
-            <TextField select fullWidth color="info" size="medium" defaultValue={order.status} label="Order Status" inputProps={{
+            <TextField select fullWidth color="info" size="medium" defaultValue={order.status} label="주문 처리 상태" inputProps={{
             IconComponent: () => <KeyboardArrowDown sx={{
               color: "grey.600",
               mr: 1
             }} />
           }}>
-              <MenuItem value="Processing">Processing</MenuItem>
-              <MenuItem value="Pending">Pending</MenuItem>
-              <MenuItem value="Delivered">Delivered</MenuItem>
-              <MenuItem value="Cancelled">Cancelled</MenuItem>
+              <MenuItem value="Processing">주문확인중</MenuItem>
+              <MenuItem value="Pending">처리진행중</MenuItem>
+              <MenuItem value="Delivered">예약확정</MenuItem>
+              <MenuItem value="Cancelled">주문취소</MenuItem>
             </TextField>
           </FlexBox>
 
@@ -75,7 +75,7 @@ const OrderDetails = ({
 
               <FlexBetween flexShrink={0}>
                 <Paragraph color="grey.600">
-                  Product properties: Black, L
+                  추가 옵션: 비즈니스석으로 변경, 필러 추가
                 </Paragraph>
 
                 <IconButton>
@@ -94,11 +94,11 @@ const OrderDetails = ({
         px: 3,
         py: 4
       }}>
-          <TextField rows={5} multiline fullWidth color="info" variant="outlined" label="Shipping Address" defaultValue={order.shippingAddress} sx={{
+          <TextField rows={5} multiline fullWidth color="info" variant="outlined" label="수수료율" defaultValue={order.shippingAddress} sx={{
           mb: 4
         }} />
 
-          <TextField rows={5} multiline fullWidth color="info" variant="outlined" label="Customer’s Note" defaultValue="Please deliver ASAP." />
+          <TextField rows={5} multiline fullWidth color="info" variant="outlined" label="고객 요청사항" defaultValue="I want to make an appointment ASAP." />
         </Card>
       </Grid>
 
@@ -108,16 +108,16 @@ const OrderDetails = ({
         py: 4
       }}>
           <H5 mt={0} mb={2}>
-            Total Summary
+            상품 가격
           </H5>
 
           <FlexBetween mb={1.5}>
-            <Paragraph color="grey.600">Subtotal:</Paragraph>
+            <Paragraph color="grey.600">소계:</Paragraph>
             <H6>{currency(order.totalPrice)}</H6>
           </FlexBetween>
 
           <FlexBetween mb={1.5}>
-            <Paragraph color="grey.600">Shipping fee:</Paragraph>
+            <Paragraph color="grey.600">세금:</Paragraph>
 
             <FlexBox alignItems="center" gap={1} maxWidth={100}>
               <Paragraph>$</Paragraph>
@@ -126,7 +126,7 @@ const OrderDetails = ({
           </FlexBetween>
 
           <FlexBetween mb={1.5}>
-            <Paragraph color="grey.600">Discount(%):</Paragraph>
+            <Paragraph color="grey.600">할인(%):</Paragraph>
 
             <FlexBox alignItems="center" gap={1} maxWidth={100}>
               <Paragraph>$</Paragraph>
@@ -139,17 +139,17 @@ const OrderDetails = ({
         }} />
 
           <FlexBetween mb={2}>
-            <H6>Total</H6>
+            <H6>총합계</H6>
             <H6>{currency(order.totalPrice)}</H6>
           </FlexBetween>
 
-          <Paragraph>Paid by Credit/Debit Card</Paragraph>
+          <Paragraph>신용카드로 결제</Paragraph>
         </Card>
       </Grid>
 
       <Grid item xs={12}>
         <Button variant="contained" color="info">
-          Save Changes
+          저장
         </Button>
       </Grid>
     </Grid>;

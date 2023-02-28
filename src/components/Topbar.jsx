@@ -165,7 +165,7 @@ const languageList = [{
   title: "EN",
   value: "en"
 }, {
-  title: "DE",
-  value: "de"
+  title: "KO",
+  value: "ko"
 }];
 export default Topbar;

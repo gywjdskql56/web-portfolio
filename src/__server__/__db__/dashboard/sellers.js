@@ -1,65 +1,65 @@
 export const sellers = [{
   phone: "+12345678910",
   balance: 10_350.25,
-  name: "Ethan Booth",
-  shopName: "The Beauty",
+  shopName: "떠나요 여행사",
+  name: "한비야",
   package: "Premium",
   published: true,
   image: "/assets/images/avatars/001-man.svg"
 }, {
   phone: "+12343458910",
   balance: 12_350.45,
-  name: "Sofia Hall",
-  shopName: "Mobile Gadgets",
+  shopName: "모두투어",
+  name: "이성계",
   package: "Gold",
   published: true,
   image: "/assets/images/avatars/002-girl.svg"
 }, {
   phone: "+12345678910",
   balance: 11_345.25,
-  shopName: "Tech Tube",
+  shopName: "하나투어",
   package: "Premium",
   published: true,
-  name: "Dominic Moss",
+  name: "홍길동",
   image: "/assets/images/avatars/002-woman.svg"
 }, {
   phone: "+12345678910",
   balance: 9_540.47,
   package: "Silver",
   published: true,
-  shopName: "Beyond Threads",
-  name: "Tilly Thomson",
+  shopName: "모두투어",
+  name: "이성계",
   image: "/assets/images/avatars/003-boy.svg"
 }, {
   phone: "+12345678910",
   balance: 7_250.36,
   package: "Gold",
   published: true,
-  shopName: "Beauty Shop",
-  name: "Finley Henry",
+  shopName: "떠나요 여행사",
+  name: "한비야",
   image: "/assets/images/avatars/003-man-1.svg"
 }, {
   phone: "+12345678910",
   balance: 8_356.34,
   package: "Silver",
   published: true,
-  shopName: "Febrick Fashion",
-  name: "Lola Ryan",
+  shopName: "가나다 여행사",
+  name: "김가네",
   image: "/assets/images/avatars/004-bald.svg"
 }, {
   phone: "+12345678910",
   balance: 4_370.55,
   package: "Gold",
   published: true,
-  shopName: "The Fashion",
-  name: "Gabriel McKenzie",
+  shopName: "인터파크",
+  name: "정몽주",
   image: "/assets/images/avatars/004-woman.svg"
 }, {
   phone: "+12345678910",
   balance: 2_458.15,
   package: "Premium",
   published: true,
-  shopName: "Icon Boy",
-  name: "James Davey",
+  shopName: "모두투어",
+  name: "이성계",
   image: "/assets/images/avatars/005-man-2.svg"
 }];

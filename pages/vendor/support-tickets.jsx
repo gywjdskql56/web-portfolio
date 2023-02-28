@@ -11,23 +11,23 @@ import { StatusWrapper, StyledTableRow, StyledTableCell, StyledIconButton } from
 import api from "utils/__api__/ticket";
 const tableHeading = [{
   id: "title",
-  label: "Information",
+  label: "문의",
   align: "left"
 }, {
   id: "type",
-  label: "Type",
-  align: "left"
-}, {
-  id: "date",
-  label: "Ticket Date",
+  label: "유형(대)",
   align: "left"
 }, {
   id: "category",
-  label: "Problem Title",
+  label: "유형(소)",
   align: "left"
-}, {
+},{
+  id: "date",
+  label: "업로드 날짜",
+  align: "left"
+},  {
   id: "action",
-  label: "Action",
+  label: "수정/삭제",
   align: "center"
 }];
 
@@ -78,13 +78,13 @@ export default function SupportTickets({
                         {ticket.type}
                       </StatusWrapper>
                     </StyledTableCell>
-
-                    <StyledTableCell align="left">
-                      {ticket.date}
-                    </StyledTableCell>
                     <StyledTableCell align="left">
                       {ticket.category}
                     </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {ticket.date}
+                    </StyledTableCell>
+
 
                     <StyledTableCell align="center">
                       <StyledIconButton>

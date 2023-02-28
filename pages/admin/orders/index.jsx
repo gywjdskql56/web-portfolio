@@ -5,44 +5,44 @@ import Scrollbar from "components/Scrollbar";
 import SearchArea from "components/dashboard/SearchArea";
 import TableHeader from "components/data-table/TableHeader";
 import TablePagination from "components/data-table/TablePagination";
-import VendorDashboardLayout from "components/layouts/vendor-dashboard";
+import AdminDashboardLayout from "components/layouts/admin-dashboard";
 import useMuiTable from "hooks/useMuiTable";
 import { OrderRow } from "pages-sections/admin";
 import api from "utils/__api__/dashboard";
 // TABLE HEADING DATA LIST
 const tableHeading = [{
   id: "id",
-  label: "Order ID",
+  label: "주문 번호",
   align: "left"
 }, {
   id: "qty",
-  label: "Qty",
+  label: "수량",
   align: "left"
 }, {
   id: "purchaseDate",
-  label: "Purchase Date",
+  label: "구매날짜",
   align: "left"
 }, {
   id: "billingAddress",
-  label: "Billing Address",
+  label: "수수료율",
   align: "left"
 }, {
   id: "amount",
-  label: "Amount",
+  label: "금액",
   align: "left"
 }, {
   id: "status",
-  label: "Status",
+  label: "처리 상태",
   align: "left"
 }, {
   id: "action",
-  label: "Action",
+  label: "수정/삭제",
   align: "center"
 }];
 
 // =============================================================================
 OrderList.getLayout = function getLayout(page) {
-  return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
+  return <AdminDashboardLayout>{page}</AdminDashboardLayout>;
 };
 // =============================================================================
 
@@ -74,9 +74,9 @@ export default function OrderList({
     defaultOrder: "desc"
   });
   return <Box py={4}>
-      <H3 mb={2}>Orders</H3>
+      <H3 mb={2}>주문내역</H3>
 
-      <SearchArea handleSearch={() => {}} buttonText="Create Order" handleBtnClick={() => {}} searchPlaceholder="Search Order..." />
+      <SearchArea handleSearch={() => {}} buttonText="주문 생성" handleBtnClick={() => {}} searchPlaceholder="주문내역 검색" />
 
       <Card>
         <Scrollbar>

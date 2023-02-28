@@ -69,7 +69,7 @@ const linkList = [{
   title: "주문 관리",
   list: [{
     href: "/orders",
-    title: "주문/배송",
+    title: "주문/예약",
     icon: ShoppingBagOutlined,
     count: 5
   }, {
@@ -90,12 +90,14 @@ const linkList = [{
     title: "회원정보",
     icon: Person,
     count: 3
-  }, {
-    href: "/address",
-    title: "주소",
-    icon: Place,
-    count: 16
-  }, {
+  },
+//   {
+//     href: "/address",
+//     title: "주소",
+//     icon: Place,
+//     count: 16
+//   },
+  {
     href: "/payment-methods",
     title: "결제 방법",
     icon: CreditCard,

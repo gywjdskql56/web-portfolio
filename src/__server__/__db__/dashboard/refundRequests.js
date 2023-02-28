@@ -1,43 +1,43 @@
 export const refundRequest = [{
   orderNo: "6ed34Edf65d",
-  shopName: "Shopify Store",
+  shopName: "하나투어",
   amount: 250,
-  status: "Accepted",
-  name: "Samsung Galaxy-M1",
-  image: "/assets/images/products/samsung.png"
+  status: "예약확정",
+  name: "상품",
+  image: "/assets/images/products/Package/img.png"
 }, {
   orderNo: "6ed34Edf65d",
-  shopName: "Shopify Store",
+  shopName: "하나투어",
   amount: 250,
-  status: "Accepted",
-  name: "Tomatto",
-  image: "/assets/images/products/tomato.png"
+  status: "예약확정",
+  name: "상품",
+  image: "/assets/images/products/Package/img.png"
 }, {
   orderNo: "6ed34Edf65d",
-  shopName: "Shopify Store",
+  shopName: "하나투어",
   amount: 24,
-  status: "Pending",
-  name: "Boston Round Cream Pack",
-  image: "/assets/images/products/beauty-cream.png"
+  status: "주문처리중",
+  name: "상품",
+  image: "/assets/images/products/Package/img.png"
 }, {
   orderNo: "6ed34Edf65d",
-  shopName: "Shopify Store",
+  shopName: "하나투어",
   amount: 250,
-  status: "Processing",
-  name: "Woman Party Dress",
-  image: "/assets/images/products/red-dress.png"
+  status: "주문처리중",
+  name: "상품",
+  image: "/assets/images/products/Package/img.png"
 }, {
   orderNo: "6ed34Edf65d",
-  shopName: "Shopify Store",
+  shopName: "하나투어",
   amount: 250,
-  status: "Accepted",
-  name: "White Tops",
-  image: "/assets/images/products/white-tops.png"
+  status: "주문처리중",
+  name: "상품",
+  image: "/assets/images/products/Package/img.png"
 }, {
   orderNo: "6ed34Edf65d",
-  shopName: "Shopify Store",
+  shopName: "하나투어",
   amount: 450,
-  status: "Processing",
-  name: "Casual Shirt for Man",
-  image: "/assets/images/products/formal-shirt.png"
+  status: "주문처리중",
+  name: "상품",
+  image: "/assets/images/products/Package/img.png"
 }];

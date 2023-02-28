@@ -1,10 +1,10 @@
 export const users = [{
   id: "e42e28ea-528f-4bc8-81fb-97f658d67d75",
-  email: "Jayden.Gislason78@gmail.com",
+  email: "jiyeun97@gmail.com",
   phone: "010-2933-1903",
   avatar: "/assets/images/faces/ralph.png",
   password: "wJVineM971smn42",
-  dateOfBirth: "1996-04-25",
+  dateOfBirth: "1999-04-25",
   verified: true,
   name: {
     firstName: "지윤",

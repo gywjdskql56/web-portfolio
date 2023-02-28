@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
 import { H3 } from "components/Typography";
-import VendorDashboardLayout from "components/layouts/vendor-dashboard";
+import AdminDashboardLayout from "components/layouts/admin-dashboard";
 import { OrderDetails } from "pages-sections/admin";
 import api from "utils/__api__/dashboard";
 
 // =============================================================================
 OrderEdit.getLayout = function getLayout(page) {
-  return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
+  return <AdminDashboardLayout>{page}</AdminDashboardLayout>;
 };
 // =============================================================================
 
@@ -24,7 +24,7 @@ export default function OrderEdit() {
     return <h1>Loading...</h1>;
   }
   return <Box py={4}>
-      <H3 mb={2}>Order Details</H3>
+      <H3 mb={2}>주문 상세</H3>
       <OrderDetails order={orderDetails} />
     </Box>;
 }

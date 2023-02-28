@@ -12,17 +12,17 @@ const WishCard = () => {
     justifyContent: "center"
   }}>
       <H5 color="info.main" mb={0.5}>
-        Good Morning, Maruf!
+        안녕하세요, 관리자님!
       </H5>
       <Paragraph color="grey.600">
-        Here’s what happening with your store today!
+        웹사이트 전체 현황 페이지입니다.
       </Paragraph>
 
       <H3 mt={3}>15,350.25</H3>
-      <Paragraph color="grey.600">Today’s Visit</Paragraph>
+      <Paragraph color="grey.600">오늘의 방문자수</Paragraph>
 
       <H3 mt={1.5}>{currency(10360.66)}</H3>
-      <Paragraph color="grey.600">Today’s total sales</Paragraph>
+      <Paragraph color="grey.600">오늘의 전체 판매금액</Paragraph>
 
       <Box sx={{
       right: 24,

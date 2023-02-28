@@ -248,32 +248,32 @@
 // ];
 
 const productVariants = [{
-  title: "Option",
+  title: "추가 옵션",
   id: "opt_01GNCQMGM2QPHYQ37FWC41HF63",
   values: [{
-    value: "option 1",
+    value: "비즈니스석으로 변경 (+$xxxx.xx)",
     id: "optval_01GNCQMGNJPBNGBKJJY8A8QK8G"
   }, {
-    value: "option 2",
+    value: "수하물 추가 (+$xxxx.xx)",
+    id: "optval_01GNCQMGRCBK0Z5FAB6JJD9J9Z"
+  }, {
+    value: "수면마취로 변경 (+$xxxx.xx)",
     id: "optval_01GNCQMGP2YJMQW5Z0C0RZTZ3Y"
   }, {
-    value: "option 3",
+    value: "수술당일 입원으로 변경 (+$xxx.xx)",
     id: "optval_01GNCQMGQ37RMQEZ9BV3AAQNWE"
-  }, {
-    value: "option 4",
-    id: "optval_01GNCQMGRCBK0Z5FAB6JJD9J9Z"
   }]
 }, {
-  title: "Type",
+  title: "필요한 언어 지원선택",
   id: "opt_01GNCQMGM3SN0R7E08631EJFA2",
   values: [{
-    value: "type 1",
+    value: "영어",
     id: "optval_01GNCQMGMWTZ39SKCSE96WTEHN"
   }, {
-    value: "type 2",
+    value: "중국어",
     id: "optval_01GNCQMGNJ7CVDN4Q8317CZ583"
   }, {
-    value: "type 3",
+    value: "일본어",
     id: "optval_01GNCQMGP2P1P3G5TXB10W28WR"
   }]
 }];

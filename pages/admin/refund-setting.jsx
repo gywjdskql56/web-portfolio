@@ -1,75 +1,75 @@
 import { Delete } from "@mui/icons-material";
 import { Box, Button, Card, IconButton, TextField } from "@mui/material";
 import { FlexBetween, FlexBox } from "components/flex-box";
-import VendorDashboardLayout from "components/layouts/vendor-dashboard";
+import AdminDashboardLayout from "components/layouts/admin-dashboard";
 import { H3, H4, H5 } from "components/Typography";
 import React, { useState } from "react";
 const reasonList = [{
   id: 1,
-  title: "Ordered the wrong product"
+  title: "잘못된 상품을 결제했어요"
 }, {
   id: 2,
-  title: "The merchant shipped the wrong product"
+  title: "판매자가 사실과 다른 상품을 판매했어요"
 }, {
   id: 3,
-  title: "The product is damaged or defective"
+  title: "상품이 품절되거나 조건이 변경되었어요"
 }, {
   id: 4,
-  title: "The product arrived too late"
+  title: "예약가능날짜와 일정이 맞지않아요"
 }, {
   id: 5,
-  title: "The product do not match the description"
+  title: "다른 상품으로 변경하고 싶어요"
 }];
 
 // =============================================================================
 RefundSetting.getLayout = function getLayout(page) {
-  return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
+  return <AdminDashboardLayout>{page}</AdminDashboardLayout>;
 };
 // =============================================================================
 
 export default function RefundSetting() {
-  const [refundReq, setRefundReq] = useState("Confirm");
-  const [refundTime, setRefundTime] = useState("120 Days");
+  const [refundReq, setRefundReq] = useState("확인중");
+  const [refundTime, setRefundTime] = useState("120일");
   const [reasonTypeList, setReasonTypeList] = useState(reasonList);
   const handleDeleteReason = id => () => {
     setReasonTypeList(state => state.filter(item => item.id !== id));
   };
   return <Box py={4}>
-      <H3 mb={2}>Refund Setting</H3>
+      <H3 mb={2}>환불 규정</H3>
 
       <Card sx={{
       p: 3
     }}>
-        <H4 mb={3}>Refund Time</H4>
+        <H4 mb={3}>환불 가능 기간</H4>
 
-        <TextField fullWidth color="info" size="medium" value={refundTime} variant="outlined" label="Refund Request Generation Time" onChange={e => setRefundTime(e.target.value)} sx={{
+        <TextField fullWidth color="info" size="medium" value={refundTime} variant="outlined" label="환불 신청 가능 기간" onChange={e => setRefundTime(e.target.value)} sx={{
         fontSize: 14,
         fontWeight: 600,
         mb: 2
       }} />
 
         <Button color="info" variant="contained">
-          Update
+          저장
         </Button>
 
         <H4 mb={3} mt={4}>
-          Order Status
+          주문 상태
         </H4>
 
-        <TextField fullWidth color="info" size="medium" value={refundReq} variant="outlined" label="Enabling Refund Request" onChange={e => setRefundReq(e.target.value)} sx={{
+        <TextField fullWidth color="info" size="medium" value={refundReq} variant="outlined" label="환불 요청 상태" onChange={e => setRefundReq(e.target.value)} sx={{
         fontSize: 14,
         fontWeight: 600,
         mb: 2
       }} />
 
         <Button color="info" variant="contained">
-          Update
+          저장
         </Button>
 
         <H4 mb={3} mt={4}>
-          Refund Reasons
+          환불 사유
         </H4>
-        <H5 mb={2}>Reason Type</H5>
+        <H5 mb={2}>환불 사유 유형</H5>
 
         <Box width={{
         lg: "90%",
@@ -99,11 +99,11 @@ export default function RefundSetting() {
 
           <FlexBetween mt={4}>
             <Button color="info" variant="contained">
-              Update
+              저장
             </Button>
 
             <Button color="info" variant="outlined">
-              Add New
+              추가하기
             </Button>
           </FlexBetween>
         </Box>

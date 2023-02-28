@@ -54,8 +54,8 @@ const ProductDetails = props => {
 
         {/* PRODUCT DESCRIPTION AND REVIEW */}
         <StyledTabs textColor="primary" value={selectedOption} indicatorColor="primary" onChange={handleOptionClick}>
-          <Tab className="inner-tab" label="Description" />
-          <Tab className="inner-tab" label="Review (3)" />
+          <Tab className="inner-tab" label="상품 설명" />
+          <Tab className="inner-tab" label="상품 후기 (3)" />
         </StyledTabs>
 
         <Box mb={6}>

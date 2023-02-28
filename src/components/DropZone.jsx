@@ -9,8 +9,8 @@ import { H5, Small } from "./Typography";
 
 const DropZone = ({
   onChange,
-  title = "Drag & drop product image here",
-  imageSize = "Upload 280*280 image"
+  title = "이미지를 업로드해주세요.",
+  imageSize = "280*280 이미지를 업로드해주세요."
 }) => {
   const onDrop = useCallback(acceptedFiles => onChange(acceptedFiles), [onChange]);
   const {
@@ -52,7 +52,7 @@ const DropZone = ({
       px: 4,
       my: 4
     }}>
-        Select files
+        파일을 선택해주세요.
       </Button>
 
       <Small color="grey.600">{imageSize}</Small>

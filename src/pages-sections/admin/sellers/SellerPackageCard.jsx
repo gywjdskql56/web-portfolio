@@ -57,11 +57,11 @@ const SellerPackageCard = ({
 
       <FlexBox alignItems="center" gap={2} width={200}>
         <Button fullWidth color="secondary" variant="outlined">
-          Edit
+          수정
         </Button>
 
         <Button fullWidth color="error" variant="outlined">
-          Delete
+          삭제
         </Button>
       </FlexBox>
     </Wrapper>;

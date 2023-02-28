@@ -2,12 +2,12 @@ import { Box } from "@mui/material";
 import * as yup from "yup";
 import { H3 } from "components/Typography";
 import { BrandForm } from "pages-sections/admin";
-import VendorDashboardLayout from "components/layouts/vendor-dashboard";
+import AdminDashboardLayout from "components/layouts/admin-dashboard";
 // import api from "utils/__api__/products";
 
 // =============================================================================
 CreateBrand.getLayout = function getLayout(page) {
-  return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
+  return <AdminDashboardLayout>{page}</AdminDashboardLayout>;
 };
 // =============================================================================
 

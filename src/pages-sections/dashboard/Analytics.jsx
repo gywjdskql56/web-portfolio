@@ -41,12 +41,12 @@ const Analytics = () => {
     p: 3
   }}>
       <FlexBetween>
-        <H5>Analytics</H5>
+        <H5>매출/비용 추이</H5>
 
         <StyledSelect value={selectType} IconComponent={() => <KeyboardArrowDown />} onChange={e => setSelectType(e.target.value)}>
-          <MenuItem value="yearly">Yearly</MenuItem>
-          <MenuItem value="monthly">Monthly</MenuItem>
-          <MenuItem value="Weekily">Weekily</MenuItem>
+          <MenuItem value="yearly">연간</MenuItem>
+          <MenuItem value="monthly">월간</MenuItem>
+          <MenuItem value="Weekily">주간</MenuItem>
         </StyledSelect>
       </FlexBetween>
 

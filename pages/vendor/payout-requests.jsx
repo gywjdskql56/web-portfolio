@@ -11,23 +11,23 @@ import { currency } from "lib";
 import api from "utils/__api__/vendor";
 const tableHeading = [{
   id: "no",
-  label: "No",
+  label: "번호",
   align: "left"
 }, {
   id: "date",
-  label: "Date",
+  label: "날짜",
   align: "left"
 }, {
   id: "amount",
-  label: "Amount",
+  label: "금액",
   align: "center"
 }, {
   id: "status",
-  label: "Status",
+  label: "상태",
   align: "center"
 }, {
   id: "message",
-  label: "Message",
+  label: "메시지",
   align: "center"
 }];
 
@@ -53,7 +53,7 @@ export default function PayoutRequests({
     defaultSort: "no"
   });
   return <Box py={4}>
-      <H3 mb={2}>Payout Requests</H3>
+      <H3 mb={2}>대금결제 요청</H3>
 
       <Card>
         <Scrollbar>

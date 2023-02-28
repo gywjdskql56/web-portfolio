@@ -40,21 +40,21 @@ export default function PayoutSettings() {
   // pay via bank account form handler
   const handleAccountPaymentSubmit = values => {};
   return <Box py={4} maxWidth={740} margin="auto">
-      <H3 mb={2}>Payout Settings</H3>
+      <H3 mb={2}>대금결제 설정</H3>
 
       <Card sx={{
       p: 3
     }}>
         <Paragraph fontWeight={700} mb={4}>
-          Cash Payment
+          현금 지불
         </Paragraph>
 
-        <TextField fullWidth color="info" size="medium" name="amount" label="Amount" defaultValue="$250" sx={{
+        <TextField fullWidth color="info" size="medium" name="amount" label="금액" defaultValue="$250" sx={{
         mb: 3
       }} />
 
         <Button type="submit" color="info" variant="contained">
-          Save Changes
+          저장
         </Button>
 
         <Divider sx={{
@@ -62,7 +62,7 @@ export default function PayoutSettings() {
       }} />
 
         <Paragraph fontWeight={700} mb={4}>
-          Card Payment
+          카드 지불
         </Paragraph>
 
         <Formik initialValues={cardInitialValues} onSubmit={handleCardPaymentSubmit} validationSchema={validationSchema}>
@@ -75,17 +75,17 @@ export default function PayoutSettings() {
           handleSubmit
         }) => <form onSubmit={handleSubmit}>
               <Stack spacing={3} mb={3}>
-                <TextField color="info" size="medium" name="amount" label="Amount" onBlur={handleBlur} value={values.amount} onChange={handleChange} error={Boolean(errors.amount && touched.amount)} helperText={touched.amount && errors.amount} />
+                <TextField color="info" size="medium" name="amount" label="금액" onBlur={handleBlur} value={values.amount} onChange={handleChange} error={Boolean(errors.amount && touched.amount)} helperText={touched.amount && errors.amount} />
 
-                <TextField color="info" size="medium" onBlur={handleBlur} name="cardHolderName" onChange={handleChange} label="Card Holder Name" value={values.cardHolderName} error={Boolean(errors.cardHolderName && touched.cardHolderName)} helperText={touched.cardHolderName && errors.cardHolderName} />
+                <TextField color="info" size="medium" onBlur={handleBlur} name="cardHolderName" onChange={handleChange} label="카드 소유주" value={values.cardHolderName} error={Boolean(errors.cardHolderName && touched.cardHolderName)} helperText={touched.cardHolderName && errors.cardHolderName} />
 
-                <TextField color="info" size="medium" name="cardNo" label="Card No" onBlur={handleBlur} value={values.cardNo} onChange={handleChange} error={Boolean(errors.cardNo && touched.cardNo)} helperText={touched.cardNo && errors.cardNo} />
+                <TextField color="info" size="medium" name="cardNo" label="카드 번호" onBlur={handleBlur} value={values.cardNo} onChange={handleChange} error={Boolean(errors.cardNo && touched.cardNo)} helperText={touched.cardNo && errors.cardNo} />
 
-                <TextField color="info" size="medium" name="cardCvc" label="Card CVC" onBlur={handleBlur} value={values.cardCvc} onChange={handleChange} error={Boolean(errors.cardCvc && touched.cardCvc)} helperText={touched.cardCvc && errors.cardCvc} />
+                <TextField color="info" size="medium" name="cardCvc" label="카드 CVC" onBlur={handleBlur} value={values.cardCvc} onChange={handleChange} error={Boolean(errors.cardCvc && touched.cardCvc)} helperText={touched.cardCvc && errors.cardCvc} />
               </Stack>
 
               <Button type="submit" color="info" variant="contained">
-                Save Changes
+                저장
               </Button>
             </form>}
         </Formik>
@@ -95,7 +95,7 @@ export default function PayoutSettings() {
       }} />
 
         <Paragraph fontWeight={700} mb={4}>
-          Bank Payment
+          계좌 지불
         </Paragraph>
 
         <Formik initialValues={accountInitialValues} onSubmit={handleAccountPaymentSubmit} validationSchema={accountValidateSchema}>
@@ -108,17 +108,17 @@ export default function PayoutSettings() {
           handleSubmit
         }) => <form onSubmit={handleSubmit}>
               <Stack spacing={3} mb={3}>
-                <TextField color="info" size="medium" name="amount" label="Amount" onBlur={handleBlur} value={values.amount} onChange={handleChange} error={Boolean(errors.amount && touched.amount)} helperText={touched.amount && errors.amount} />
+                <TextField color="info" size="medium" name="amount" label="금액" onBlur={handleBlur} value={values.amount} onChange={handleChange} error={Boolean(errors.amount && touched.amount)} helperText={touched.amount && errors.amount} />
 
-                <TextField color="info" size="medium" onBlur={handleBlur} onChange={handleChange} name="accountHolderName" label="Account Holder Name" value={values.accountHolderName} error={Boolean(errors.accountHolderName && touched.accountHolderName)} helperText={touched.accountHolderName && errors.accountHolderName} />
+                <TextField color="info" size="medium" onBlur={handleBlur} onChange={handleChange} name="accountHolderName" label="계좌 소유주" value={values.accountHolderName} error={Boolean(errors.accountHolderName && touched.accountHolderName)} helperText={touched.accountHolderName && errors.accountHolderName} />
 
-                <TextField color="info" size="medium" name="accountNo" label="Account No" onBlur={handleBlur} onChange={handleChange} value={values.accountNo} error={Boolean(errors.accountNo && touched.accountNo)} helperText={touched.accountNo && errors.accountNo} />
+                <TextField color="info" size="medium" name="accountNo" label="계좌번호" onBlur={handleBlur} onChange={handleChange} value={values.accountNo} error={Boolean(errors.accountNo && touched.accountNo)} helperText={touched.accountNo && errors.accountNo} />
 
-                <TextField color="info" size="medium" name="routingNo" label="Routing No" onBlur={handleBlur} onChange={handleChange} value={values.routingNo} error={Boolean(errors.routingNo && touched.routingNo)} helperText={touched.routingNo && errors.routingNo} />
+                <TextField color="info" size="medium" name="routingNo" label="라우팅 숫자" onBlur={handleBlur} onChange={handleChange} value={values.routingNo} error={Boolean(errors.routingNo && touched.routingNo)} helperText={touched.routingNo && errors.routingNo} />
               </Stack>
 
               <Button type="submit" color="info" variant="contained">
-                Save Changes
+                저장
               </Button>
             </form>}
         </Formik>

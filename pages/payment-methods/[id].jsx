@@ -33,12 +33,12 @@ const PaymentMethodEditor = () => {
       bgcolor: "primary.light",
       px: "2rem"
     }}>
-        Back to Payment Methods
+        카드관리로 돌아가기
       </Button>
     </Link>;
   return <CustomerDashboardLayout>
       {/* TITLE HEADER AREA */}
-      <UserDashboardHeader icon={CreditCard} button={HEADER_LINK} title={`${query.id === "add" ? "Add New" : "Edit"} Payment Method`} />
+      <UserDashboardHeader icon={CreditCard} button={HEADER_LINK} title={`${query.id === "add" ? "새로운 카드 추가" : "카드정보 수정"} 하기`} />
 
       {/* PAYMENT DETAILS EDIT FORM */}
       <Card1>
@@ -54,22 +54,22 @@ const PaymentMethodEditor = () => {
               <Box mb={4}>
                 <Grid container spacing={3}>
                   <Grid item md={6} xs={12}>
-                    <TextField name="card_no" label="Card Number" fullWidth onBlur={handleBlur} onChange={handleChange} value={values.card_no || ""} error={!!touched.card_no && !!errors.card_no} helperText={touched.card_no && errors.card_no} />
+                    <TextField name="card_no" label="카드번호" fullWidth onBlur={handleBlur} onChange={handleChange} value={values.card_no || ""} error={!!touched.card_no && !!errors.card_no} helperText={touched.card_no && errors.card_no} />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <TextField name="name" label="Name on Card" fullWidth onBlur={handleBlur} onChange={handleChange} value={values.name || ""} error={!!touched.name && !!errors.name} helperText={touched.name && errors.name} />
+                    <TextField name="name" label="카드이름" fullWidth onBlur={handleBlur} onChange={handleChange} value={values.name || ""} error={!!touched.name && !!errors.name} helperText={touched.name && errors.name} />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <TextField name="exp" label="Exp. Date" fullWidth onBlur={handleBlur} onChange={handleChange} value={values.exp || ""} error={!!touched.exp && !!errors.exp} helperText={touched.exp && errors.exp} />
+                    <TextField name="exp" label="만료일자" fullWidth onBlur={handleBlur} onChange={handleChange} value={values.exp || ""} error={!!touched.exp && !!errors.exp} helperText={touched.exp && errors.exp} />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <TextField name="cvc" label="CVC" fullWidth onBlur={handleBlur} onChange={handleChange} value={values.cvc || ""} error={!!touched.cvc && !!errors.cvc} helperText={touched.cvc && errors.cvc} />
+                    <TextField name="cvc" label="CVC번호" fullWidth onBlur={handleBlur} onChange={handleChange} value={values.cvc || ""} error={!!touched.cvc && !!errors.cvc} helperText={touched.cvc && errors.cvc} />
                   </Grid>
                 </Grid>
               </Box>
 
               <Button type="submit" variant="contained" color="primary">
-                Save Changes
+                저장
               </Button>
             </form>}
         </Formik>

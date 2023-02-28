@@ -63,9 +63,9 @@ const Profile = ({
                   <div>
                     <H5 my="0px">{`${user.name.firstName} ${user.name.lastName}`}</H5>
                     <FlexBox alignItems="center">
-                      <Typography color="grey.600">Balance:</Typography>
+                      <Typography color="grey.600">포인트:</Typography>
                       <Typography ml={0.5} color="primary.main">
-                        {currency(500)}
+                        {currency(5.50)}
                       </Typography>
                     </FlexBox>
                   </div>
@@ -111,11 +111,11 @@ const Profile = ({
         justifyContent: "flex-start"
       })
     }}>
-        <TableRowItem title="First Name" value={user.name.firstName} />
-        <TableRowItem title="Last Name" value={user.name.lastName} />
-        <TableRowItem title="Email" value={user.email} />
-        <TableRowItem title="Phone" value={user.phone} />
-        <TableRowItem title="Birth date" value={format(new Date(user.dateOfBirth), "dd MMM, yyyy")} />
+        <TableRowItem title="이름" value={user.name.firstName} />
+        <TableRowItem title="성" value={user.name.lastName} />
+        <TableRowItem title="이메일" value={user.email} />
+        <TableRowItem title="휴대폰번호" value={user.phone} />
+        <TableRowItem title="생년월일" value={format(new Date(user.dateOfBirth), "yyyy-MM-dd")} />
       </TableRow>
     </CustomerDashboardLayout>;
 };

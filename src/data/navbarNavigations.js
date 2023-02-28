@@ -37,7 +37,7 @@ const megaMenus = [[{
     title: "Order List",
     url: "/orders"
   }, {
-    title: "Order Details",
+    title: "주문 상세",
     url: "/orders/f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8"
   }, {
     title: "View Profile",
@@ -98,7 +98,7 @@ const megaMenus = [[{
     url: "/sale-page-2"
   }]
 }, {
-  title: "주문/배송",
+  title: "주문/예약",
   child: [{
     title: "Search product",
     url: "/product/search/mobile phone"
@@ -186,7 +186,7 @@ const navbarNavigations = [{
       url: "/sale-page-2"
     }]
   }, {
-    title: "Vendor",
+    title: "판매사",
     child: [{
       title: "All vendors",
       url: "/shops"
@@ -195,7 +195,7 @@ const navbarNavigations = [{
       url: "/shops/scarlett-beauty"
     }]
   }, {
-    title: "Shop",
+    title: "상점",
     child: [{
       title: "Search product",
       url: "/product/search/mobile phone"
@@ -226,7 +226,7 @@ const navbarNavigations = [{
       title: "Order List",
       url: "/orders"
     }, {
-      title: "Order Details",
+      title: "주문 상세",
       url: "/orders/f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8"
     }]
   }, {
@@ -263,7 +263,7 @@ const navbarNavigations = [{
 }, {
   megaMenu: false,
   megaMenuWithSub: false,
-  title: "Vendor Account",
+  title: "판매사 계정",
   child: [{
     title: "Dashboard",
     url: "/vendor/dashboard"
@@ -277,16 +277,16 @@ const navbarNavigations = [{
       url: "/admin/products/lord-2019"
     }]
   }, {
-    title: "Orders",
+    title: "주문",
     child: [{
-      title: "All orders",
+      title: "모든 주문",
       url: "/admin/orders"
     }, {
-      title: "Order details",
+      title: "주문 상세",
       url: "/admin/orders/f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8"
     }]
   }, {
-    title: "Profile",
+    title: "프로필",
     url: "/vendor/account-setting"
   }]
 }];

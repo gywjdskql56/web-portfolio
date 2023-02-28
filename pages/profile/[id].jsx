@@ -43,7 +43,7 @@ const ProfileEditor = ({
       px: 4,
       bgcolor: "primary.light"
     }}>
-        Back to Profile
+        프로필로 돌아가기
       </Button>
     </Link>;
 
@@ -53,7 +53,7 @@ const ProfileEditor = ({
   }
   return <CustomerDashboardLayout>
       {/* TITLE HEADER AREA */}
-      <UserDashboardHeader icon={Person} title="Edit Profile" button={HEADER_LINK} navigation={<CustomerDashboardNavigation />} />
+      <UserDashboardHeader icon={Person} title="프로필 수정" button={HEADER_LINK} navigation={<CustomerDashboardNavigation />} />
 
       {/* PROFILE EDITOR FORM */}
       <Card1>
@@ -94,24 +94,24 @@ const ProfileEditor = ({
               <Box mb={4}>
                 <Grid container spacing={3}>
                   <Grid item md={6} xs={12}>
-                    <TextField fullWidth name="first_name" label="First Name" onBlur={handleBlur} onChange={handleChange} value={values.first_name} error={!!touched.first_name && !!errors.first_name} helperText={touched.first_name && errors.first_name} />
+                    <TextField fullWidth name="first_name" label="이름" onBlur={handleBlur} onChange={handleChange} value={values.first_name} error={!!touched.first_name && !!errors.first_name} helperText={touched.first_name && errors.first_name} />
                   </Grid>
 
                   <Grid item md={6} xs={12}>
-                    <TextField fullWidth name="last_name" label="Last Name" onBlur={handleBlur} onChange={handleChange} value={values.last_name} error={!!touched.last_name && !!errors.last_name} helperText={touched.last_name && errors.last_name} />
+                    <TextField fullWidth name="last_name" label="성" onBlur={handleBlur} onChange={handleChange} value={values.last_name} error={!!touched.last_name && !!errors.last_name} helperText={touched.last_name && errors.last_name} />
                   </Grid>
 
                   <Grid item md={6} xs={12}>
-                    <TextField fullWidth name="email" type="email" label="Email" onBlur={handleBlur} value={values.email} onChange={handleChange} error={!!touched.email && !!errors.email} helperText={touched.email && errors.email} />
+                    <TextField fullWidth name="email" type="email" label="이메일" onBlur={handleBlur} value={values.email} onChange={handleChange} error={!!touched.email && !!errors.email} helperText={touched.email && errors.email} />
                   </Grid>
 
                   <Grid item md={6} xs={12}>
-                    <TextField fullWidth label="Phone" name="contact" onBlur={handleBlur} value={values.contact} onChange={handleChange} error={!!touched.contact && !!errors.contact} helperText={touched.contact && errors.contact} />
+                    <TextField fullWidth label="휴대폰 번호" name="contact" onBlur={handleBlur} value={values.contact} onChange={handleChange} error={!!touched.contact && !!errors.contact} helperText={touched.contact && errors.contact} />
                   </Grid>
 
                   <Grid item md={6} xs={12}>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <DatePicker label="Birth Date" maxDate={new Date()} value={values.birth_date} inputFormat="dd MMMM, yyyy" renderInput={props => <TextField fullWidth size="small" helperText={touched.birth_date && errors.birth_date} error={!!touched.birth_date && !!errors.birth_date || props.error} {...props} />} onChange={newValue => setFieldValue("birth_date", newValue)} />
+                      <DatePicker label="생년월일" maxDate={new Date()} value={values.birth_date} inputFormat="yyyy-MM-dd" renderInput={props => <TextField fullWidth size="small" helperText={touched.birth_date && errors.birth_date} error={!!touched.birth_date && !!errors.birth_date || props.error} {...props} />} onChange={newValue => setFieldValue("birth_date", newValue)} />
                     </LocalizationProvider>
                   </Grid>
                 </Grid>

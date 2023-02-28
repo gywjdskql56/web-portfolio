@@ -131,7 +131,7 @@ const shops = [{
     }
   },
   email: "Clifton.Mohr@hotmail.com",
-  name: "Keyboard Kiosk",
+  name: "모두투어",
   phone: "(613) 343-9004",
   address: "845 N. Stonybrook Ave. Tonawanda, NY 14210, Denmark",
   verified: false,
@@ -160,7 +160,7 @@ const shops = [{
     }
   },
   email: "Hal_Hayes67@gmail.com",
-  name: "Anytime Buys",
+  name: "하나투어",
   phone: "(613) 343-9004",
   address: "845 N. Stonybrook Ave. Tonawanda, NY 14210, Denmark",
   verified: false,
@@ -189,7 +189,7 @@ const shops = [{
     }
   },
   email: "Damon2@gmail.com",
-  name: "Word Wide Wishes",
+  name: "SJ 투어",
   phone: "(613) 343-9004",
   address: "845 N. Stonybrook Ave. Tonawanda, NY 14210, Denmark",
   verified: false,
@@ -218,7 +218,7 @@ const shops = [{
     }
   },
   email: "Dwight7@gmail.com",
-  name: "Cybershop",
+  name: "월드 투어",
   phone: "(613) 343-9004",
   address: "845 N. Stonybrook Ave. Tonawanda, NY 14210, Denmark",
   verified: false,

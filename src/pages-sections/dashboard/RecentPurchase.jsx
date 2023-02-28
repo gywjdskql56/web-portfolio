@@ -6,19 +6,19 @@ import DataListTable from "./table";
 // table column list
 const tableHeading = [{
   id: "orderId",
-  label: "Order ID",
+  label: "주문번호",
   alignRight: false
 }, {
   id: "product",
-  label: "Product",
+  label: "상품",
   alignRight: false
 }, {
   id: "payment",
-  label: "Payment",
+  label: "상태",
   alignRight: false
 }, {
   id: "amount",
-  label: "Amount",
+  label: "금액",
   alignCenter: true
 }];
 
@@ -31,10 +31,10 @@ const RecentPurchase = ({
 }) => {
   return <Card>
       <FlexBetween px={3} py={2.5}>
-        <H5>Recent Purchases</H5>
+        <H5>최근 주문 상품</H5>
 
         <Button size="small" color="info" variant="outlined">
-          All Orders
+          전체보기
         </Button>
       </FlexBetween>
 

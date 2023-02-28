@@ -1,6 +1,6 @@
 export const categories = [{
   id: "4c9681ac-69e7-4ab6-b819-971b8ee9563b",
-  name: "Birthday Gift",
+  name: "지방흡입",
   icon: null,
   image: "/assets/images/Gift Shop/Product 1.png",
   slug: "birthday-gift",
@@ -9,7 +9,7 @@ export const categories = [{
   featured: true
 }, {
   id: "c8305a8a-a71e-4240-a01f-6b6336be20d9",
-  name: "Couple Gift",
+  name: "라식/라섹",
   icon: null,
   image: "/assets/images/Gift Shop/Product 2.png",
   slug: "couple-gift",
@@ -18,7 +18,7 @@ export const categories = [{
   featured: true
 }, {
   id: "ce8d812a-1df6-4c00-84a0-e4ef9780adcd",
-  name: "Baby Doll",
+  name: "임플란트",
   icon: null,
   parent: [],
   slug: "baby-doll",
@@ -27,7 +27,7 @@ export const categories = [{
   featured: false
 }, {
   id: "96c813a8-efff-4a51-8926-fc674757a135",
-  name: "Men's Fashion",
+  name: "성형",
   icon: null,
   image: "/assets/images/products/t-shirt4.png",
   slug: "men's-fashion",
@@ -36,7 +36,7 @@ export const categories = [{
   featured: true
 }, {
   id: "76f4a1dd-fd27-461e-8b59-bfc3c1da6895",
-  name: "Women's Fashion",
+  name: "건강검진",
   icon: null,
   image: "/assets/images/products/t-shirt5.png",
   slug: "women's-fashion",
@@ -45,7 +45,7 @@ export const categories = [{
   featured: false
 }, {
   id: "e6d2c2e3-d973-4367-98d8-0c140fbaf390",
-  name: "Gadgets",
+  name: "시술",
   icon: null,
   image: "/assets/images/products/smartwatch-2.png",
   slug: "gadgets",
@@ -54,7 +54,7 @@ export const categories = [{
   featured: true
 }, {
   id: "f7b1da64-4d03-4a10-b364-67a2589b9de1",
-  name: "Cosmatics",
+  name: "이비인후과",
   icon: null,
   image: "/assets/images/products/casmatics.jpg",
   slug: "cosmatics",

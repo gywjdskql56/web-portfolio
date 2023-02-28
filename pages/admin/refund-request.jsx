@@ -2,7 +2,7 @@ import { Box, Card, Stack, Table, TableContainer } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableHeader from "components/data-table/TableHeader";
 import TablePagination from "components/data-table/TablePagination";
-import VendorDashboardLayout from "components/layouts/vendor-dashboard";
+import AdminDashboardLayout from "components/layouts/admin-dashboard";
 import Scrollbar from "components/Scrollbar";
 import { H3 } from "components/Typography";
 import useMuiTable from "hooks/useMuiTable";
@@ -12,33 +12,33 @@ import api from "utils/__api__/dashboard";
 // table column list
 const tableHeading = [{
   id: "orderNo",
-  label: "Order No",
+  label: "주문번호",
   align: "left"
 }, {
   id: "shopName",
-  label: "Shop Name",
+  label: "판매사",
   align: "left"
 }, {
   id: "product",
-  label: "Product Details",
+  label: "상품 상세",
   align: "left"
 }, {
   id: "amount",
-  label: "Amount",
+  label: "가격",
   align: "left"
 }, {
   id: "status",
-  label: "Status",
+  label: "상태",
   align: "left"
 }, {
   id: "action",
-  label: "Action",
+  label: "수정/삭제",
   align: "center"
 }];
 
 // =============================================================================
 RefundRequest.getLayout = function getLayout(page) {
-  return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
+  return <AdminDashboardLayout>{page}</AdminDashboardLayout>;
 };
 // =============================================================================
 
@@ -59,7 +59,7 @@ export default function RefundRequest({
     listData: requests
   });
   return <Box py={4}>
-      <H3 mb={2}>Refund Request</H3>
+      <H3 mb={2}>환불 요청</H3>
 
       <Card>
         <Scrollbar>

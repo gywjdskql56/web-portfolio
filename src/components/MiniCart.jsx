@@ -42,7 +42,7 @@ const MiniCart = ({
             <CartBag color="inherit" />
 
             <Paragraph lineHeight={0} fontWeight={600}>
-              {cartList.length} item
+              {cartList.length} 개의 상품
             </Paragraph>
           </FlexBox>
 
@@ -129,7 +129,7 @@ const MiniCart = ({
           mb: "0.75rem",
           height: "40px"
         }} onClick={toggleSidenav}>
-              Checkout Now ({currency(getTotalPrice())})
+              바로 결제하기 ({currency(getTotalPrice())})
             </Button>
           </Link>
 
@@ -137,7 +137,7 @@ const MiniCart = ({
             <Button fullWidth color="primary" variant="outlined" sx={{
           height: 40
         }} onClick={toggleSidenav}>
-              View Cart
+              장바구니 보기
             </Button>
           </Link>
         </Box>}

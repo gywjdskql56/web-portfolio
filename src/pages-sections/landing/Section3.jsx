@@ -178,37 +178,37 @@ const demoPageList = [{
 const shopPageList = [{
   imgUrl: "/assets/images/landing/shop/sale-page-1.jpg",
   previewUrl: "/sale-page-1",
-  title: "Sale Page",
+  title: "판매 페이지",
   page: "shop"
 }, {
   imgUrl: "/assets/images/landing/shop/sale-page-2.jpg",
   previewUrl: "/sale-page-2",
-  title: "Sale Page (Small Navigation)",
+  title: "판매 페이지 (축소버전)",
   page: "shop"
 }, {
   imgUrl: "/assets/images/landing/shop/vendor-store.jpg",
   previewUrl: "/shops/scarlett-beauty",
-  title: "Vendor Shop",
+  title: "판매사 페이지",
   page: "shop"
 }, {
   imgUrl: "/assets/images/landing/shop/search-product.jpg",
   previewUrl: "/product/search/mobile%20phone",
-  title: "Search",
+  title: "검색",
   page: "shop"
 }, {
   imgUrl: "/assets/images/landing/shop/product-details.jpg",
   previewUrl: "/product/classic-rolex-watch",
-  title: "Product Details",
+  title: "상품 상세",
   page: "shop"
 }, {
   imgUrl: "/assets/images/landing/shop/cart.jpg",
   previewUrl: "/cart",
-  title: "Cart",
+  title: "장바구니",
   page: "shop"
 }, {
   imgUrl: "/assets/images/landing/shop/checkout.jpg",
   previewUrl: "/checkout",
-  title: "Checkout",
+  title: "결제",
   page: "shop"
 }, {
   imgUrl: "/assets/images/landing/shop/checkout-alternative.jpg",
@@ -218,191 +218,191 @@ const shopPageList = [{
 }, {
   imgUrl: "/assets/images/landing/shop/shop-list.jpg",
   previewUrl: "/shops",
-  title: "Shop List",
+  title: "판매사 리스트",
   page: "shop"
 }];
 const vendorPageList = [{
   imgUrl: "/assets/images/landing/vendor/dashboard.jpg",
   previewUrl: "/vendor/dashboard",
-  title: "Dashboard",
+  title: "전체 현황표",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/product-list.jpg",
   previewUrl: "/admin/products",
-  title: "Product List",
+  title: "상품 리스트",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/create-product.jpg",
   previewUrl: "/admin/products/create",
-  title: "Create Product",
+  title: "상품 추가하기",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/categories.jpg",
   previewUrl: "/admin/categories",
-  title: "Category List",
+  title: "카테고리 리스트",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/brands.jpg",
   previewUrl: "/admin/brands",
-  title: "Brand List",
+  title: "브랜드 리스트",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/reviews.jpg",
   previewUrl: "/admin/product-reviews",
-  title: "Product Reviews",
+  title: "상품 리뷰",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/order-list.jpg",
   previewUrl: "/admin/orders",
-  title: "Order List",
+  title: "주문 목록",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/order-details.jpg",
   previewUrl: "/admin/orders/f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8",
-  title: "Order Details",
+  title: "주문 상세페이지",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/customers.jpg",
   previewUrl: "/admin/customers",
-  title: "Customer List",
+  title: "고객 리스트",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/refund-request.jpg",
   previewUrl: "/admin/refund-request",
-  title: "Refund Request",
+  title: "환불 요청",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/refund-setting.jpg",
   previewUrl: "/admin/refund-setting",
-  title: "Refund Setting",
+  title: "환불 관리",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/seller-list.jpg",
   previewUrl: "/admin/sellers",
-  title: "Seller List",
+  title: "판매사 리스트",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/seller-package.jpg",
   previewUrl: "/admin/seller-package",
-  title: "Seller Packages",
+  title: "판매사 패키지",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/package-payment.jpg",
   previewUrl: "/admin/package-payment",
-  title: "Pacakge Payment",
+  title: "패키지 결제",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/earning-history.jpg",
   previewUrl: "/admin/earning-history",
-  title: "Earning History",
+  title: "판매 내역",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/payout-list.jpg",
   previewUrl: "/admin/payouts",
-  title: "Payout List",
+  title: "대금결제 리스트",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/payout-request.jpg",
   previewUrl: "/admin/payout-request",
-  title: "Payout Request",
+  title: "대금결제 요청",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/vendor-earning.jpg",
   previewUrl: "/vendor/earning-history",
-  title: "Vendor Earning History",
+  title: "판매사 판매 내역",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/vendor-payouts.jpg",
   previewUrl: "/vendor/payouts",
-  title: "Vendor Payouts",
+  title: "판매사 대금결제",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/vendor-payout-requests.jpg",
   previewUrl: "/vendor/payout-requests",
-  title: "Vendor Payout Request",
+  title: "판매사 대금결제 요청",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/payout-settings.jpg",
   previewUrl: "/vendor/payout-settings",
-  title: "Payout Settings",
+  title: "대금 결제 설정",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/vendor-refund-requests.jpg",
   previewUrl: "/vendor/refund-request",
-  title: "Vendor Refund Requests",
+  title: "판매사 환불 요청",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/vendor-product-reviews.jpg",
   previewUrl: "/vendor/reviews",
-  title: "Vendor Product Reviews",
+  title: "판매사 상품 리뷰",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/shop-settings.jpg",
   previewUrl: "/vendor/shop-settings",
-  title: "Shop Settings",
+  title: "판매사 환경설정",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/support-tickets.jpg",
   previewUrl: "/vendor/support-tickets",
-  title: "Support Tickets",
+  title: "고객센터",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/account-setting.jpg",
   previewUrl: "/vendor/account-setting",
-  title: "Account Settings",
+  title: "환경설정",
   status: "New",
   page: "admin"
 }, {
   imgUrl: "/assets/images/landing/vendor/site-settings.jpg",
   previewUrl: "/vendor/site-settings",
-  title: "Site Settings",
+  title: "사이트 환경설정",
   status: "New",
   page: "admin"
 }];
 const customerPageList = [{
   imgUrl: "/assets/images/landing/customer/profile.jpg",
   previewUrl: "/profile",
-  title: "Profile",
+  title: "마이페이지",
   page: "user"
 }, {
   imgUrl: "/assets/images/landing/customer/edit-profile.jpg",
   previewUrl: "/profile/e42e28ea-528f-4bc8-81fb-97f658d67d75",
-  title: "Edit Profile",
+  title: "내정보 수정",
   page: "user"
 }, {
   imgUrl: "/assets/images/landing/customer/order-list.jpg",
   previewUrl: "/orders",
-  title: "My Orders",
+  title: "내 주문",
   page: "user"
 }, {
   imgUrl: "/assets/images/landing/customer/order-details.jpg",
   previewUrl: "/orders/f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8",
-  title: "Order Details",
+  title: "주문 상세",
   page: "user"
 }, {
   imgUrl: "/assets/images/landing/customer/my-addresses.jpg",
@@ -412,27 +412,27 @@ const customerPageList = [{
 }, {
   imgUrl: "/assets/images/landing/customer/add-new-addresses.jpg",
   previewUrl: "/address/d27d0e28-c35e-4085-af1e-f9f1b1bd9c34",
-  title: "Add Addresses",
+  title: "주소 추가하기",
   page: "user"
 }, {
   imgUrl: "/assets/images/landing/customer/payment.jpg",
   previewUrl: "/payment-methods",
-  title: "Payment Methods",
+  title: "결제 방법",
   page: "user"
 }, {
   imgUrl: "/assets/images/landing/customer/support-ticket.jpg",
   previewUrl: "/support-tickets",
-  title: "Support Tickets",
+  title: "고객센터",
   page: "user"
 }, {
   imgUrl: "/assets/images/landing/customer/support-ticket-detials.jpg",
   previewUrl: "/support-tickets/product-broken.-i-need-refund",
-  title: "Ticket Details",
+  title: "고객센터 상세",
   page: "user"
 }, {
   imgUrl: "/assets/images/landing/customer/wish-list.jpg",
   previewUrl: "/wish-list",
-  title: "Wish List",
+  title: "위시리스트",
   page: "user"
 }];
 export default Section3;

@@ -7,15 +7,15 @@ import DataListTable from "./table";
 // table column list
 const tableHeading = [{
   id: "product",
-  label: "Product",
+  label: "상품",
   alignRight: false
 }, {
   id: "stock",
-  label: "Stock",
+  label: "재고",
   alignRight: false
 }, {
   id: "amount",
-  label: "Amount",
+  label: "금액",
   alignCenter: true
 }];
 
@@ -30,10 +30,10 @@ const StockOutProducts = ({
     height: "100%"
   }}>
       <FlexBetween px={3} py={2.5}>
-        <H5>Stock Out Products</H5>
+        <H5>품절된 상품</H5>
 
         <Button size="small" color="info" variant="outlined">
-          All Products
+          전체보기
         </Button>
       </FlexBetween>
 

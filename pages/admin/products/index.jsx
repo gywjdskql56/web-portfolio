@@ -4,7 +4,7 @@ import TableBody from "@mui/material/TableBody";
 import SearchArea from "components/dashboard/SearchArea";
 import TableHeader from "components/data-table/TableHeader";
 import TablePagination from "components/data-table/TablePagination";
-import VendorDashboardLayout from "components/layouts/vendor-dashboard";
+import AdminDashboardLayout from "components/layouts/admin-dashboard";
 import { H3 } from "components/Typography";
 import useMuiTable from "hooks/useMuiTable";
 import Scrollbar from "components/Scrollbar";
@@ -13,33 +13,33 @@ import api from "utils/__api__/dashboard";
 // TABLE HEADING DATA LIST
 const tableHeading = [{
   id: "name",
-  label: "Name",
+  label: "상품명",
   align: "left"
 }, {
   id: "category",
-  label: "Category",
+  label: "카테고리",
   align: "left"
 }, {
   id: "brand",
-  label: "Brand",
+  label: "판매사",
   align: "left"
 }, {
   id: "price",
-  label: "Price",
+  label: "가격",
   align: "left"
 }, {
   id: "published",
-  label: "Published",
+  label: "공개여부",
   align: "left"
 }, {
   id: "action",
-  label: "Action",
+  label: "수정 및 삭제",
   align: "center"
 }];
 
 // =============================================================================
 ProductList.getLayout = function getLayout(page) {
-  return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
+  return <AdminDashboardLayout>{page}</AdminDashboardLayout>;
 };
 // =============================================================================
 
@@ -73,9 +73,9 @@ export default function ProductList(props) {
     listData: filteredProducts
   });
   return <Box py={4}>
-      <H3 mb={2}>Product List</H3>
+      <H3 mb={2}>상품 리스트</H3>
 
-      <SearchArea handleSearch={() => {}} buttonText="Add Product" searchPlaceholder="Search Product..." handleBtnClick={() => Router.push("/admin/products/create")} />
+      <SearchArea handleSearch={() => {}} buttonText="상품 추가하기" searchPlaceholder="상품 검색하기..." handleBtnClick={() => Router.push("/admin/products/create")} />
 
       <Card>
         <Scrollbar autoHide={false}>

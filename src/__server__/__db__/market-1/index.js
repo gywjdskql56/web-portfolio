@@ -188,6 +188,39 @@ Mock.onGet("/api/market-1/bottom-categories").reply(async () => {
     }];
   }
 });
+Mock.onGet("/api/market-1/bottom-categories2").reply(async () => {
+  try {
+    const categories2 = db.categories2.filter(item => item.for.type === "categories2");
+    return [200, categories2];
+  } catch (err) {
+    console.error(err);
+    return [500, {
+      message: "Internal server error"
+    }];
+  }
+});
+Mock.onGet("/api/market-1/bottom-categories3").reply(async () => {
+  try {
+    const categories3 = db.categories3.filter(item => item.for.type === "categories3");
+    return [200, categories3];
+  } catch (err) {
+    console.error(err);
+    return [500, {
+      message: "Internal server error"
+    }];
+  }
+});
+Mock.onGet("/api/market-1/bottom-categories4").reply(async () => {
+  try {
+    const categories4 = db.categories4.filter(item => item.for.type === "categories4");
+    return [200, categories4];
+  } catch (err) {
+    console.error(err);
+    return [500, {
+      message: "Internal server error"
+    }];
+  }
+});
 Mock.onGet("/api/market-1/get-more-items").reply(async () => {
   try {
     const products = db.products.filter(item => item.for.type === "more-products");

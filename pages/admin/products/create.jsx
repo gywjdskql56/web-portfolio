@@ -2,11 +2,11 @@ import { Box } from "@mui/material";
 import * as yup from "yup";
 import { H3 } from "components/Typography";
 import { ProductForm } from "pages-sections/admin";
-import VendorDashboardLayout from "components/layouts/vendor-dashboard";
+import AdminDashboardLayout from "components/layouts/admin-dashboard";
 
 // =============================================================================
 CreateProduct.getLayout = function getLayout(page) {
-  return <VendorDashboardLayout>{page}</VendorDashboardLayout>;
+  return <AdminDashboardLayout>{page}</AdminDashboardLayout>;
 };
 // =============================================================================
 
@@ -33,7 +33,7 @@ export default function CreateProduct() {
     console.log(values);
   };
   return <Box py={4}>
-      <H3 mb={2}>Add New Product</H3>
+      <H3 mb={2}>새로운 상품 추가하기</H3>
 
       <ProductForm initialValues={INITIAL_VALUES} validationSchema={validationSchema} handleFormSubmit={handleFormSubmit} />
     </Box>;

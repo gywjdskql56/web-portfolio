@@ -7,14 +7,26 @@ import { H3 } from "components/Typography";
 
 const ProductDescription = () => {
   return <Box>
-      <H3 mb={2}>Specification:</H3>
+      <H3 mb={2}>상세설명:</H3>
       <Box>
-        Brand: Beats <br />
-        Model: S450 <br />
-        Wireless Bluetooth Headset <br />
-        FM Frequency Response: 87.5 – 108 MHz <br />
-        Feature: FM Radio, Card Supported (Micro SD / TF) <br />
-        Made in China <br />
+        패키지명 : 인천 앞바다 패키지 <br />
+        여행사 : 하나투어 <br />
+        여행기간 : 7박 9일(2월내 출발상품) <br />
+        상품구성 : 인천 대학병원 교수님이 집도하시는 라섹/라식에 인천 차이나타운/동화마을/월미도 관광 패키지  <br />
+        상세설명 : 월/화 - 김리라 교수님, 수/목/금/토 - 가나다 교수님께서 라섹과 라식 수술 집도 <br />
+        {"       "}1일차 : 인천 도착 및 숙소방문<br />
+        {"       "}2일차 : 수술 전 검진 및 차이나타운 방문<br />
+        {"       "}3일차 : 동화마을 방문 및 인천시장 방문<br />
+        {"       "}4일차 : 월미도 방문<br />
+        {"       "}5일차 : 수술 진행<br />
+        {"       "}6일차 : 송도 복합 쇼핑몰<br />
+        {"       "}7일차 : 자유시간 및 탑승수속<br />
+        {"       "}** 호텔정보 : U5<br />
+        주의사항 : 1. 환불은 출발 3일전까지 가능합니다. <br />
+        {"      "} 2. 숙소는 출발전 일주일전까지만 협의하에 변경이 가능합니다. (차액이 발생할 수 있습니다.)<br />
+        {"      "} 3. 일정은 병원 사정에 의해서 최대 1일까지 변동이 있을 수 있습니다.<br />
+        <br />
+        <br />
       </Box>
     </Box>;
 };

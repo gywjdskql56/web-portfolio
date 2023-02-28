@@ -31,7 +31,7 @@ const TicketList = ({
 }) => {
   return <CustomerDashboardLayout>
       {/* TITLE HEADER AREA */}
-      <UserDashboardHeader title="Support Ticket" icon={CustomerService} navigation={<CustomerDashboardNavigation />} />
+      <UserDashboardHeader title="고객센터" icon={CustomerService} navigation={<CustomerDashboardNavigation />} />
 
       {/* SUPPORT TICKET LIST AREA */}
       {ticketList.map(item => <Link href={`/support-tickets/${item.slug}`} key={item.id} passHref>

@@ -50,19 +50,23 @@ const StatusWrapper = styled(Box)(({
 }) => {
   let color = theme.palette.secondary.main;
   let backgroundColor = theme.palette.secondary[100];
-  if (status === "Accepted" || status === "Delivered" || status === "Normal") {
+  if (status === "입금완료" || status === "예약확정" || status === "Normal") {
     color = theme.palette.success.main;
     backgroundColor = theme.palette.success[100];
   }
-  if (status === "Rejected" || status === "Urgent" || status === "Cancelled") {
+  if (status === "Rejected" || status === "Urgent" || status === "구매취소") {
     color = theme.palette.error.main;
     backgroundColor = theme.palette.error[100];
   }
-  if (status === "Processing") {
+  if (status === "주문확인중") {
     color = theme.palette.warning.main;
     backgroundColor = theme.palette.warning[100];
   }
-  if (status === "Pending") {
+  if (status === "요청확인중") {
+    color = theme.palette.warning.main;
+    backgroundColor = theme.palette.warning[100];
+  }
+  if (status === "처리진행중") {
     color = theme.palette.info.main;
     backgroundColor = theme.palette.info[100];
   }

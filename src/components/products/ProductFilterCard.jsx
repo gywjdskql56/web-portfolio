@@ -9,7 +9,7 @@ const ProductFilterCard = () => {
     overflow: "auto"
   }} elevation={1}>
       {/* CATEGORY VARIANT FILTER */}
-      <H6 mb={1.25}>Categories</H6>
+      <H6 mb={1.25}>카테고리</H6>
 
       {categroyList.map(item => item.subCategories ? <Accordion key={item.title} expanded>
             <AccordionHeader px={0} py={0.75} color="grey.600">
@@ -34,7 +34,7 @@ const ProductFilterCard = () => {
     }} />
 
       {/* PRICE VARIANT FILTER */}
-      <H6 mb={2}>Price Range</H6>
+      <H6 mb={2}>가격대</H6>
       <FlexBetween>
         <TextField placeholder="0" type="number" size="small" fullWidth />
         <H5 color="grey.600" px={1}>
@@ -48,7 +48,7 @@ const ProductFilterCard = () => {
     }} />
 
       {/* BRAND VARIANT FILTER */}
-      <H6 mb={2}>Brands</H6>
+      <H6 mb={2}>판매사</H6>
       {brandList.map(item => <FormControlLabel key={item} sx={{
       display: "flex"
     }} label={<Span color="inherit">{item}</Span>} control={<Checkbox size="small" color="secondary" />} />)}
@@ -66,7 +66,7 @@ const ProductFilterCard = () => {
     }} />
 
       {/* RATINGS FILTER */}
-      <H6 mb={2}>Ratings</H6>
+      <H6 mb={2}>후기</H6>
       {[5, 4, 3, 2, 1].map(item => <FormControlLabel control={<Checkbox size="small" color="secondary" />} label={<Rating size="small" value={item} color="warn" readOnly />} sx={{
       display: "flex"
     }} key={item} />)}
@@ -76,7 +76,7 @@ const ProductFilterCard = () => {
     }} />
 
       {/* COLORS VARIANT FILTER */}
-      <H6 mb={2}>Colors</H6>
+      {/*<H6 mb={2}>색상</H6>
       <FlexBox mb={2} flexWrap="wrap" gap={1}>
         {colorList.map(item => <Box key={item} flexShrink={0} sx={{
         width: 25,
@@ -85,20 +85,20 @@ const ProductFilterCard = () => {
         cursor: "pointer",
         borderRadius: "50%"
       }} />)}
-      </FlexBox>
+      </FlexBox>*/}
     </Card>;
 };
 const categroyList = [{
-  title: "Bath Preparations",
-  subCategories: ["Bubble Bath", "Bath Capsules", "Others"]
+  title: "성형",
+  subCategories: ["얼굴", "몸", "시술"]
 }, {
-  title: "Eye Makeup Preparations"
+  title: "눈성형"
 }, {
-  title: "Fragrance"
+  title: "코성형"
 }, {
-  title: "Hair Preparations"
+  title: "윤곽수술"
 }];
-const brandList = ["Maccs", "Karts", "Baars", "Bukks", "Luasis"];
-const otherOptions = ["On Sale", "In Stock", "Featured"];
+const brandList = ["하나투어", "모두투어", "가나다 여행사", "위드투어"];
+const otherOptions = ["판매중", "품절", "판매종료"];
 const colorList = ["#1C1C1C", "#FF7A7A", "#FFC672", "#84FFB5", "#70F6FF", "#6B7AFF"];
 export default ProductFilterCard;

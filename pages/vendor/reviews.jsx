@@ -12,23 +12,23 @@ import { StyledIconButton, StyledTableCell, StyledTableRow } from "pages-section
 import api from "utils/__api__/vendor";
 const tableHeading = [{
   id: "name",
-  label: "Name",
+  label: "상품명",
   align: "left"
 }, {
   id: "customer",
-  label: "Customer",
+  label: "고객",
   align: "left"
 }, {
   id: "comment",
-  label: "Comment",
+  label: "후기",
   align: "left"
 }, {
   id: "rating",
-  label: "Rating",
+  label: "별점",
   align: "left"
 }, {
   id: "action",
-  label: "Action",
+  label: "수정/삭제",
   align: "center"
 }];
 
@@ -55,7 +55,7 @@ export default function Reviews({
     listData: reviews
   });
   return <Box py={4}>
-      <H3 mb={2}>Product Reviews</H3>
+      <H3 mb={2}>상품 후기</H3>
 
       <Card>
         <Scrollbar>

@@ -15,18 +15,18 @@ export const orders = [{
   id: "f0ba538b-c8f3-45ce-b6c1-209cf07ba5f8",
   tax: 0,
   items: [{
-    product_img: "/assets/images/products/Automotive/2.Audi2017.png",
-    product_name: "Budi 2017",
+    product_img: "/assets/images/products/Package/img.png",
+    product_name: "시술 + 강원도 꽃 관광패키지",
     product_price: 226,
     product_quantity: 4
   }, {
-    product_img: "/assets/images/products/Automotive/3.Tesla2015.png",
-    product_name: "Resla 2015",
+    product_img: "/assets/images/products/Package/img_1.png",
+    product_name: "건강검진 + 제주도 패키지",
     product_price: 101,
     product_quantity: 4
   }, {
-    product_img: "/assets/images/products/Automotive/4.Porsche2018.png",
-    product_name: "Xorsche 2018",
+    product_img: "/assets/images/products/Package/img_2.png",
+    product_name: "라식/라섹 인천 여행 패키지",
     product_price: 241,
     product_quantity: 4
   }],
@@ -34,8 +34,8 @@ export const orders = [{
   discount: 0,
   totalPrice: 350,
   isDelivered: false,
-  shippingAddress: "Kelly Williams 777 Brockton Avenue, Abington MA 2351",
-  status: "Pending",
+  shippingAddress: "서울특별시 화곡동 1087-29, 404호",
+  status: "주문 접수",
   deliveredAt: null
 }, {
   users: {
@@ -54,18 +54,18 @@ export const orders = [{
   id: "1f10985b-09a8-4d93-b5ef-bd8a73bd6067",
   tax: 0,
   items: [{
-    product_img: "/assets/images/products/Automotive/2.Audi2017.png",
-    product_name: "Budi 2017",
+    product_img: "/assets/images/products/Package/img_1.png",
+    product_name: "인천 패키지",
     product_price: 226,
     product_quantity: 4
   }, {
-    product_img: "/assets/images/products/Automotive/3.Tesla2015.png",
-    product_name: "Resla 2015",
+    product_img: "/assets/images/products/Package/img.png",
+    product_name: "제주도 패키지",
     product_price: 101,
     product_quantity: 4
   }, {
-    product_img: "/assets/images/products/Automotive/4.Porsche2018.png",
-    product_name: "Xorsche 2018",
+    product_img: "/assets/images/products/Package/img.png",
+    product_name: "제주도 패키지",
     product_price: 241,
     product_quantity: 4
   }],
@@ -74,7 +74,7 @@ export const orders = [{
   totalPrice: 500,
   isDelivered: false,
   shippingAddress: "Kelly Williams 777 Brockton Avenue, Abington MA 2351",
-  status: "Processing",
+  status: "주문처리중",
   deliveredAt: null
 }, {
   users: {
@@ -93,18 +93,18 @@ export const orders = [{
   id: "6d54d506-208a-43bb-8cb1-20c0783ea661",
   tax: 0,
   items: [{
-    product_img: "/assets/images/products/Automotive/2.Audi2017.png",
-    product_name: "Budi 2017",
+    product_img: "/assets/images/products/Package/img_1.png",
+    product_name: "인천 패키지",
     product_price: 226,
     product_quantity: 4
   }, {
-    product_img: "/assets/images/products/Automotive/3.Tesla2015.png",
-    product_name: "Resla 2015",
+    product_img: "/assets/images/products/Package/img.png",
+    product_name: "제주도 패키지",
     product_price: 101,
     product_quantity: 4
   }, {
-    product_img: "/assets/images/products/Automotive/4.Porsche2018.png",
-    product_name: "Xorsche 2018",
+    product_img: "/assets/images/products/Package/img.png",
+    product_name: "제주도 패키지",
     product_price: 241,
     product_quantity: 4
   }],
@@ -113,7 +113,7 @@ export const orders = [{
   totalPrice: 700,
   isDelivered: true,
   shippingAddress: "Kelly Williams 777 Brockton Avenue, Abington MA 2351",
-  status: "Delivered",
+  status: "예약확정",
   deliveredAt: "2023-02-21T07:18:01.062Z"
 }, {
   users: {
@@ -132,18 +132,18 @@ export const orders = [{
   id: "63d35462-520b-4566-ba1c-82596472a888",
   tax: 0,
   items: [{
-    product_img: "/assets/images/products/Automotive/2.Audi2017.png",
-    product_name: "Budi 2017",
+    product_img: "/assets/images/products/Package/img_1.png",
+    product_name: "인천 패키지",
     product_price: 226,
     product_quantity: 4
   }, {
-    product_img: "/assets/images/products/Automotive/3.Tesla2015.png",
-    product_name: "Resla 2015",
+    product_img: "/assets/images/products/Package/img.png",
+    product_name: "제주도 패키지",
     product_price: 101,
     product_quantity: 4
   }, {
-    product_img: "/assets/images/products/Automotive/4.Porsche2018.png",
-    product_name: "Xorsche 2018",
+    product_img: "/assets/images/products/Package/img.png",
+    product_name: "제주도 패키지",
     product_price: 241,
     product_quantity: 4
   }],
@@ -152,7 +152,7 @@ export const orders = [{
   totalPrice: 700,
   isDelivered: true,
   shippingAddress: "Kelly Williams 777 Brockton Avenue, Abington MA 2351",
-  status: "Delivered",
+  status: "예약확정",
   deliveredAt: "2022-12-12T22:23:37.065Z"
 }, {
   users: {
@@ -171,18 +171,18 @@ export const orders = [{
   id: "753deee0-56b3-40a7-85d4-346b3647c8f8",
   tax: 0,
   items: [{
-    product_img: "/assets/images/products/Automotive/2.Audi2017.png",
-    product_name: "Budi 2017",
+    product_img: "/assets/images/products/Package/img_1.png",
+    product_name: "인천 패키지",
     product_price: 226,
     product_quantity: 4
   }, {
-    product_img: "/assets/images/products/Automotive/3.Tesla2015.png",
-    product_name: "Resla 2015",
+    product_img: "/assets/images/products/Package/img.png",
+    product_name: "제주도 패키지",
     product_price: 101,
     product_quantity: 4
   }, {
-    product_img: "/assets/images/products/Automotive/4.Porsche2018.png",
-    product_name: "Xorsche 2018",
+    product_img: "/assets/images/products/Package/img.png",
+    product_name: "제주도 패키지",
     product_price: 241,
     product_quantity: 4
   }],
@@ -191,6 +191,6 @@ export const orders = [{
   totalPrice: 300,
   isDelivered: false,
   shippingAddress: "Kelly Williams 777 Brockton Avenue, Abington MA 2351",
-  status: "Cancelled",
+  status: "주문취소",
   deliveredAt: null
 }];

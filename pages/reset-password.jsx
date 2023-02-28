@@ -14,14 +14,14 @@ const ResetPassword = () => {
       boxShadow: 1
     }}>
         <H1 fontSize={20} fontWeight={700} mb={4} textAlign="center">
-          Reset your password
+          비밀번호 초기화하기
         </H1>
 
         <FlexBox justifyContent="space-between" flexWrap="wrap" my={2}>
           <form style={{
           width: "100%"
         }}>
-            <TextField fullWidth name="email" type="email" label="Email"
+            <TextField fullWidth name="email" type="email" label="이메일 또는 전화번호"
           //   onBlur={handleBlur}
           //   value={values.email}
           //   onChange={handleChange}
@@ -33,17 +33,17 @@ const ResetPassword = () => {
             mt: 2
           }}>
               <Button fullWidth type="submit" color="primary" variant="contained">
-                Reset
+                초기화
               </Button>
             </Box>
           </form>
 
           <FlexRowCenter mt="1.25rem" justifyContent="center" width="100%">
-            <Box>Don&apos;t have account?</Box>
+            <Box>아직 계정이 없으신가요?</Box>
             <Link href="/signup" passHref legacyBehavior>
               <a>
                 <H6 ml={1} borderBottom="1px solid" borderColor="grey.900">
-                  Sign Up
+                  회원가입하기
                 </H6>
               </a>
             </Link>

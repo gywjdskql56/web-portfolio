@@ -55,7 +55,7 @@ const OrderDetails = ({
     bgcolor: "primary.light",
     px: 4
   }}>
-      Order Again
+      재주문하기
     </Button>;
 
   // Show a loading state when the fallback is rendered
@@ -64,7 +64,7 @@ const OrderDetails = ({
   }
   return <CustomerDashboardLayout>
       {/* TITLE HEADER AREA */}
-      <UserDashboardHeader icon={ShoppingBag} title="Order Details" navigation={<CustomerDashboardNavigation />} button={HEADER_BUTTON} />
+      <UserDashboardHeader icon={ShoppingBag} title="주문 상세" navigation={<CustomerDashboardNavigation />} button={HEADER_BUTTON} />
 
       {/* ORDER PROGRESS AREA */}
       <Card sx={{
@@ -105,7 +105,7 @@ const OrderDetails = ({
 
         <FlexBox justifyContent={width < breakpoint ? "center" : "flex-end"}>
           <Typography p="0.5rem 1rem" textAlign="center" borderRadius="300px" color="primary.main" bgcolor="primary.light">
-            Estimated Delivery Date <b>4th October</b>
+             <b>4일 뒤에</b> 예약확정 예정입니다.
           </Typography>
         </FlexBox>
       </Card>
@@ -123,7 +123,7 @@ const OrderDetails = ({
       }}>
           <FlexBox className="pre" m={0.75} alignItems="center">
             <Typography fontSize={14} color="grey.600" mr={0.5}>
-              Order ID:
+              주문 고유번호:
             </Typography>
 
             <Typography fontSize={14}>{order.id}</Typography>
@@ -131,21 +131,21 @@ const OrderDetails = ({
 
           <FlexBox className="pre" m={0.75} alignItems="center">
             <Typography fontSize={14} color="grey.600" mr={0.5}>
-              Placed on:
+              주문 일시:
             </Typography>
 
             <Typography fontSize={14}>
-              {format(new Date(order.createdAt), "dd MMM, yyyy")}
+              {format(new Date(order.createdAt), "yyyy-MM-dd")}
             </Typography>
           </FlexBox>
 
           <FlexBox className="pre" m={0.75} alignItems="center">
             <Typography fontSize={14} color="grey.600" mr={0.5}>
-              Delivered on:
+              도착 예정:
             </Typography>
 
             <Typography fontSize={14}>
-              {format(new Date(), "dd MMM, yyyy")}
+              {format(new Date(), "yyyy-MM-dd")}
             </Typography>
           </FlexBox>
         </TableRow>
@@ -168,13 +168,13 @@ const OrderDetails = ({
 
               <FlexBox flex="1 1 260px" m={0.75} alignItems="center">
                 <Typography fontSize="14px" color="grey.600">
-                  Product properties: Black, L
+                  상품 옵션: 비즈니스석, 필러 추가
                 </Typography>
               </FlexBox>
 
               <FlexBox flex="160px" m={0.75} alignItems="center">
                 <Button variant="text" color="primary">
-                  <Typography fontSize="14px">Write a Review</Typography>
+                  <Typography fontSize="14px">리뷰 작성</Typography>
                 </Button>
               </FlexBox>
             </FlexBox>)}
@@ -188,7 +188,7 @@ const OrderDetails = ({
           p: "20px 30px"
         }}>
             <H5 mt={0} mb={2}>
-              Shipping Address
+              주문자 주소
             </H5>
 
             <Paragraph fontSize={14} my={0}>
@@ -202,12 +202,12 @@ const OrderDetails = ({
           p: "20px 30px"
         }}>
             <H5 mt={0} mb={2}>
-              Total Summary
+              결제 금액
             </H5>
 
             <FlexBetween mb={1}>
               <Typography fontSize={14} color="grey.600">
-                Subtotal:
+                상품 가격 합계:
               </Typography>
 
               <H6 my="0px">{currency(order.totalPrice)}</H6>
@@ -215,7 +215,7 @@ const OrderDetails = ({
 
             <FlexBetween mb={1}>
               <Typography fontSize={14} color="grey.600">
-                Shipping fee:
+                추가 상품 비용:
               </Typography>
 
               <H6 my="0px">{currency(0)}</H6>
@@ -223,7 +223,7 @@ const OrderDetails = ({
 
             <FlexBetween mb={1}>
               <Typography fontSize={14} color="grey.600">
-                Discount:
+                할인:
               </Typography>
 
               <H6 my="0px">{currency(order.discount)}</H6>
@@ -234,11 +234,11 @@ const OrderDetails = ({
           }} />
 
             <FlexBetween mb={2}>
-              <H6 my="0px">Total</H6>
+              <H6 my="0px">총 합계</H6>
               <H6 my="0px">{currency(order.totalPrice)}</H6>
             </FlexBetween>
 
-            <Typography fontSize={14}>Paid by Credit/Debit Card</Typography>
+            <Typography fontSize={14}>신용카드 결제</Typography>
           </Card>
         </Grid>
       </Grid>

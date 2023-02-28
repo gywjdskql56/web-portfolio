@@ -33,14 +33,14 @@ const ProductSearchResult = () => {
         }
       }}>
           <Box>
-            <H5>Searching for “ mobile phone ”</H5>
-            <Paragraph color="grey.600">48 results found</Paragraph>
+            <H5>“ 성형 ”에 대한 검색결과입니다.</H5>
+            <Paragraph color="grey.600">48 개의 상품</Paragraph>
           </Box>
 
           <FlexBox alignItems="center" columnGap={4} flexWrap="wrap" my="0.5rem">
             <FlexBox alignItems="center" gap={1} flex="1 1 0">
               <Paragraph color="grey.600" whiteSpace="pre">
-                Short by:
+                정렬기준:
               </Paragraph>
 
               <TextField select fullWidth size="small" variant="outlined" placeholder="Short by" defaultValue={sortOptions[0].value} sx={{
@@ -55,7 +55,7 @@ const ProductSearchResult = () => {
 
             <FlexBox alignItems="center" my="0.25rem">
               <Paragraph color="grey.600" mr={1}>
-                View:
+                보기형식:
               </Paragraph>
 
               <IconButton onClick={toggleView("grid")}>
@@ -89,23 +89,23 @@ const ProductSearchResult = () => {
 
           {/* PRODUCT VIEW AREA */}
           <Grid item md={9} xs={12}>
-            {view === "grid" ? <ProductCard1List products={productDatabase.slice(95, 104)} /> : <ProductCard9List products={productDatabase.slice(95, 104)} />}
+            {view === "grid" ? <ProductCard1List products={productDatabase.slice(0, 10)} /> : <ProductCard9List products={productDatabase.slice(0, 10)} />}
           </Grid>
         </Grid>
       </Container>
     </ShopLayout1>;
 };
 const sortOptions = [{
-  label: "Relevance",
+  label: "연관성",
   value: "Relevance"
 }, {
-  label: "Date",
+  label: "최신순",
   value: "Date"
 }, {
-  label: "Price Low to High",
+  label: "가격 낮은순",
   value: "Price Low to High"
 }, {
-  label: "Price High to Low",
+  label: "가격 높은순",
   value: "Price High to Low"
 }];
 export default ProductSearchResult;
