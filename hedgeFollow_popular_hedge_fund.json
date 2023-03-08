@@ -1,0 +1,107 @@
+{
+  "Sheet1": [
+    {
+      "undefined": "warren-buffett",
+      "Fund Manager": "Warren Buffett",
+      "Hedge Fund": "Berkshire Hathaway",
+      "3-Year Performance": "41.55%",
+      "Ann. 3Y Return": "12.28%",
+      "AUM": "$ 299.01B",
+      "Turnover": "3.06%",
+      "Score": "89"
+    },
+    {
+      "undefined": "george-soros",
+      "Fund Manager": "George Soros",
+      "Hedge Fund": "Soros Fund Management",
+      "3-Year Performance": "-32.98%",
+      "Ann. 3Y Return": "-12.49%",
+      "AUM": "$ 5.87B",
+      "Turnover": "33.67%",
+      "Score": "28"
+    },
+    {
+      "undefined": "bill-ackman",
+      "Fund Manager": "Bill Ackman",
+      "Hedge Fund": "Pershing Square Capital Management",
+      "3-Year Performance": "23.92%",
+      "Ann. 3Y Return": "7.41%",
+      "AUM": "$ 8.78B",
+      "Turnover": "8.33%",
+      "Score": "74"
+    },
+    {
+      "undefined": "david-einhorn",
+      "Fund Manager": "David Einhorn",
+      "Hedge Fund": "Greenlight Capital",
+      "3-Year Performance": "53.48%",
+      "Ann. 3Y Return": "15.35%",
+      "AUM": "$ 1.44B",
+      "Turnover": "17.86%",
+      "Score": "90"
+    },
+
+    {
+      "undefined": "ken-griffin",
+      "Fund Manager": "Ken Griffin",
+      "Hedge Fund": "Citadel Advisors",
+      "3-Year Performance": "9.94%",
+      "Ann. 3Y Return": "3.21%",
+      "AUM": "$ 86.38B",
+      "Turnover": "29.28%",
+      "Score": "52"
+    },
+
+    {
+      "undefined": "jim-simons",
+      "Fund Manager": "Jim Simons",
+      "Hedge Fund": "Renaissance Technologies",
+      "3-Year Performance": "38.51%",
+      "Ann. 3Y Return": "11.47%",
+      "AUM": "$ 73.06B",
+      "Turnover": "24.33%",
+      "Score": "93"
+    },
+    {
+      "undefined": "ray-dalio",
+      "Fund Manager": "Ray Dalio",
+      "Hedge Fund": "Bridgewater Associates",
+      "3-Year Performance": "6.03%",
+      "Ann. 3Y Return": "1.97%",
+      "AUM": "$ 18.32B",
+      "Turnover": "22.98%",
+      "Score": "49"
+    },
+
+    {
+      "undefined": "ken-fisher",
+      "Fund Manager": "Ken Fisher",
+      "Hedge Fund": "Fisher Asset Management",
+      "3-Year Performance": "5.72%",
+      "Ann. 3Y Return": "1.87%",
+      "AUM": "$ 147.97B",
+      "Turnover": "28.10%",
+      "Score": "50"
+    },
+    {
+      "undefined": "cathie-wood",
+      "Fund Manager": "Cathie Wood",
+      "Hedge Fund": "ARK Investment Management",
+      "3-Year Performance": "-17.02%",
+      "Ann. 3Y Return": "-6.03%",
+      "AUM": "$ 11.28B",
+      "Turnover": "15.48%",
+      "Score": "47"
+    },
+    {
+      "undefined": "julian-robertson",
+      "Fund Manager": "Julian Robertson",
+      "Hedge Fund": "Tiger Management",
+      "3-Year Performance": "21.99%",
+      "Ann. 3Y Return": "6.85%",
+      "AUM": "$ 158.21M",
+      "Turnover": "38.10%",
+      "Score": "67"
+    }
+  ]
+}

@@ -123,7 +123,7 @@ const MenuTab = ({
                   <Link href={`/stock-port`}>
                     <Tab label={(<Typography variant="h8">포트폴리오 직접 생성</Typography>)} />
                   </Link>
-                  <Link href={`/stock-port`}>
+                  <Link href={`/alloc-port`}>
                     <Tab label={(<Typography variant="h8">자산배분포트폴리오 직접생성</Typography>)} />
                   </Link>
                </TabPanel>
@@ -140,6 +140,10 @@ const MenuTab = ({
                   <Link href={`/recent-etf`}>
                     <Tab label={(<Typography variant="h8">최근출시ETF</Typography>)} />
                   </Link>
+                  <Link href={`/hedge_follow`}>
+                    <Tab label={(<Typography variant="h8">Popular 해외 포트폴리오</Typography>)} />
+                  </Link>
+
                </TabPanel>
               </TabContext>
           </Box>

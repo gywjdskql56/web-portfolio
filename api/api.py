@@ -6,6 +6,7 @@ import warnings
 import pickle
 import random
 import pymssql
+from multifactor import *
 
 warnings.filterwarnings("ignore")
 app = Flask(__name__)
@@ -32,8 +33,14 @@ def suggest_port(port, type):
         df = read_pickle("테마로테이션")
     elif port == '변동성 알고리즘':
         df = read_pickle("변동성 알고리즘")
-    else:
+    elif port == '멀티에셋 인컴':
         df = read_pickle("멀티에셋 인컴")
+    elif port == '초개인화로보':
+        df = read_pickle("초개인화로보")
+    elif port == '멀티에셋 모멘텀(국내)':
+        df = read_pickle("멀티에셋 모멘텀(국내)")
+    else:
+        df = read_pickle("멀티에셋 모멘텀(해외)")
 
     master = read_pickle('종목마스터ETF')
     master_rv = read_pickle('종목마스터ETF_rv')
@@ -110,7 +117,64 @@ def DI_theme_port(sector , theme, rmticker):
     return {"area" : {"name": "포트폴리오", "color": "hsl(336, 70%, 50%)", "children": area_data},
             "rtn" : {"data":[{ "name": "포트수익률", "data":list(map(lambda x: str(round((x-1)*100,2))+"%", total_rtn.values.tolist()))}], "xaxis":total_rtn.index.tolist()}}
 
+@app.route('/recent_etf', methods=['GET', 'POST'])
+def recent_etf():
+    etf_table = read_pickle("recent_etf")
+    return {"table": etf_table, "tablepage":len(etf_table)}
 
+def df2list(df):
+    df = df.fillna(0)
+    df_list = []
+    for idx in df.index:
+        row_dict = dict()
+        row_dict['id'] = idx
+        for col in df.columns:
+            row_dict[col] = round(df.loc[idx, col] * 100, 2)
+        df_list.append(row_dict)
+    return df_list
+
+def df2list_pie(df):
+    df = df[df.weight!=0]
+    df_list = []
+    color = ["hsl(164, 70%, 50%)", "hsl(206, 70%, 50%)", "hsl(165, 70%, 50%)", "hsl(173, 70%, 50%)", "hsl(17, 70%, 50%)"]
+    for count, idx in enumerate(df.index):
+        row_dict = dict()
+        row_dict['id'] = idx
+        row_dict['label'] = idx
+        row_dict['color'] = color[count%4]
+        row_dict['value'] = round(df.loc[idx].values[0]*100,2)
+        df_list.append(row_dict)
+    return df_list
+
+@app.route('/alloc-port-set/<portnm>_<te>_<valuelist>', methods=['GET', 'POST'])
+def alloc_port_set(portnm, te, valuelist):
+    # props = load_data()
+    # save_pickle(props, 'props')
+    valuelist = list(map(lambda x: (int(x)-50)/100, valuelist.split('|')))
+    props = read_pickle('props')
+    # portfolio_weight, portfolio_risk = risk_analysis(props['regression_result'].exposures.drop('const', axis=1),
+    #                                                  # factor exposure (n * f)
+    #                                                  props['df_factor_summary']['Annualized Volatility'],
+    #                                                  # factor volatility (f * 1)
+    #                                                  props['opts'][portnm])
+    print('risk_analysis 완료')
+    result = run_optimization(prob=props['prob'], factor_return_regime=props['factor_return_regime'], regime_probability=props['regime_probability'],
+                     port_selection=portnm, returns=props['returns'], factors=props['factors'], max_active_risk=0.05,
+                     US_Equity=valuelist[0], EFA_Equity=valuelist[1],
+                     EM_Equity=valuelist[2], Interest_Rates=valuelist[3],
+                     Credit=valuelist[4], Commodity=valuelist[5],
+                     Inflation=valuelist[6], USD=valuelist[7],
+                     SMB=valuelist[8], HML=valuelist[9],
+                     RMW=valuelist[10], CMA=valuelist[11],
+                     Mom=valuelist[12], regression_result=props['regression_result'],
+                     etf_performance=props['etf_performance'], df_yahoo_index=props['df_yahoo_index'],
+                     df_factor_summary=props['df_factor_summary'])
+    result['backtest_returns'].prices
+
+
+    return {'expected_return': df2list(result['expected_return']), "risk_return":df2list(result['risk_return']),
+            "exposure_comparison":df2list(result['exposure_comparison']), "risk_comparison":df2list(result['risk_comparison']),
+            "pie_data_bf":df2list_pie(result['before_weights']),"pie_data_af":df2list_pie(result['after_weights'])}
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)

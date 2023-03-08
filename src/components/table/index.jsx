@@ -94,7 +94,7 @@ const RowSpanning = ({
   const rows = table
   const pages = pageSize
 
-    return ( <div style={{ height: 70* pages, width: '100%' }}>
+    return ( <div style={{ height: 55* pages+100, width: '100%' }}>
     <StyledDataGrid
 //        checkboxSelection
         pageSize={ pages }

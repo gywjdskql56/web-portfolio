@@ -48,6 +48,7 @@ const Section10 = ({
   categories
 }) => {
 
+
 const [active1, setActive1] = useState("주식포트폴리오 직접생성");
 const [active2, setActive2] = useState("글로벌 주식");
 const [active3, setActive3] = useState("테마");
@@ -72,7 +73,14 @@ useEffect(() => {
 useEffect(() => {
     console.log(categories4[active4][0].name)
     setActive5(categories4[active4][0].name)
+
 }, [active4]);
+
+useEffect(() => {
+    console.log(active4)
+    console.log(active5)
+    getAreaData()
+}, [active5]);
 
 useEffect(() => {
     console.log(rmticker)
@@ -211,7 +219,7 @@ const state = {
         <Grid item lg={3} md={6} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
-                    onClick={() => {setActive4(item.name); setActive5(categories4[active4][0]); getAreaData(); setOpen(true); setRMticker(["제외종목"]);}}
+                    onClick={() => {setActive4(item.name); setActive5(categories4[active4][0].name); setOpen(true); console.log('click 4'); }}
                     style={{ backgroundColor: active4==item.name ? "#043B72" : "", color: active4==item.name ? "white" : "black"  }}
                 elevation={1}>
                   <Box fontWeight="600" ml={1.25} fontSize={20}>
@@ -227,7 +235,7 @@ const state = {
         <Grid item lg={12/5} md={3} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
-                    onClick={() => {setActive5(item.name); console.log("click:",item.name); getAreaData(); setOpen(true); setRMticker(["제외종목"]);}}
+                    onClick={() => {setActive5(item.name); console.log("click:",item.name); setOpen(true); console.log('click 5');}}
                     style={{ backgroundColor: active5==item.name ? "#043B72" : "", color: active5==item.name ? "white" : "black"  }}
                 elevation={1}>
                   <Box fontWeight="600" ml={1.25} fontSize={20}>

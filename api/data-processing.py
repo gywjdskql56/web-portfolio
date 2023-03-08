@@ -10,54 +10,54 @@ def read_pickle(file_nm):
         df = pickle.load(file)
     return df
 
-# ## 추천포트폴리오 엑셀 변환
-# file_nm = "멀티에셋 인컴"
-# port1 = pd.read_excel('org-data/suggest/{}.xlsx'.format(file_nm), sheet_name='적극투자형')
-# port2 = pd.read_excel('org-data/suggest/{}.xlsx'.format(file_nm), sheet_name='위험중립형')
-# port3 = pd.read_excel('org-data/suggest/{}.xlsx'.format(file_nm), sheet_name='안정추구형')
-#
-# def df2list_table(df):
-#     total_list = list()
-#     for idx, row in df.iterrows():
-#         print(idx)
-#         print(row)
-#         part_dict = {
-#             'id': idx,
-#             'type': row.loc['구분'],
-#             'wgt1': str(round(row.loc['비중1'] * 100, 1)) + "%",
-#             'ticker': row.loc['종목명'],
-#             'wgt2': str(round(row.loc['비중2'] * 100, 1)) + "%",
-#         }
-#         total_list.append(part_dict)
-#     return total_list
-#
-# def df2list_pie(df):
-#     total_list = list()
-#     df = df[['구분','비중1']].drop_duplicates()
-#     color = ["hsl(164, 70%, 50%)", "hsl(206, 70%, 50%)", "hsl(165, 70%, 50%)", "hsl(173, 70%, 50%)", "hsl(17, 70%, 50%)"]
-#     for idx, row in df.iterrows():
-#         print(idx)
-#         print(row)
-#         part_dict = {
-#             'id': row.loc['구분'],
-#             'value': round(row.loc['비중1'] * 100, 1),
-#             'label': row.loc['구분'].split(" ")[-1],
-#             'color': color[idx%len(color)],
-#         }
-#         total_list.append(part_dict)
-#     return total_list
-#
-# total_dict = dict()
-# total_dict['적극투자형'] = df2list_table(port1)
-# total_dict['위험중립형'] = df2list_table(port2)
-# total_dict['안정추구형'] = df2list_table(port3)
-#
-# total_dict['적극투자형_pie'] = df2list_pie(port1)
-# total_dict['위험중립형_pie'] = df2list_pie(port2)
-# total_dict['안정추구형_pie'] = df2list_pie(port3)
-#
-# save_pickle(total_dict, file_nm)
-# print(1)
+## 추천포트폴리오 엑셀 변환
+file_nm = "초개인화로보"
+port1 = pd.read_excel('org-data/suggest/{}.xlsx'.format(file_nm), sheet_name='적극투자형')
+port2 = pd.read_excel('org-data/suggest/{}.xlsx'.format(file_nm), sheet_name='위험중립형')
+port3 = pd.read_excel('org-data/suggest/{}.xlsx'.format(file_nm), sheet_name='안정추구형')
+
+def df2list_table(df):
+    total_list = list()
+    for idx, row in df.iterrows():
+        print(idx)
+        print(row)
+        part_dict = {
+            'id': idx,
+            'type': row.loc['구분'],
+            'wgt1': str(round(row.loc['비중1'] * 100, 1)) + "%",
+            'ticker': row.loc['종목명'],
+            'wgt2': str(round(row.loc['비중2'] * 100, 1)) + "%",
+        }
+        total_list.append(part_dict)
+    return total_list
+
+def df2list_pie(df):
+    total_list = list()
+    df = df[['구분','비중1']].drop_duplicates()
+    color = ["hsl(164, 70%, 50%)", "hsl(206, 70%, 50%)", "hsl(165, 70%, 50%)", "hsl(173, 70%, 50%)", "hsl(17, 70%, 50%)"]
+    for idx, row in df.iterrows():
+        print(idx)
+        print(row)
+        part_dict = {
+            'id': row.loc['구분'],
+            'value': round(row.loc['비중1'] * 100, 1),
+            'label': row.loc['구분'].split(" ")[-1],
+            'color': color[idx%len(color)],
+        }
+        total_list.append(part_dict)
+    return total_list
+
+total_dict = dict()
+total_dict['적극투자형'] = df2list_table(port1)
+total_dict['위험중립형'] = df2list_table(port2)
+total_dict['안정추구형'] = df2list_table(port3)
+
+total_dict['적극투자형_pie'] = df2list_pie(port1)
+total_dict['위험중립형_pie'] = df2list_pie(port2)
+total_dict['안정추구형_pie'] = df2list_pie(port3)
+
+save_pickle(total_dict, file_nm)
+print(1)
 
 ## DI
 # score = read_pickle('테마DI스코어')
@@ -94,22 +94,29 @@ def read_pickle(file_nm):
 # save_pickle(master_sp, "종목마스터")
 # save_pickle(master_sp_rv, "종목마스터_rv")
 
-def get_master():
+# def get_master():
+#
+#     conn = pymssql.connect(host='10.93.20.65', user='quant', password='mirae', database='MARKET',                    charset='utf8')  # 개발DB
+#     sql = '''
+#     select *
+#     from WEBQM..FR_ETF_MAST
+#     '''
+#     result = pd.read_sql(sql, con=conn)
+#     return result
+#
+# master_org = get_master()
+#
+# master = master_org[['FSYM_ID','TICKER']].set_index('TICKER')['FSYM_ID'].to_dict()
+# master_rv = master_org[['FSYM_ID','TICKER']].set_index('FSYM_ID')['TICKER'].to_dict()
+# save_pickle(master, "종목마스터ETF")
+# save_pickle(master_rv, "종목마스터ETF_rv")
+etf = pd.read_excel('org-data/info/ETF_0210.xlsx').fillna('-')
+etf_list = list()
+etf['시가총액'] = etf['시가총액'].apply(lambda x: str(round(x/10000,0))+"만" if type(x)!= str else x)
+etf['1주 수익률'] = etf['1주 수익률'].apply(lambda x: str(round(x*100,1))+"%" if type(x)!= str else x)
+etf['1달 수익률'] = etf['1달 수익률'].apply(lambda x: str(round(x*100,1))+"%" if type(x)!= str else x)
 
-    conn = pymssql.connect(host='10.93.20.65', user='quant', password='mirae', database='MARKET',                    charset='utf8')  # 개발DB
-    sql = '''
-    select * 
-    from WEBQM..FR_ETF_MAST
-    '''
-    result = pd.read_sql(sql, con=conn)
-    return result
-
-master_org = get_master()
-
-master = master_org[['FSYM_ID','TICKER']].set_index('TICKER')['FSYM_ID'].to_dict()
-master_rv = master_org[['FSYM_ID','TICKER']].set_index('FSYM_ID')['TICKER'].to_dict()
-save_pickle(master, "종목마스터ETF")
-save_pickle(master_rv, "종목마스터ETF_rv")
-
-
+for idx, row in etf.iterrows():
+    etf_list.append({"id":idx,"group":row['그룹'],"ticker":row['티커'], "ma":row['운용사'],"name":row['ETF 명'],"mcap":row['시가총액'],"week":row['1주 수익률'],"month":row['1달 수익률'],"initdate":row['최초상장일'],})
+save_pickle(etf_list, "recent_etf")
 print(1)

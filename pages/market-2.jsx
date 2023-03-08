@@ -65,7 +65,7 @@ const Market = props => {
 //       <Newsletter />
 
       {/* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */}
-      <Setting />
+      {/*<Setting />*/}
     </ShopLayout1>;
 };
 export const getStaticProps = async () => {

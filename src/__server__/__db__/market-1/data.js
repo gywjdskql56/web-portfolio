@@ -41,7 +41,7 @@ export const categories = [  {
   id: "3c36096b-73b4-4c3e-a768-f846cc889fd5",
   name: "자산배분포트폴리오 직접생성",
   icon: null,
-  slug: "stock-port",
+  slug: "alloc-port",
   image: "/assets/images/products/Fashion/Accessories/12.Xiaomimiband2.png",
   description: null,
   parent: [],

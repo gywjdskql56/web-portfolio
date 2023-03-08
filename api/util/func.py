@@ -1,11 +1,13 @@
 # Core Functions
+from util.qpms import *
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
 from hmmlearn.hmm import GaussianHMM
 from hmmlearn.hmm import GMMHMM
 from sklearn.mixture import GaussianMixture
-from util.qpms import *
+
+from matplotlib import colors
 # Data Reader
 import yfinance as yf
 import statsmodels.api as sm
@@ -23,7 +25,7 @@ import plotly.graph_objs as go
 import seaborn as sns
 import plotly.graph_objects as go
 import ipywidgets as widgets
-
+import pickle
 # notebook formatting
 from IPython.display import clear_output
 from IPython.core.display import HTML, display
@@ -41,6 +43,15 @@ import riskfolio as rp
 # 한글설정
 from matplotlib import rcParams
 rcParams['font.family'] = 'Malgun Gothic'
+
+def save_pickle(df, file_nm):
+    with open('pkl/{}.pickle'.format((file_nm)), 'wb') as file:
+        pickle.dump(df, file, protocol = pickle.HIGHEST_PROTOCOL)
+
+def read_pickle(file_nm):
+    with open('pkl/{}.pickle'.format((file_nm)), 'rb') as file:
+        df = pickle.load(file)
+    return df
 
 # Ipywidgets 스크롤 설정
 style = """
@@ -109,7 +120,7 @@ factor_columns=['US_Growth','EFA_Growth','EM_Growth','Real Rates', 'Inflation', 
 # 데이터 기간 및 주기 등 정의
 
 start = pd.to_datetime('1970-12-31')
-end = pd.to_datetime('2023-01-15')
+end = pd.to_datetime('2023-02-01')
 frequency = 'D'
 
 if frequency == 'M':
@@ -729,19 +740,8 @@ def display_regime(prob, factor_return_regime, regime_probability, regime_list):
     factor_return_regime.index.set_levels(regime_list, level=0, inplace=True)
     factor_return_regime.columns = ['주식_미국', '주식_EFA', '주식_EM', '금리', '크레딧', '원자재', '인플레이션', '원달러', '중소형', '가치/성장',
                                     '수익성', '회계퀄리티', '모멘텀']
+    return regime_probability, factor_return_regime
 
-    fig, ax = plt.subplots(1, 2, figsize=(20, 6))
-    ax = np.ravel(ax)
-
-    prob.plot.area(stacked=True, color=['steelblue', 'yellow', 'red', 'green'], title='역사적 국면변화', ax=ax[0])
-    plt.gca().yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))
-
-    regime_probability.plot.bar(title='국면별 확률', ax=ax[1])
-    plt.gca().yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))
-
-    plt.show()
-
-    display(factor_return_regime)
 
 def display_weights(before_weights, after_weights):
 
@@ -879,46 +879,47 @@ def display_summary(after_weights, before_weights, cov, expected_return):
 
     expected_return = summary.iloc[0:4, :]
     risk_return = summary.iloc[4:, :]
-    display(summary.T)
-
-    # Active Risk 그래프 생성
-
-    fig = go.Figure(go.Indicator(
-        mode="number+gauge",
-        gauge={'shape': "bullet",
-               'axis': {'tickformat': ',.0%', 'range': [None, 0.15]},
-               'steps': [{'range': [0.05, 0.10], 'color': "lightgray"}, {'range': [0.10, 0.15], 'color': "gray"}],
-               'bar': {'color': "red"}},
-        value=TE.iloc[0, 0],
-        number={'valueformat': ',.0%'},
-        domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': "예상추적오차", 'font': {"size": 12}}))
-
-    fig.update_layout(autosize=False, width=1400, height=200)
-
-    fig.show()
-
-    # 국면별 기대수익 및 리스크-리턴 프로파일 그래프 생성
-
-    fig, ax = plt.subplots(1, 2, figsize=(14, 6))
-    ax = np.ravel(ax)
-
-    expected_return.plot.bar(title='국면별 예상 기대수익률', ax=ax[0])
-    ax[0].yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1, decimals=None, symbol='%', is_latex=False))
-
-    # risk_return.plot.bar(title='리스크-리턴 추정치)', ax=ax[1])
-    plt.plot(risk_return.T['변동성(연간)'][0], risk_return.T['기대수익(연간)'][0], 'bo', label='Before')
-    plt.plot(risk_return.T['변동성(연간)'][1], risk_return.T['기대수익(연간)'][1], 'ro', label='After')
-    plt.title('리스크-리턴 프로파일')
-    plt.axis([0, 0.2, -0.2, 0.2])
-    plt.xlabel('변동성(연간)')
-    plt.ylabel('기대수익(연간)')
-    plt.legend()
-
-    ax[1].yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1, decimals=None, symbol='%', is_latex=False))
-    ax[1].xaxis.set_major_formatter(mtick.PercentFormatter(xmax=1, decimals=None, symbol='%', is_latex=False))
-
-    plt.show()
+    return expected_return, risk_return
+    # display(summary.T)
+    #
+    # # Active Risk 그래프 생성
+    #
+    # fig = go.Figure(go.Indicator(
+    #     mode="number+gauge",
+    #     gauge={'shape': "bullet",
+    #            'axis': {'tickformat': ',.0%', 'range': [None, 0.15]},
+    #            'steps': [{'range': [0.05, 0.10], 'color': "lightgray"}, {'range': [0.10, 0.15], 'color': "gray"}],
+    #            'bar': {'color': "red"}},
+    #     value=TE.iloc[0, 0],
+    #     number={'valueformat': ',.0%'},
+    #     domain={'x': [0, 1], 'y': [0, 1]},
+    #     title={'text': "예상추적오차", 'font': {"size": 12}}))
+    #
+    # fig.update_layout(autosize=False, width=1400, height=200)
+    #
+    # fig.show()
+    #
+    # # 국면별 기대수익 및 리스크-리턴 프로파일 그래프 생성
+    #
+    # fig, ax = plt.subplots(1, 2, figsize=(14, 6))
+    # ax = np.ravel(ax)
+    #
+    # expected_return.plot.bar(title='국면별 예상 기대수익률', ax=ax[0])
+    # ax[0].yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1, decimals=None, symbol='%', is_latex=False))
+    #
+    # # risk_return.plot.bar(title='리스크-리턴 추정치)', ax=ax[1])
+    # plt.plot(risk_return.T['변동성(연간)'][0], risk_return.T['기대수익(연간)'][0], 'bo', label='Before')
+    # plt.plot(risk_return.T['변동성(연간)'][1], risk_return.T['기대수익(연간)'][1], 'ro', label='After')
+    # plt.title('리스크-리턴 프로파일')
+    # plt.axis([0, 0.2, -0.2, 0.2])
+    # plt.xlabel('변동성(연간)')
+    # plt.ylabel('기대수익(연간)')
+    # plt.legend()
+    #
+    # ax[1].yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1, decimals=None, symbol='%', is_latex=False))
+    # ax[1].xaxis.set_major_formatter(mtick.PercentFormatter(xmax=1, decimals=None, symbol='%', is_latex=False))
+    #
+    # plt.show()
 
 # ## todo
 def display_risk(before_weights, after_weights, regression_result, df_factor_summary):
@@ -943,15 +944,16 @@ def display_risk(before_weights, after_weights, regression_result, df_factor_sum
     risk_comparison['After'] = new_risk['risk contribution(%)']
     risk_comparison.index = ['주식_미국', '주식_EFA', '주식_EM', '금리', '크레딧', '원자재', '인플레이션', '원달러', '중소형', '가치/성장', '수익성',
                              '회계퀄리티', '모멘텀']
+    return exposure_comparison, risk_comparison
 
-    fig, ax = plt.subplots(1, 2, figsize=(14, 6))
-    ax = np.ravel(ax)
-
-    exposure_comparison.plot.bar(title='팩터 노출도', ax=ax[0])
-    risk_comparison.plot.bar(title='위험 기여도(%)', ax=ax[1])
-
-    plt.gca().yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))
-    plt.show()
+    # fig, ax = plt.subplots(1, 2, figsize=(14, 6))
+    # ax = np.ravel(ax)
+    #
+    # exposure_comparison.plot.bar(title='팩터 노출도', ax=ax[0])
+    # risk_comparison.plot.bar(title='위험 기여도(%)', ax=ax[1])
+    #
+    # plt.gca().yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))
+    # plt.show()
 
 
 def display_performance(before_weights, after_weights, data):
@@ -975,11 +977,14 @@ def display_performance(before_weights, after_weights, data):
     # create a backtest and run it
     backtest_Before = bt.Backtest(Before, data[before_names].dropna(), commissions=my_comm)
     backtest_After = bt.Backtest(After, data[after_names].dropna(), commissions=my_comm)
-
     report = bt.run(backtest_Before, backtest_After)
-    report.plot()
 
-    plt.show()
+    return report
+
+    # report = bt.run(backtest_Before, backtest_After)
+    # report.plot()
+    #
+    # plt.show()
 
 def make_weight_dataframe(df_exposures, df_portfolio):
     df_exposures=df_exposures.sort_index()
@@ -1007,36 +1012,57 @@ def match_port_weight(initial_port):
                                     'IEF': [0.15],
                                     'DBC': [0.075],
                                     'GLD': [0.075]})
-    if initial_port == 'All Equity':
+    if initial_port == '테마로테이션' or initial_port == '변동성 알고리즘':
         weight = port_equity
-    elif initial_port == '8020':
+    elif initial_port == '멀티에셋 모멘텀':
         weight = port_8020
-    elif initial_port == '6040':
+    elif initial_port == '초개인화로보':
         weight = port_6040
-    elif initial_port == '4060':
+    elif initial_port == '멀티에셋 인컴':
         weight = port_4060
     else:
         weight = port_allweather
 
     return weight
-# ## todo
-def run_optimization(prob, factor_return_regime, regime_probability, port_selection, returns, factors, max_active_risk, US_Equity,  EFA_Equity, EM_Equity, Interest_Rates, Credit, Commodity, Inflation, USD, SMB, HML, RMW, CMA, Mom, regression_result, etf_performance, df_yahoo_index):
+
+def run_optimization(prob, factor_return_regime, regime_probability, port_selection, returns, factors, max_active_risk, US_Equity,  EFA_Equity, EM_Equity, Interest_Rates, Credit, Commodity, Inflation, USD, SMB, HML, RMW, CMA, Mom, regression_result, etf_performance, df_yahoo_index, df_factor_summary):
     clear_output(wait=True)
     initial_weight = match_port_weight(port_selection)
     initial_weight = make_weight_dataframe(factors, initial_weight)
     target_exposure=pd.Series([US_Equity,EFA_Equity, EM_Equity,Interest_Rates, Credit, Commodity, Inflation, USD, SMB, HML, RMW, CMA, Mom], index=factors.index)
-    weights=0
+
     weights = optimize_portfolio(returns, factors, target_exposure, initial_portfolio=initial_weight, cov=regression_result.cov*annualization, max_active_risk=max_active_risk, max_assets=15)
     weights = pd.DataFrame(weights, index=factors.columns, columns=['weight'])
-    display_regime(prob, factor_return_regime, regime_probability, regime_list=['상승국면', '인플레이션 국면', '하락국면', '급락국면'])
-    display_weights(before_weights=initial_weight.T, after_weights=weights)
-    display_summary(after_weights=weights.T, before_weights=initial_weight, cov=regression_result.cov*annualization, expected_return=etf_performance)
-    display_risk(before_weights=initial_weight, after_weights=weights.T, regression_result=regression_result, df_factor_summary=df_factor_summary)
-    display_performance(before_weights=initial_weight, after_weights=weights.T, data=df_yahoo_index)
+    regime_probability, factor_return_regime = display_regime(prob, factor_return_regime, regime_probability, regime_list=['상승국면', '인플레이션 국면', '하락국면', '급락국면'])
+    before_weights = initial_weight.T
+    after_weights = weights
+    expected_return, risk_return = display_summary(after_weights=weights.T, before_weights=initial_weight, cov=regression_result.cov*annualization, expected_return=etf_performance)
+    exposure_comparison, risk_comparison = display_risk(before_weights=initial_weight, after_weights=weights.T, regression_result=regression_result, df_factor_summary=df_factor_summary)
+    backtest_returns = display_performance(before_weights=initial_weight, after_weights=weights.T, data=df_yahoo_index)
+    return {
+        "regime_probability": regime_probability,
+        "factor_return_regime": factor_return_regime,
+        "before_weights": before_weights,
+        "after_weights": after_weights,
+        "expected_return": expected_return, # 국면별 기대수익
+        "risk_return": risk_return, # 리스크-리턴
+        "exposure_comparison": exposure_comparison,
+        "risk_comparison": risk_comparison,
+        "backtest_returns": backtest_returns,
+
+    }
+
+def background_gradient(s, m, M, cmap='Pubu', low=0, high=0): # Factor Exposure 보여줄 색깔 정의
+    rng = M - m
+    norm = colors.Normalize(m - (rng * low),
+                            M + (rng * high))
+    normed = norm(s.values)
+    c = [colors.rgb2hex(x) for x in plt.cm.get_cmap(cmap)(normed)]
+    return ['background-color: %s' % color for color in c]
 
 
 def run_interactive_widgets(port_selection, portfolio_risk, returns, factors, prob, factor_return_regime,
-                            regime_probability):
+                            regime_probability, regression_result, etf_performance, df_yahoo_index,df_factor_summary):
     clear_output(wait=True)
 
     max_active_risk = widgets.FloatSlider(
@@ -1183,10 +1209,10 @@ def run_interactive_widgets(port_selection, portfolio_risk, returns, factors, pr
                                                         'prob': prob,
                                                         'factor_return_regime': factor_return_regime,
                                                         'regime_probability': regime_probability,
-                                                        'regression_result' : regression_result,
-                                                        'tf_performance':tf_performance,
-                                                        'df_yahoo_index': df_yahoo_index
-
+                                                        'regression_result': regression_result,
+                                                        'etf_performance': etf_performance,
+                                                        'df_yahoo_index' : df_yahoo_index,
+                                                        'df_factor_summary':df_factor_summary
                                                         })
 
     display(ui, out)

@@ -5,7 +5,7 @@ import BazaarCard from "components/BazaarCard";
 import HorizonLine from "components/HorizontalLine";
 import CategoryIcon from "components/icons/Category";
 import {httpGet, url} from "components/config";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import RowSpanning from "components/table";
 import Pie from "components/chart/Piechart";
 import table from "./table";
@@ -67,50 +67,42 @@ const categories2 = [
     { name: "위험중립형"},
     { name: "안정추구형"},
 ];
-const [active1, setActive1] = useState("추천 포트폴리오");
-const [active2, setActive2] = useState("미래에셋 추천 포트폴리오");
-const [active3, setActive3] = useState("적극투자형");
+
 const [tabledata, setTableData] = useState(table);
 const [tablepage, setTablePage] = useState(20);
-typeof window !== 'undefined' ? sessionStorage.setItem("pages", 20) : null;
-const [piedata, setPieData] = useState(pie);
-const [rtndata, setRtnData] = useState(null);
-const series = [
-    {
-      name: "Guests",
-      data: [19, 22, 20, 26]
-    }
-  ];
-  const options = {
-    xaxis: {
-      categories: ["2019-05-01", "2019-05-02", "2019-05-03", "2019-05-04"]
-    }
-  };
 
-
-
-function handleClick1(val) {
-    console.log(val);
-    setActive2(val);
-    console.log(active2);
-    fetch(url.concat(`/suggest_port/${val}_${active3}`), { method: 'GET' })
+useEffect(()=>{
+    fetch(url.concat(`/recent_etf`), { method: 'GET' })
     .then(data => data.json())
-    .then(json => {setTableData(json.table); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage);})
-}
+    .then(json => {setTableData(json.table); setTablePage(json.tablepage);})
 
-function handleClick2(val) {
-    console.log(val);
-    setActive3(val);
-    console.log(active3);
-    fetch(url.concat(`/suggest_port/${active2}_${val}`), { method: 'GET' })
-    .then(data => data.json())
-    .then(json => {setTableData(json.table); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage);})
-}
+},[])
+//function handleClick1(val) {
+//    console.log(val);
+//    setActive2(val);
+//    console.log(active2);
+//    fetch(url.concat(`/suggest_port/${val}_${active3}`), { method: 'GET' })
+//    .then(data => data.json())
+//    .then(json => {setTableData(json.table); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage);})
+//}
+//
+//function handleClick2(val) {
+//    console.log(val);
+//    setActive3(val);
+//    console.log(active3);
+//    fetch(url.concat(`/suggest_port/${active2}_${val}`), { method: 'GET' })
+//    .then(data => data.json())
+//    .then(json => {setTableData(json.table); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage);})
+//}
 const columns = [
-    { field: "type", headerName: "구분", width: 210 },
-    { field: "wgt1", headerName: "비중", width: 70 },
-    { field: "ticker", headerName: "종목명", width: 249 },
-    { field: "wgt2", headerName: "비중", type: "number", width: 70 },
+    { field: "group", headerName: "그룹", width: 150 },
+    { field: "ticker", headerName: "티커", width: 150 },
+    { field: "ma", headerName: "운용사", width: 250 },
+    { field: "name", headerName: "ETF명", width: 250 },
+    { field: "mcap", headerName: "시가총액", width: 100 },
+    { field: "week", headerName: "1주성과", type: "number", width: 90 },
+    { field: "month", headerName: "1달성과", type: "number", width: 90 },
+    { field: "initdate", headerName: "최초 상장일", type: "number", width: 147 },
   ];
 
   return <Container sx={{
@@ -119,7 +111,7 @@ const columns = [
       <CategorySectionHeader seeMoreLink="" title="" />
           <Container sx={{ mb: "40px" }} />
           <Grid container spacing={3}>
-          <HorizonLine text="포트폴리오 상세" />
+          <HorizonLine text="최근 출시된 ETF" />
             <Grid item xs={12} md={12} lg={12}>
                 <RowSpanning table={tabledata} pageSize={tablepage} columns={columns} />
             </Grid>

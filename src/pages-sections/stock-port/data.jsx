@@ -32,7 +32,7 @@ export const categories4 = {
     {  name: "폐기물",},
     {  name: "풍력",},
     {  name: "원자력",}],
-"디지털": [{  name: "5G",},
+"디지털": [{  name: "5g",},
     {  name: "AI,로보",},
     {  name: "Agr Tech",},
     {  name: "게임",},
