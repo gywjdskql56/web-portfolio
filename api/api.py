@@ -7,12 +7,15 @@ import pickle
 import random
 import pymssql
 from multifactor import *
+from qpmsdb import *
+from redis_save import *
+
+save_master()
 
 warnings.filterwarnings("ignore")
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 CORS(app)
-
 
 def save_pickle(df, file_nm):
     with open('pkl/{}.pickle'.format((file_nm)), 'wb') as file:
@@ -22,7 +25,6 @@ def read_pickle(file_nm):
     with open('pkl/{}.pickle'.format((file_nm)), 'rb') as file:
         df = pickle.load(file)
     return df
-
 
 
 @app.route('/suggest_port/<port>_<type>', methods=['GET', 'POST'])
@@ -46,23 +48,7 @@ def suggest_port(port, type):
     master_rv = read_pickle('종목마스터ETF_rv')
     return {'table': df[type], 'pie':df[type+'_pie'], 'tablepage':len(df[type])}
 
-def get_us_stock_pr(ticker_list):
-    ticker2id = read_pickle('종목마스터')
-    id2ticker = read_pickle('종목마스터_rv')
-    ticker_list_filter = list(filter(lambda x: x in ticker2id.keys() and type(x)==str, ticker_list))
-    id_list = list(filter(lambda x: type(x)==str,list(map(lambda x: ticker2id[x], ticker_list_filter))))
-    conn = pymssql.connect(host='10.93.20.65', user='quant', password='mirae', database='MARKET',
-                           charset='utf8')  # 개발DB
-    sql = '''
-    select FSYM_ID, BASE_DT, P_PRICE
-    from EUMQNTDB..FP_PRICE_ADJ 
-    where FSYM_ID in ('{}')
-    and base_dt > '20210000'
-    '''.format('\',\''.join(id_list))
-    result = pd.read_sql(sql, con=conn)
-    result = result.pivot(index='BASE_DT', columns='FSYM_ID', values='P_PRICE').bfill().ffill()
-    result.columns = list(map(lambda x: id2ticker[x], result.columns))
-    return result
+
 
 @app.route('/di_theme_univ/<sector>_<theme>_<rmticker>', methods=['GET', 'POST'])
 def DI_theme_port(sector , theme, rmticker):
@@ -90,32 +76,35 @@ def DI_theme_port(sector , theme, rmticker):
         area_data.append(child)
     print({"area" : {"name": "포트폴리오", "color": "hsl(336, 70%, 50%)", "children": area_data}})
 
-    price = get_us_stock_pr(df['ticker'].dropna().tolist())
-    rtn = price.pct_change().fillna(0)
-    total_rtn = None
-    idx = 0
-    total_wgt = 0
-    no_db = list()
-    in_db = list()
-    for ticker, wgt in zip(df['ticker'].tolist(), df['wgt'].tolist()):
-        if ticker in rtn.columns:
-            total_wgt += wgt*0.01
-            if idx==0:
-                total_rtn = rtn[ticker] * wgt * 0.01
+    # price = get_us_stock_pr(df['ticker'].dropna().tolist())
+    price = get_all_ticker_pr(df['ticker'].dropna().tolist())
+    if price is not None:
+        rtn = price.pct_change().fillna(0)
+        total_rtn = None
+        idx = 0
+        total_wgt = 0
+        no_db = list()
+        in_db = list()
+        for ticker, wgt in zip(df['ticker'].tolist(), df['wgt'].tolist()):
+            if ticker in rtn.columns:
+                total_wgt += wgt*0.01
+                if idx==0:
+                    total_rtn = rtn[ticker] * wgt * 0.01
+                else:
+                    total_rtn += rtn[ticker] * wgt * 0.01
+                in_db.append(ticker)
             else:
-                total_rtn += rtn[ticker] * wgt * 0.01
-            in_db.append(ticker)
-        else:
-            no_db.append(ticker)
-    print("in_db : {} || no_db : {}".format(len(in_db), len(no_db)))
-    print("in_db : {} || no_db : {}".format((in_db), (no_db)))
-    total_rtn = (1+total_rtn).cumprod()
-    # line_data = list()
-    # for idx,val in zip(total_rtn.index, total_rtn.values):
-    #     line_data.append({"x":idx, "y":round(val,2)})
-
-    return {"area" : {"name": "포트폴리오", "color": "hsl(336, 70%, 50%)", "children": area_data},
-            "rtn" : {"data":[{ "name": "포트수익률", "data":list(map(lambda x: str(round((x-1)*100,2))+"%", total_rtn.values.tolist()))}], "xaxis":total_rtn.index.tolist()}}
+                no_db.append(ticker)
+        print("in_db : {} || no_db : {}".format(len(in_db), len(no_db)))
+        print("in_db : {} || no_db : {}".format((in_db), (no_db)))
+        total_rtn = (1+total_rtn).cumprod()
+        return {"area" : {"name": "포트폴리오", "color": "hsl(336, 70%, 50%)", "children": area_data},
+            "rtn" : {"data":[{ "name": "포트수익률", "data":list(map(lambda x: str(round((x-1)*100,4))+"%", total_rtn.values.tolist()))}], "xaxis":total_rtn.index.tolist()}}
+    else:
+        return {"area": {"name": "포트폴리오", "color": "hsl(336, 70%, 50%)", "children": area_data},
+                "rtn": {"data": [{"name": "포트수익률", "data": list(
+                    map(lambda x: str(round((x - 1) * 100, 2)) + "%", [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]))}],
+                        "xaxis": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}
 
 @app.route('/recent_etf', methods=['GET', 'POST'])
 def recent_etf():
@@ -146,11 +135,23 @@ def df2list_pie(df):
         df_list.append(row_dict)
     return df_list
 
+@app.route('/alloc-port-set-pre/<portnm>', methods=['GET', 'POST'])
+def alloc_port_set_pre(portnm):
+    # props = load_data()
+    # save_pickle(props, 'props')
+    props = read_pickle('props')
+    portfolio_weight, portfolio_risk = risk_analysis(props['regression_result'].exposures.drop('const', axis=1),
+                                                     # factor exposure (n * f)
+                                                     props['df_factor_summary']['Annualized Volatility'],
+                                                     # factor volatility (f * 1)
+                                                     props['opts'][portnm])
+    return {'valuelist':[round((portfolio_risk['exposure'][i]),2) for i in range(len(portfolio_risk['exposure']))]}
+
 @app.route('/alloc-port-set/<portnm>_<te>_<valuelist>', methods=['GET', 'POST'])
 def alloc_port_set(portnm, te, valuelist):
     # props = load_data()
     # save_pickle(props, 'props')
-    valuelist = list(map(lambda x: (int(x)-50)/100, valuelist.split('|')))
+    valuelist = list(map(lambda x: float(x), valuelist.split('|')))
     props = read_pickle('props')
     # portfolio_weight, portfolio_risk = risk_analysis(props['regression_result'].exposures.drop('const', axis=1),
     #                                                  # factor exposure (n * f)

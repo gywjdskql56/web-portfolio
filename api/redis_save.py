@@ -1,6 +1,6 @@
 from qpmsdb import *
 import redis
-r = redis.Redis("localhost")
+r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 def save_pickle(df, file_nm):
     with open('redis/{}.pickle'.format((file_nm)), 'wb') as file:
@@ -24,6 +24,16 @@ def save_master():
     save_pickle(fs2ticker, 'fs2ticker')
     save_pickle(isin2ticker, 'isin2ticker')
     save_pickle(ticker2isin, 'ticker2isin')
+    for k, v in ticker2fs.items():
+        r.set(k, v)
+    for k, v in fs2ticker.items():
+        r.set(k, v)
+    for k, v in isin2ticker.items():
+        r.set(k, v)
+    for k, v in ticker2isin.items():
+        r.set(k, v)
+    print("master is uploaded to redis")
+    print(1)
 
 
 if __name__ == "__main__":

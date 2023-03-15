@@ -62,7 +62,7 @@ function getAreaData() {
     console.log(url.concat(`/di_theme_univ/${active4}_${active5}_${rmticker.join('|')}`))
     fetch(url.concat(`/di_theme_univ/${active4}_${active5}_${rmticker.join('|')}`), { method: 'GET' })
     .then(data => data.json())
-    .then(json => {setPortData(json); console.log(json)})
+    .then(json => {setPortData(json); console.log(json); setOpen(true);})
 }
 
 useEffect(() => {
@@ -219,7 +219,7 @@ const state = {
         <Grid item lg={3} md={6} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
-                    onClick={() => {setActive4(item.name); setActive5(categories4[active4][0].name); setOpen(true); console.log('click 4'); }}
+                    onClick={() => {setActive4(item.name); setActive5(categories4[active4][0].name);  console.log('click 4'); }}
                     style={{ backgroundColor: active4==item.name ? "#043B72" : "", color: active4==item.name ? "white" : "black"  }}
                 elevation={1}>
                   <Box fontWeight="600" ml={1.25} fontSize={20}>
@@ -235,7 +235,7 @@ const state = {
         <Grid item lg={12/5} md={3} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
-                    onClick={() => {setActive5(item.name); console.log("click:",item.name); setOpen(true); console.log('click 5');}}
+                    onClick={() => {setActive5(item.name); console.log("click:",item.name); console.log('click 5');}}
                     style={{ backgroundColor: active5==item.name ? "#043B72" : "", color: active5==item.name ? "white" : "black"  }}
                 elevation={1}>
                   <Box fontWeight="600" ml={1.25} fontSize={20}>

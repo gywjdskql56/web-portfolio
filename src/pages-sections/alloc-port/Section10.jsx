@@ -66,7 +66,7 @@ useEffect(() => {
     setHydrated(true);
 },[])
 const [value, setValue] = React.useState(30);
-const [valuelist, setValueList] = React.useState([50,50,50,50,50,50,50,50,50,50,50,50,50]);
+const [valuelist, setValueList] = React.useState([0,0,0,0,0,0,0,0,0,0,0,0,0]);
 const [active1, setActive1] = useState("자산배분포트폴리오 직접생성");
 const [active2, setActive2] = useState("변동성 알고리즘");
 const [open, setOpen] = useState(false);
@@ -86,6 +86,12 @@ function getBarData() {
     .then(json => {console.log("완료"); setBarData1(json.expected_return); setBarData2(json.risk_return);
     setBarData3(json.exposure_comparison); setBarData4(json.risk_comparison); setPieData1(json.pie_data_bf); setPieData2(json.pie_data_af);
     console.log(json); setOpen(true)})
+}
+function getSliderData() {
+    console.log(url.concat(`/alloc-port-set-pre/${active2}`))
+    fetch(url.concat(`/alloc-port-set-pre/${active2}`), { method: 'GET' })
+    .then(data => data.json())
+    .then(json => {console.log("완료"); setValueList(json.valuelist);})
 }
   const handleSliderChange = (event, newValue) => {
     setValue(newValue);
@@ -154,7 +160,7 @@ function getBarData() {
   };
 
 function valuetexts(value) {
-  return `${(value-50)/100}`;
+  return `${value}`;
 }
 
 
@@ -188,7 +194,7 @@ function valuetexts(value) {
         <Grid item lg={4} md={6} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
-                    onClick={() => {setActive2(item.name);}}
+                    onClick={() => {setActive2(item.name); getSliderData();}}
                     style={{ backgroundColor: active2==item.name ? "#043B72" : "", color: active2==item.name ? "white" : "black"  }}
                 elevation={1}>
                   <Box fontWeight="600" ml={1.25} fontSize={20}>
@@ -243,23 +249,26 @@ function valuetexts(value) {
             {item}
           </Typography>
           <Slider
+            min = {-1}
+            max = {1}
+            step = {0.1}
             onChange={e => handleSliderChanges(e,idx, item)}
             aria-label="Temperature"
             orientation="vertical"
             getAriaValueText={valuetexts}
             valueLabelDisplay="auto"
-            defaultValue={50}
+            defaultValue={0}
           />
           <Typography id="input-slider" gutterBottom>
             {valuetexts}
           </Typography>
           <MuiInput
-            value={(valuelist[idx]-50)/100}
+            value={valuelist[idx]}
             size="small"
             onChange={e => handleInputChanges(e, idx, item)}
             onBlur={e => handleBlurs(e, idx, item)}
             inputProps={{
-              step: 100,
+              step: 0.1,
               min: -1,
               max: 1,
               type: 'number',
