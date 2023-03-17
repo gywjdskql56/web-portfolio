@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Box, Container, Grid, styled } from "@mui/material";
 import LazyImage from "components/LazyImage";
+import ReactTable from "components/react-table/React-Table";
 import BazaarCard from "components/BazaarCard";
 import HorizonLine from "components/HorizontalLine";
 import CategoryIcon from "components/icons/Category";
@@ -74,8 +75,7 @@ const [tablepage, setTablePage] = useState(20);
 useEffect(()=>{
     fetch(url.concat(`/recent_etf`), { method: 'GET' })
     .then(data => data.json())
-    .then(json => {setTableData(json.table); setTablePage(json.tablepage);})
-
+    .then(json => {setTableData(json.table); console.log(json)})
 },[])
 //function handleClick1(val) {
 //    console.log(val);
@@ -113,9 +113,16 @@ const columns = [
           <Grid container spacing={3}>
           <HorizonLine text="최근 출시된 ETF" />
             <Grid item xs={12} md={12} lg={12}>
-                <RowSpanning table={tabledata} pageSize={tablepage} columns={columns} />
+                <ReactTable table={tabledata} />
             </Grid>
           </Grid>
+
+          {/*<Grid container spacing={3}>
+          <HorizonLine text="최근 출시된 ETF" />
+            <Grid item xs={12} md={12} lg={12}>
+                <RowSpanning table={tabledata} pageSize={tablepage} columns={columns} />
+            </Grid>
+          </Grid>*/}
     </Container>;
 };
 export default Section10;

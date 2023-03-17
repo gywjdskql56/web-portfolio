@@ -9,54 +9,84 @@ def read_pickle(file_nm):
     with open('pkl/{}.pickle'.format((file_nm)), 'rb') as file:
         df = pickle.load(file)
     return df
-
+file_list = ['미래에셋 추천 포트폴리오','변동성 알고리즘','테마로테이션','멀티에셋 인컴','초개인화로보','멀티에셋 모멘텀(해외)','멀티에셋 모멘텀(국내)']
 ## 추천포트폴리오 엑셀 변환
-file_nm = "초개인화로보"
-port1 = pd.read_excel('org-data/suggest/{}.xlsx'.format(file_nm), sheet_name='적극투자형')
-port2 = pd.read_excel('org-data/suggest/{}.xlsx'.format(file_nm), sheet_name='위험중립형')
-port3 = pd.read_excel('org-data/suggest/{}.xlsx'.format(file_nm), sheet_name='안정추구형')
+for file_nm in file_list:
+    port1 = pd.read_excel('org-data/suggest/{}.xlsx'.format(file_nm), sheet_name='적극투자형')
+    port2 = pd.read_excel('org-data/suggest/{}.xlsx'.format(file_nm), sheet_name='위험중립형')
+    port3 = pd.read_excel('org-data/suggest/{}.xlsx'.format(file_nm), sheet_name='안정추구형')
 
-def df2list_table(df):
-    total_list = list()
-    for idx, row in df.iterrows():
-        print(idx)
-        print(row)
-        part_dict = {
-            'id': idx,
-            'type': row.loc['구분'],
-            'wgt1': str(round(row.loc['비중1'] * 100, 1)) + "%",
-            'ticker': row.loc['종목명'],
-            'wgt2': str(round(row.loc['비중2'] * 100, 1)) + "%",
-        }
-        total_list.append(part_dict)
-    return total_list
+    def df2list_table(df):
+        total_list = list()
+        for idx, row in df.iterrows():
+            print(idx)
+            print(row)
+            part_dict = {
+                'id': idx,
+                'type': row.loc['구분'],
+                'wgt1': str(round(row.loc['비중1'] * 100, 1)) + "%",
+                'ticker': row.loc['종목명'],
+                'wgt2': str(round(row.loc['비중2'] * 100, 1)) + "%",
+            }
+            total_list.append(part_dict)
+        return total_list
 
-def df2list_pie(df):
-    total_list = list()
-    df = df[['구분','비중1']].drop_duplicates()
-    color = ["hsl(164, 70%, 50%)", "hsl(206, 70%, 50%)", "hsl(165, 70%, 50%)", "hsl(173, 70%, 50%)", "hsl(17, 70%, 50%)"]
-    for idx, row in df.iterrows():
-        print(idx)
-        print(row)
-        part_dict = {
-            'id': row.loc['구분'],
-            'value': round(row.loc['비중1'] * 100, 1),
-            'label': row.loc['구분'].split(" ")[-1],
-            'color': color[idx%len(color)],
-        }
-        total_list.append(part_dict)
-    return total_list
+    def df2list_tableN(df):
+        total_list = list()
+        for idx, row in df.iterrows():
+            print(idx)
+            print(row)
+            part_dict = {
+                'state': row.loc['구분'],
+                'firstName': str(round(row.loc['비중1'] * 100, 1)) + "%",
+                'lastName': row.loc['종목명'],
+                'Name': round(row.loc['비중2'] * 100, 1),
+            }
+            total_list.append(part_dict)
+        return total_list
 
-total_dict = dict()
-total_dict['적극투자형'] = df2list_table(port1)
-total_dict['위험중립형'] = df2list_table(port2)
-total_dict['안정추구형'] = df2list_table(port3)
 
-total_dict['적극투자형_pie'] = df2list_pie(port1)
-total_dict['위험중립형_pie'] = df2list_pie(port2)
-total_dict['안정추구형_pie'] = df2list_pie(port3)
+    # row_dict = {
+    #     "state": row.loc['그룹'],
+    #     "firstName": row.loc['티커'],
+    #     "lastName": row.loc['운용사'],
+    #     "Name": row.loc['ETF 명'],
+    #     "age": row.loc['시가총액'],
+    #     "gender": row.loc['1주 수익률'],
+    #     "salary": row.loc['1달 수익률'],
+    #     "date": row.loc['최초상장일'],
+    # }
 
-save_pickle(total_dict, file_nm)
+    def df2list_pie(df):
+        total_list = list()
+        df = df[['구분','비중1']].drop_duplicates()
+        color = ["hsl(164, 70%, 50%)", "hsl(206, 70%, 50%)", "hsl(165, 70%, 50%)", "hsl(173, 70%, 50%)", "hsl(17, 70%, 50%)"]
+        for idx, row in df.iterrows():
+            print(idx)
+            print(row)
+            part_dict = {
+                'id': row.loc['구분'],
+                'value': round(row.loc['비중1'] * 100, 1),
+                'label': row.loc['구분'].split(" ")[-1],
+                'color': color[idx%len(color)],
+            }
+            total_list.append(part_dict)
+        return total_list
+
+    total_dict = dict()
+    total_dict['적극투자형'] = df2list_table(port1)
+    total_dict['위험중립형'] = df2list_table(port2)
+    total_dict['안정추구형'] = df2list_table(port3)
+
+    total_dict['적극투자형_table'] = df2list_tableN(port1)
+    total_dict['위험중립형_table'] = df2list_tableN(port2)
+    total_dict['안정추구형_table'] = df2list_tableN(port3)
+
+    total_dict['적극투자형_pie'] = df2list_pie(port1)
+    total_dict['위험중립형_pie'] = df2list_pie(port2)
+    total_dict['안정추구형_pie'] = df2list_pie(port3)
+
+    save_pickle(total_dict, file_nm)
 print(1)
 
 ## DI

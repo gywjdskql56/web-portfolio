@@ -8,14 +8,16 @@ import random
 import pymssql
 from multifactor import *
 from qpmsdb import *
-from redis_save import *
-
-save_master()
+# from redis_save import *
+from datetime import datetime
+# save_master()
+import random
 
 warnings.filterwarnings("ignore")
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 CORS(app)
+
 
 def save_pickle(df, file_nm):
     with open('pkl/{}.pickle'.format((file_nm)), 'wb') as file:
@@ -29,55 +31,126 @@ def read_pickle(file_nm):
 
 @app.route('/suggest_port/<port>_<type>', methods=['GET', 'POST'])
 def suggest_port(port, type):
-    if port == '미래에셋 추천 포트폴리오':
-        df = read_pickle(port)
-    elif port == '테마로테이션':
-        df = read_pickle("테마로테이션")
-    elif port == '변동성 알고리즘':
-        df = read_pickle("변동성 알고리즘")
-    elif port == '멀티에셋 인컴':
-        df = read_pickle("멀티에셋 인컴")
-    elif port == '초개인화로보':
-        df = read_pickle("초개인화로보")
-    elif port == '멀티에셋 모멘텀(국내)':
-        df = read_pickle("멀티에셋 모멘텀(국내)")
+    if port !="미래에셋 추천 포트폴리오":
+        graph = pd.read_excel('org-data/suggest/RATB_성과표_18차추가.xlsx', sheet_name='그래프(영업일)', skiprows=1)
+        graph = graph.rename(columns={'Unnamed: 0': 'Date'}).set_index('Date').drop_duplicates().rename(columns=port2nm)
+        returns = graph[['_'.join([port,type])]].dropna()
+        rows = list()
+        count = 0
+        for idx, val in zip(returns.index, returns.values.flatten()):
+            if count%10 == 0:
+                row = {"x": idx.strftime('%y/%m/%d'), "y":val}
+                rows.append(row)
+            count+=1
+        perform = pd.read_excel('org-data/suggest/RATB_성과표_18차추가.xlsx', sheet_name='성과(요약)', skiprows=2)
+        perform = perform.rename(columns={"Unnamed: 1": "PORT"}).dropna(subset=['PORT'])[
+            ['PORT', '1D', '1W', '1M', '6M', '1Y', 'YTD']]
+        perform['PORT'] = perform['PORT'].apply(lambda x: port2nm[x])
+        perform = perform.set_index("PORT")
+        performs = perform.loc['_'.join([port,type])].to_dict()
+        rows_perform = [ {
+            'address': str(round(performs['1D']*100,2))+"%",
+            'firstName': str(round(performs['1W']*100,2))+"%",
+            'lastName': str(round(performs['1M']*100,2))+"%",
+            'city': str(round(performs['6M']*100,2))+"%",
+            'state': str(round(performs['1Y']*100,2))+"%",
+            'state1': str(round(performs['YTD']*100,2))+"%",
+            } ]
+        print(1)
     else:
-        df = read_pickle("멀티에셋 모멘텀(해외)")
+        rows_perform = ""
+        rows = ""
 
-    master = read_pickle('종목마스터ETF')
-    master_rv = read_pickle('종목마스터ETF_rv')
-    return {'table': df[type], 'pie':df[type+'_pie'], 'tablepage':len(df[type])}
+    linedata = [
+        {
+            "id": "수익률",
+            "color": "hsl(236, 70%, 50%)",
+            "data":rows
+        }]
+
+
+    if port == '미래에셋 추천 포트폴리오':
+        num = 0
+    elif port == '테마로테이션':
+        num = 3
+    elif port == '변동성 알고리즘':
+        num = 1
+    elif port == '멀티에셋 인컴':
+        num = 4
+    elif port == '초개인화로보':
+        num = 2
+    elif port == '멀티에셋 모멘텀(국내)':
+        num = 6
+    else:
+        num = 7
+    df = read_pickle(port)
+    risk = 1
+    if type == "공격투자형":
+        risk = 1
+    elif type == "위험중립형":
+        risk = 2
+    elif type == "안정추구형":
+        risk = 3
+
+    return {'tableN': df[type+'_table'], 'table': df[type], 'pie':df[type+'_pie'], 'tablepage':len(df[type]), 'imagenum':num, 'risknum':risk
+            , 'line':linedata, 'tableP':rows_perform }
 
 
 
-@app.route('/di_theme_univ/<sector>_<theme>_<rmticker>', methods=['GET', 'POST'])
-def DI_theme_port(sector , theme, rmticker):
+@app.route('/di_univ/<strategy>_<sector>_<theme>_<rmticker>', methods=['GET', 'POST'])
+def DI_theme_port(strategy, sector , theme, rmticker):
     if rmticker=='':
         rm_ticker = []
     else:
         rm_ticker = rmticker.split('|')
-    df = read_pickle('테마DI스코어')
 
-    df = df[df['theme']==theme]
-    total_sum = df['mcap'].sum()
-    df['wgt'] = df['mcap'].apply(lambda x : x/total_sum*100)
-    df['TF'] = df.apply(lambda row: row.loc['industry'] not in rmticker and row.loc['ticker'] not in rmticker,axis=1)
-    df = df[df['TF']==True]
-    df = df.dropna(subset=['ticker'])
+    nm_df = get_all_stock_ticker().dropna()
+    nm_df['TICKER_rf'] = nm_df['TICKER'].apply(lambda x: x.replace(' EQUITY', '').replace(' ', '-'))
+    if strategy=="테마":
+        df = read_pickle('테마DI스코어')
+
+        df = df[df['theme']==theme]
+        total_sum = float(df['mcap'].sum())
+        df['wgt'] = df['mcap'].apply(lambda x : float(x)/total_sum*100)
+        df['TF'] = df.apply(lambda row: row.loc['industry'] not in rmticker and row.loc['ticker'] not in rmticker,axis=1)
+        df = df[df['TF']==True]
+        df = df.dropna(subset=['ticker'])
+        nm_dict = nm_df[['COUNTRY_NAME','TICKER_rf']].set_index('TICKER_rf')['COUNTRY_NAME'].to_dict()
+        df['country'] = df['ticker'].apply(lambda x:nm_dict[x] if x in nm_dict.keys() else 'etc')
+    else:
+        if theme=="건전한 재무재표 전략지수":
+            factor = '400130' # WEBQM..WEB_GQPM_ACCT
+        elif theme=="주주환원지수":
+            factor = '600100'
+        elif theme=="Capex와 R&D 지수":
+            factor = '400100'
+        elif theme == "배당성장주":
+            factor = '400120'
+        df = get_factor(factor, td='20230201')
+        wgt_df = get_factor('600100', td='20230201')
+        df = pd.merge(df, wgt_df[['FSYM_ID', 'VAL']].dropna().drop_duplicates('FSYM_ID').rename(
+            columns={'VAL': 'WGT'}), left_on=['FSYM_ID'], right_on=['FSYM_ID'], how='left').sort_values(by=['VAL'],ascending=False).dropna().iloc[:50]
+
+        nm_dict = nm_df[['FSYM_ID', 'TICKER_rf']].set_index('FSYM_ID')['TICKER_rf'].to_dict()
+        df['ticker'] = df['FSYM_ID'].apply(lambda x: nm_dict[x] if x in nm_dict.keys() else x)
+        df['industry'] = df['GICS_INDUSTRYGROUP']
+        total_sum = df['WGT'].sum()
+        df['wgt'] = df['WGT'].apply(lambda x : x/total_sum*100)
+        df['country'] = df['COUNTRY_NAME']
+
 
     area_data = list()
     for sec in list(set(df['industry'])):
         area_data_ch = list()
         sub_df = df[df['industry']==sec].fillna(0)
         for t, w in zip(sub_df['ticker'], sub_df['wgt']):
-            child_ch = {"name": t,"color": "hsl({}, 70%, 50%)".format(random.randint(5, 200)),"loc": round(w,0)}
+            child_ch = {"name": t,"color": "hsl({}, 70%, 50%)".format(random.randint(5, 200)),"loc": round(w,2)}
             area_data_ch.append(child_ch)
         child = {"name": sec, "color": "hsl({}, 70%, 50%)".format(random.randint(200, 350)), "children": area_data_ch}
         area_data.append(child)
     print({"area" : {"name": "포트폴리오", "color": "hsl(336, 70%, 50%)", "children": area_data}})
 
-    # price = get_us_stock_pr(df['ticker'].dropna().tolist())
-    price = get_all_ticker_pr(df['ticker'].dropna().tolist())
+    price = get_all_ticker_pr(df['ticker'].dropna().tolist(), td='20220101', nm_df=nm_df)
     if price is not None:
         rtn = price.pct_change().fillna(0)
         total_rtn = None
@@ -98,18 +171,38 @@ def DI_theme_port(sector , theme, rmticker):
         print("in_db : {} || no_db : {}".format(len(in_db), len(no_db)))
         print("in_db : {} || no_db : {}".format((in_db), (no_db)))
         total_rtn = (1+total_rtn).cumprod()
+
+        pie = list()
+        pie_data = df.groupby('industry')['wgt'].sum().to_dict()
+        for key in pie_data.keys():
+            pie.append({
+                "id": key,
+                "label": key,
+                "value": round(pie_data[key],2),
+                "color": "hsl({}, 70%, 50%)".format(random.randint(2, 300))
+            })
+        pie_ctr = list()
+        pie_ctr_data = df.groupby('country')['wgt'].sum().to_dict()
+        for key in pie_ctr_data.keys():
+            pie_ctr.append({
+                "id": key,
+                "label": key,
+                "value": round(pie_ctr_data[key],2),
+                "color": "hsl({}, 70%, 50%)".format(random.randint(2, 300))
+            })
         return {"area" : {"name": "포트폴리오", "color": "hsl(336, 70%, 50%)", "children": area_data},
-            "rtn" : {"data":[{ "name": "포트수익률", "data":list(map(lambda x: str(round((x-1)*100,4))+"%", total_rtn.values.tolist()))}], "xaxis":total_rtn.index.tolist()}}
+            "rtn" : {"data":[{ "name": "포트수익률", "data":list(map(lambda x: str(round((x-1)*100,4))+"%", total_rtn.values.tolist()))}], "xaxis":list(map(lambda x: datetime.strptime(x,"%Y%m%d").strftime("%Y-%m-%d"),total_rtn.index.tolist()))},
+                "pie":pie, 'pie_ctr':pie_ctr}
     else:
         return {"area": {"name": "포트폴리오", "color": "hsl(336, 70%, 50%)", "children": area_data},
                 "rtn": {"data": [{"name": "포트수익률", "data": list(
                     map(lambda x: str(round((x - 1) * 100, 2)) + "%", [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]))}],
-                        "xaxis": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}}
+                        "xaxis": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"pie":""}
 
-@app.route('/recent_etf', methods=['GET', 'POST'])
-def recent_etf():
-    etf_table = read_pickle("recent_etf")
-    return {"table": etf_table, "tablepage":len(etf_table)}
+# @app.route('/recent_etf', methods=['GET', 'POST'])
+# def recent_etf():
+#     etf_table = read_pickle("recent_etf")
+#     return {"table": etf_table, "tablepage":len(etf_table)}
 
 def df2list(df):
     df = df.fillna(0)
@@ -169,13 +262,59 @@ def alloc_port_set(portnm, te, valuelist):
                      RMW=valuelist[10], CMA=valuelist[11],
                      Mom=valuelist[12], regression_result=props['regression_result'],
                      etf_performance=props['etf_performance'], df_yahoo_index=props['df_yahoo_index'],
-                     df_factor_summary=props['df_factor_summary'])
-    result['backtest_returns'].prices
+                     df_factor_summary=props['df_factor_summary'],)
 
+
+    returns = (result["backtest_returns"].dropna().sort_index().pct_change().fillna(0) + 1).cumprod()
+    rows = dict()
+    for col in ['After','Before']:
+        row_list = list()
+        count=0
+        for idx, val in zip(returns[col].index, returns[col].values):
+            if count%25==0:
+                idx = idx.strftime('%y/%m/%d')
+                row_list.append({"x": idx, "y": round(float(val),2)})
+            count += 1
+        rows[col] = row_list
+
+    prices = [
+        {
+            "id": "After",
+            "color": "hsl(236, 70%, 50%)",
+            "data":rows["After"]
+        },
+        {
+            "id": "Before",
+            "color": "hsl(236, 70%, 50%)",
+            "data": rows["Before"]
+        }
+    ]
 
     return {'expected_return': df2list(result['expected_return']), "risk_return":df2list(result['risk_return']),
             "exposure_comparison":df2list(result['exposure_comparison']), "risk_comparison":df2list(result['risk_comparison']),
-            "pie_data_bf":df2list_pie(result['before_weights']),"pie_data_af":df2list_pie(result['after_weights'])}
+            "pie_data_bf":df2list_pie(result['before_weights']),"pie_data_af":df2list_pie(result['after_weights']), "backtest_returns": prices}
+
+@app.route('/recent_etf', methods=['GET', 'POST'])
+def recent_etf():
+    etf = pd.read_excel('org-data/info/ETF_0210.xlsx')
+    total_rows = list()
+    etf['시가총액'] = etf['시가총액'].apply(lambda x:  round(x,2))
+    etf['1주 수익률'] = etf['1주 수익률'].apply(lambda x:  round(x*100,2))
+    etf['1달 수익률'] = etf['1달 수익률'].apply(lambda x:  round(x*100,2))
+    for i in range(len(etf)):
+        row = etf.iloc[i].fillna('-')
+        row_dict = {
+            "state": row.loc['그룹'],
+            "firstName": row.loc['티커'],
+            "lastName": row.loc['운용사'],
+            "Name": row.loc['ETF 명'],
+            "age": row.loc['시가총액'],
+            "gender": row.loc['1주 수익률'],
+            "salary": row.loc['1달 수익률'],
+            "date": row.loc['최초상장일'],
+        }
+        total_rows.append(row_dict)
+    return {"table": total_rows}
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)

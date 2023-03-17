@@ -280,14 +280,14 @@ const data = [
   }
 ]
   return   <ResponsiveLine
-        data={data}
+        data={linedata}
         margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
         xScale={{ type: 'point' }}
         yScale={{
             type: 'linear',
             min: 'auto',
             max: 'auto',
-            stacked: true,
+            stacked: false,
             reverse: false
         }}
         yFormat=" >-.2f"
@@ -297,8 +297,8 @@ const data = [
             orient: 'bottom',
             tickSize: 5,
             tickPadding: 5,
-            tickRotation: 0,
-            legend: 'transportation',
+            tickRotation: 90,
+            legend: '날짜',
             legendOffset: 36,
             legendPosition: 'middle'
         }}
@@ -307,11 +307,11 @@ const data = [
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: 'count',
+            legend: '수익률',
             legendOffset: -40,
             legendPosition: 'middle'
         }}
-        pointSize={10}
+        pointSize={1}
         pointColor={{ theme: 'background' }}
         pointBorderWidth={2}
         pointBorderColor={{ from: 'serieColor' }}

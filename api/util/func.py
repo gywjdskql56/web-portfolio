@@ -1,5 +1,5 @@
 # Core Functions
-from util.qpms import *
+# from util.qpmsdb import *
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
@@ -218,27 +218,27 @@ def famafrench_download(start, end, frequency):  # 야후 데이타 다운로드
     return df_factors_index, df_factors_return
 
 
-def db_download():  # 동현매니저 작업한 DB데이타 다운로드
-    temp_df = get_data().run("ALL")
-
-    group_df = temp_df.pivot_table(index=['Dates'], columns=['INDEX_ID'])
-    group_df.columns = group_df.columns.droplevel(0)
-    column_names = group_df.columns
-
-    for i in column_names:
-        existing_str = i
-        new_str = existing_str.replace('extended_', '')
-        new_str = new_str.replace('_US_Equity', '')
-
-        group_df.rename(columns={i: new_str}, inplace=True)
-    if frequency == 'M':
-        group_df = group_df.resample('M').last()  # 일간데이터를 월간데이터로 변환
-    elif frequency == 'Q':
-        group_df = group_df.resample('Q').last()  # 일간데이터를 분기데이터로 변환
-    elif frequency == 'W':
-        group_df = group_df.resample('W').last()  # 일간데이터를 분기데이터로 변환
-
-    return group_df
+# def db_download():  # 동현매니저 작업한 DB데이타 다운로드
+#     temp_df = get_data().run("ALL")
+#
+#     group_df = temp_df.pivot_table(index=['Dates'], columns=['INDEX_ID'])
+#     group_df.columns = group_df.columns.droplevel(0)
+#     column_names = group_df.columns
+#
+#     for i in column_names:
+#         existing_str = i
+#         new_str = existing_str.replace('extended_', '')
+#         new_str = new_str.replace('_US_Equity', '')
+#
+#         group_df.rename(columns={i: new_str}, inplace=True)
+#     if frequency == 'M':
+#         group_df = group_df.resample('M').last()  # 일간데이터를 월간데이터로 변환
+#     elif frequency == 'Q':
+#         group_df = group_df.resample('Q').last()  # 일간데이터를 분기데이터로 변환
+#     elif frequency == 'W':
+#         group_df = group_df.resample('W').last()  # 일간데이터를 분기데이터로 변환
+#
+#     return group_df
 
 
 def calculate_factor_ret(df_asset_ret, df_equityfactor_ret, method='specific'):  # 야후데이터 활용해 팩터리턴 계산
@@ -979,7 +979,7 @@ def display_performance(before_weights, after_weights, data):
     backtest_After = bt.Backtest(After, data[after_names].dropna(), commissions=my_comm)
     report = bt.run(backtest_Before, backtest_After)
 
-    return report
+    return report.prices
 
     # report = bt.run(backtest_Before, backtest_After)
     # report.plot()
@@ -1049,7 +1049,6 @@ def run_optimization(prob, factor_return_regime, regime_probability, port_select
         "exposure_comparison": exposure_comparison,
         "risk_comparison": risk_comparison,
         "backtest_returns": backtest_returns,
-
     }
 
 def background_gradient(s, m, M, cmap='Pubu', low=0, high=0): # Factor Exposure 보여줄 색깔 정의

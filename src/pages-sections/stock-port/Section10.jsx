@@ -43,6 +43,16 @@ const StyledBazaarCard = styled(BazaarCard)(({
     }
 }));
 
+const ExplainCard = styled(BazaarCard)(({
+  theme
+}) => ({
+  display: "flex",
+  borderRadius: 8,
+  padding: "0.75rem",
+  alignItems: "center",
+  transition: "all 250ms ease-in-out",
+}));
+
 
 const Section10 = ({
   categories
@@ -59,8 +69,8 @@ const [portdata, setPortData] = useState("");
 const [rmticker, setRMticker] = useState(["제외종목"]);
 
 function getAreaData() {
-    console.log(url.concat(`/di_theme_univ/${active4}_${active5}_${rmticker.join('|')}`))
-    fetch(url.concat(`/di_theme_univ/${active4}_${active5}_${rmticker.join('|')}`), { method: 'GET' })
+    console.log(url.concat(`/di_univ/${active3}_${active4}_${active5}_${rmticker.join('|')}`))
+    fetch(url.concat(`/di_univ/${active3}_${active4}_${active5}_${rmticker.join('|')}`), { method: 'GET' })
     .then(data => data.json())
     .then(json => {setPortData(json); console.log(json); setOpen(true);})
 }
@@ -84,8 +94,8 @@ useEffect(() => {
 
 useEffect(() => {
     console.log(rmticker)
-    console.log(url.concat(`/di_theme_univ/${active4}_${active5}_${rmticker.join('|')}`))
-    fetch(url.concat(`/di_theme_univ/${active4}_${active5}_${rmticker.join('|')}`), { method: 'GET' })
+    console.log(url.concat(`/di_univ/${active3}_${active4}_${active5}_${rmticker.join('|')}`))
+    fetch(url.concat(`/di_univ/${active3}_${active4}_${active5}_${rmticker.join('|')}`), { method: 'GET' })
     .then(data => data.json())
     .then(json => {setPortData(json); console.log(json)})
 }, [rmticker]);
@@ -181,13 +191,20 @@ const state = {
           </Grid>
           </Link>
           )}
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+              <ExplainCard>
+                <Box fontWeight="100" ml={1.25} fontSize={15}>
+                  {"주식으로 구성된 포트폴리오를 다이렉트 인덱싱을 활용해서 직접 만들어볼 수 있습니다."}
+                </Box>
+              </ExplainCard>
+          </Grid>
           <Container sx={{ mb: "20px" }} />
           <HorizonLine text="기본 지수 선택" />
          {categories1.map((item, ind) =>
         <Grid item lg={4} md={6} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
-                    onClick={() => {setActive2(item.name); setRMticker(["제외종목"]);}}
+                    onClick={() => {setActive2(item.name);}}
                     style={{ backgroundColor: active2==item.name ? "#043B72" : "", color: active2==item.name ? "white" : "black"  }}
                 elevation={1}>
                   <Box fontWeight="600" ml={1.25} fontSize={20}>
@@ -203,7 +220,7 @@ const state = {
         <Grid item lg={4} md={6} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
-                    onClick={() => {setActive3(item.name); setRMticker(["제외종목"]);}}
+                    onClick={() => {setActive3(item.name); }}
                     style={{ backgroundColor: active3==item.name ? "#043B72" : "", color: active3==item.name ? "white" : "black"  }}
                 elevation={1}>
                   <Box fontWeight="600" ml={1.25} fontSize={20}>
@@ -235,7 +252,7 @@ const state = {
         <Grid item lg={12/5} md={3} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
-                    onClick={() => {setActive5(item.name); console.log("click:",item.name); console.log('click 5');}}
+                    onClick={() => {setActive5(item.name); console.log("click:",item.name); console.log('click 5'); setRMticker(["제외종목"]);}}
                     style={{ backgroundColor: active5==item.name ? "#043B72" : "", color: active5==item.name ? "white" : "black"  }}
                 elevation={1}>
                   <Box fontWeight="600" ml={1.25} fontSize={20}>
@@ -281,6 +298,20 @@ const state = {
                     {ticker}
                   </Box>
           </StyledBazaarCard>))}
+          <Container sx={{ mb: "20px" }} />
+            <Grid item xs={5.5} md={5.5} lg={5.5}>
+            <HorizonLine text="섹터별 비중" />
+             <div style={{height: 400}}>
+                <Pie piedata={portdata.pie} />
+              </div>
+            </Grid>
+            <Grid item xs={1} md={1} lg={1} />
+            <Grid item xs={5.5} md={5.5} lg={5.5}>
+            <HorizonLine text="국가별 비중" />
+             <div style={{height: 400}}>
+                <Pie piedata={portdata.pie_ctr} />
+              </div>
+            </Grid>
           <Container sx={{ mb: "20px" }} />
           <HorizonLine text="수익률 현황" />
           <Grid item lg={12} md={12} sm={12} xs={12}>

@@ -19,7 +19,6 @@ import PaginationItem from '@mui/material/PaginationItem';
 import React, { useState, useEffect  } from "react";
 import {categories1, categories2, categories3, categories4} from "./data";
 import { ResponsiveTreeMapHtml } from '@nivo/treemap'
-import { ResponsiveLine } from '@nivo/line'
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
 import Stack from '@mui/material/Stack';
@@ -58,6 +57,16 @@ const StyledBazaarCard = styled(BazaarCard)(({
     }
 }));
 
+const ExplainCard = styled(BazaarCard)(({
+  theme
+}) => ({
+  display: "flex",
+  borderRadius: 8,
+  padding: "0.75rem",
+  alignItems: "center",
+  transition: "all 250ms ease-in-out",
+}));
+
 const Section10 = ({
   categories
 }) => {
@@ -78,13 +87,16 @@ const [bardata4, setBarData4] = useState("");
 
 const [piedata1, setPieData1] = useState("");
 const [piedata2, setPieData2] = useState("");
+
+const [linedata, setLineData] = useState("");
+
 const factors = ['주식(미국)','주식(EFA)','주식(EM)','금리','크레딧','원자재','인플레이션','원달러','중소형','가치/성장','수익성','회계퀄리티','모멘텀']
 function getBarData() {
     console.log(url.concat(`/alloc-port-set/${active2}_${value}_${valuelist.join("|")}`))
     fetch(url.concat(`/alloc-port-set/${active2}_${value}_${valuelist.join("|")}`), { method: 'GET' })
     .then(data => data.json())
     .then(json => {console.log("완료"); setBarData1(json.expected_return); setBarData2(json.risk_return);
-    setBarData3(json.exposure_comparison); setBarData4(json.risk_comparison); setPieData1(json.pie_data_bf); setPieData2(json.pie_data_af);
+    setBarData3(json.exposure_comparison); setBarData4(json.risk_comparison); setPieData1(json.pie_data_bf); setPieData2(json.pie_data_af); setLineData(json.backtest_returns);
     console.log(json); setOpen(true)})
 }
 function getSliderData() {
@@ -188,6 +200,13 @@ function valuetexts(value) {
           </Grid>
           </Link>
           )}
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+          <ExplainCard>
+            <Box fontWeight="100" ml={1.25} fontSize={15}>
+              {"미래에셋 자산운용에서 추천하는 포트폴리오를 기반으로 자산배분 포트폴리오를 직접 구성해볼 수 있습니다."}
+            </Box>
+          </ExplainCard>
+          </Grid>
           <Container sx={{ mb: "20px" }} />
           <HorizonLine text="기초 포트폴리오 선택" />
          {categories1.map((item, ind) =>
@@ -361,9 +380,9 @@ function valuetexts(value) {
           { open?(
                 <div style={{height: 300}}>
                       <Typography align="center">
-                        위험 기여도
+                        수익률
                       </Typography>
-                    <Line linedata={""}/>
+                    <Line linedata={linedata}/>
                 </div>
           ):
            (<div />)

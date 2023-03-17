@@ -1,5 +1,9 @@
 import Link from "next/link";
+import PeriodTable from "components/react-table/Period-Table";
+import CardMedia from "@mui/material/CardMedia";
+import { Modal, Button, debounce, Checkbox, TextField, IconButton, FormControlLabel, ClickAwayListener } from "@mui/material";
 import { Box, Container, Grid, styled } from "@mui/material";
+import Line from "components/chart/Linechart";
 import LazyImage from "components/LazyImage";
 import BazaarCard from "components/BazaarCard";
 import HorizonLine from "components/HorizontalLine";
@@ -10,6 +14,8 @@ import RowSpanning from "components/table";
 import Pie from "components/chart/Piechart";
 import table from "./table";
 import pie from "./pie";
+import ReactTable from "components/react-table/Port-Table";
+import Typography from '@material-ui/core/Typography';
 import CategorySectionHeader from "components/CategorySectionHeader";
 import {
   DataGrid,
@@ -21,7 +27,6 @@ import {
 import { STATUS_OPTIONS, useDemoData, randomDesk, generateFilledQuantity, randomStatusOptions,renderProgress, renderStatus, renderEditProgress, renderEditStatus } from '@mui/x-data-grid-generator';
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
-//import Chart from "react-apexcharts";
 import dynamic from 'next/dynamic'
 
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
@@ -47,6 +52,34 @@ const StyledBazaarCard = styled(BazaarCard)(({
     }
 }));
 
+const ExplainCard = styled(BazaarCard)(({
+  theme
+}) => ({
+  display: "flex",
+  borderRadius: 8,
+  padding: "0.75rem",
+  alignItems: "center",
+  transition: "all 250ms ease-in-out",
+  fontWeight: 100,
+  backgroundColor: "#DCDCDC",
+    "&:hover": {
+    boxShadow: theme.shadows[3],
+    backgroundColor: "#C0C0C0",
+  },
+}));
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 1300,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 
 const Section10 = ({
   categories
@@ -70,11 +103,23 @@ const categories2 = [
 const [active1, setActive1] = useState("추천 포트폴리오");
 const [active2, setActive2] = useState("미래에셋 추천 포트폴리오");
 const [active3, setActive3] = useState("적극투자형");
-const [tabledata, setTableData] = useState(table);
+const [linedata, setLineData] = useState(null);
+const [tabledata, setTableData] = useState(null);
+const [tabledataP, setTableDataP] = useState(null);
+const [tabledataN, setTableDataN] = useState(null);
 const [tablepage, setTablePage] = useState(20);
 typeof window !== 'undefined' ? sessionStorage.setItem("pages", 20) : null;
 const [piedata, setPieData] = useState(pie);
 const [rtndata, setRtnData] = useState(null);
+const [open, setOpen] = React.useState(false);
+const [openF, setOpenF] = React.useState(false);
+const [openR, setOpenR] = React.useState(false);
+const [image, setImage] = React.useState("0");
+const [imageR, setImageR] = React.useState("1");
+const handleOpen = () => setOpenF(true);
+const handleClose = () => setOpenF(false);
+const handleOpenR = () => setOpenR(true);
+const handleCloseR = () => setOpenR(false);
 const series = [
     {
       name: "Guests",
@@ -101,7 +146,7 @@ function handleClick1(val) {
     console.log(active2);
     fetch(url.concat(`/suggest_port/${val}_${active3}`), { method: 'GET' })
     .then(data => data.json())
-    .then(json => {setTableData(json.table); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage);})
+    .then(json => {console.log(json.tableN); setLineData(json.line); setTableDataN(json.tableN); setTableData(json.table); setTableDataP(json.tableP); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage); setImage(json.imagenum); setImageR(json.risknum); setOpen(true)})
 }
 
 function handleClick2(val) {
@@ -110,7 +155,7 @@ function handleClick2(val) {
     console.log(active3);
     fetch(url.concat(`/suggest_port/${active2}_${val}`), { method: 'GET' })
     .then(data => data.json())
-    .then(json => {setTableData(json.table); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage);})
+    .then(json => {console.log(json.tableN); setLineData(json.line); setTableDataN(json.tableN); setTableData(json.table); setTableDataP(json.tableP); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage); setImage(json.imagenum); setImageR(json.risknum);setOpen(true)})
 }
 
   return <Container sx={{
@@ -137,12 +182,56 @@ function handleClick2(val) {
             </Grid>
             </Link>
         )}
+        <Grid item lg={12} md={12} sm={12} xs={12}>
+          <ExplainCard>
+            <Box fontWeight="100" ml={1.25} color="#696969" fontSize={15}>
+              {"미래에셋 자산운용에서 추천하는 포트폴리오를 확인하실 수 있습니다."}
+            </Box>
+          </ExplainCard>
+          </Grid>
+           <Container sx={{ mb: "10px" }} />
         </Grid>
 
         <Container sx={{ mb: "40px" }} />
-
         <Grid container spacing={3}>
-          <HorizonLine text="펀드 선택" />
+            <Grid container spacing={3}>
+              <HorizonLine text="펀드 선택" />
+              <Grid item lg={2} md={4} sm={5} xs={6}>
+              <ExplainCard onClick={handleOpen}>
+                <Box fontWeight="300" ml={1.25} color="#696969" fontSize={15}>
+                  {"펀드 설명보기"}
+                </Box>
+              </ExplainCard>
+            </Grid>
+          </Grid>
+       <Modal
+        keepMounted
+        open={openF}
+        onClose={handleClose}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={style}>
+{/*         <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
+            알고리즘 설명서
+          </Typography>
+          <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+            알고리즘을 도식화한 내용입니다.
+          </Typography> */}
+
+          <CardMedia
+            src={"/assets/images/port/port_"+image+".png"}
+            component="img"
+            title={"title"}
+            sx={{
+              maxWidth: "100%",
+              margin: 0,
+              objectFit: "cover",
+              objectPosition: "center",
+            }}
+          />
+        </Box>
+      </Modal>
          {categories1.map((item, ind) =>
           <Grid item lg={3} md={4} sm={4} xs={12} key={ind}>
             <a>
@@ -162,6 +251,43 @@ function handleClick2(val) {
         <Container sx={{ mb: "40px" }} />
         <Grid container spacing={3}>
           <HorizonLine text="위험 성향 선택" />
+          <Grid container spacing={3}>
+            <Grid item lg={2} md={4} sm={5} xs={6}>
+              <ExplainCard onClick={handleOpenR}>
+                <Box fontWeight="100" ml={1.25} color="#696969" fontSize={15}>
+                  {"위험성향 설명보기"}
+                </Box>
+              </ExplainCard>
+                </Grid>
+            </Grid>
+        <Modal
+        keepMounted
+        open={openR}
+        onClose={handleCloseR}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={style}>
+ {/*     <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
+            알고리즘 설명서
+          </Typography>
+          <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+            알고리즘을 도식화한 내용입니다.
+          </Typography> */}
+
+          <CardMedia
+            src={"/assets/images/port/risk_"+imageR+".png"}
+            component="img"
+            title={"title"}
+            sx={{
+              maxWidth: "100%",
+              margin: 0,
+              objectFit: "cover",
+              objectPosition: "center",
+            }}
+          />
+        </Box>
+      </Modal>
            {categories2.map((item, ind) =>
             <Grid item lg={4} md={4} sm={4} xs={4} key={ind}>
                 <a>
@@ -177,8 +303,37 @@ function handleClick2(val) {
             </Grid>
             )}
           </Grid>
+            <Container sx={{ mb: "40px" }} />
+          <Grid container spacing={3}>
+          {open&active2!="미래에셋 추천 포트폴리오"? (
+          <Grid container spacing={3}>
+          <HorizonLine text="포트폴리오 상세" />
+            <Grid item xs={6} md={6} lg={6}>
+             <div style={{height: 400}}>
+                <Pie piedata={piedata} />
+             </div>
+            </Grid>
+            {/*<Grid item xs={6} md={6} lg={6}>
+                <RowSpanning table={tabledata} pageSize={tablepage} columns={columns} />
+            </Grid>*/}
+            <Grid item xs={6} md={6} lg={6}>
+               <div style={{height: 300}}>
+                  <Typography align="center">
+                    수익률
+                  </Typography>
+                <Line linedata={linedata}/>
+                </div>
+            </Grid>
+            <Grid item xs={12} md={12} lg={12}>
+                <PeriodTable table={tabledataP} />
+            </Grid>
+            <Grid item xs={12} md={12} lg={12}>
+                <ReactTable table={tabledataN} />
+            </Grid>
+          </Grid>):
+          (<div> </div>)}
 
-          <Container sx={{ mb: "40px" }} />
+          {open&active2=="미래에셋 추천 포트폴리오"? (
           <Grid container spacing={3}>
           <HorizonLine text="포트폴리오 상세" />
             <Grid item xs={6} md={6} lg={6}>
@@ -187,8 +342,10 @@ function handleClick2(val) {
              </div>
             </Grid>
             <Grid item xs={6} md={6} lg={6}>
-                <RowSpanning table={tabledata} pageSize={tablepage} columns={columns} />
+                <ReactTable table={tabledataN} />
             </Grid>
+          </Grid>):
+          (<div> </div>)}
           </Grid>
     </Container>;
 };
