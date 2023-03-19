@@ -41,21 +41,24 @@ const MarketShop = (props) => {
   let pieColumns = [];
   let pieList = [];
   // 모달창 노출
-  const showModal = (name) => {
+  const showModal = (name, index_) => {
     setModalOpen(true);
     setModal(name);
+    setIndex(index_);
+    console.log(index_);
+
     let sum = 0.0;
     for (let i = 0; i < Json_2[name].length; i++) {
       if (i < 10) {
-        pieColumns.push(Json_2[name][i]["Company Name"]);
-        pieList.push(parseFloat(Json_2[name][i]["% of Portfolio"]).toFixed(1));
+        pieColumns.push(Json_2[name][i]['Company Name']);
+        pieList.push(parseFloat(Json_2[name][i]['% of Portfolio']).toFixed(1));
       } else if (i >= 10) {
-        sum += Number(parseFloat(Json_2[name][i]["% of Portfolio"]).toFixed(1));
+        sum += Number(parseFloat(Json_2[name][i]['% of Portfolio']).toFixed(1));
         console.log(sum);
       }
     }
     if (sum > 0) {
-      pieColumns.push("Others");
+      pieColumns.push('etc');
       pieList.push(sum);
     }
 
@@ -73,7 +76,7 @@ const MarketShop = (props) => {
     "Ann. 3Y Return",
     "AUM",
     "Turnover",
-    "Score",
+    // "Score",
   ];
   // const columns_2 = ['undefined', 'Stock', 'Company Name', '% of Portfolio', 'Shares Owned', 'Value', 'Change in Shares', 'Ownership History', 'Average Buy Price', 'Price History', 'Date'];
   const columns_2 = [
@@ -102,7 +105,7 @@ const MarketShop = (props) => {
           "#8FFFE5",
           "#EB8AFF",
           "#FFAED3",
-          "#A3A92FF",
+          "#A3A9FF",
         ],
         fill: false,
       },
@@ -130,11 +133,15 @@ const MarketShop = (props) => {
       <Setting />
       <TextDiv className="TextDiv">
         <div className="Wrap">
-          <div className="Title">Top 10 Most Popular Hedge Funds</div>
+          <div className="Title">글로벌 Top 10 Popular 헤지펀드 포트폴리오 </div>
           <div className="Description">
-            This list shows the 10 most popular hedge funds based on their annualized
-            3-year return, using a weighted portfolio of their top 50 holdings
-            over this period. It shows the change in number of shares for the last quarter. 
+          헤지 펀드는 일반적으로 다양한 투자 전략을 사용하여 시장의 변동성을 완화하고 수익을 추구하는 투자 기관입니다.  
+          인지도를 기반으로 상위 10개의 헤지펀드를 보여주고, 최근 3년간 상위 50개 주식을 가중 포트폴리오로 묶어서 3년 수익률 및 연간 수익률을 보여줍니다.  <br></br>
+          <br></br>
+          또한 이전 분기 대비 해당 펀드가 보유한 주식 수의 변화를 함께 제공하여, 최근 추세나 해당 펀드의 운용 전략에 대한 힌트를 제공합니다. 
+          이를 통해 투자자는 해당 펀드의 투자 전략을 파악하고, 자신에게 적합한 투자전략을 수립 할 수 있습니다.          
+          <br></br>
+          <br></br>
           </div>
           {modalOpen && (
             <Modal className="Modal" onClick={closeModal}>
@@ -142,6 +149,7 @@ const MarketShop = (props) => {
                 <TableSection className="TableSection">
                   <div className="AlgorithmTableDiv">
                     <table>
+
                       <thead>
                         <tr>
                           {columns.map((col, index) => {
@@ -149,13 +157,14 @@ const MarketShop = (props) => {
                           })}
                         </tr>
                       </thead>
+
                       <tbody>
                         {Json.Sheet1.map((row, rowIndex) => {
                           if (rowIndex === index) {
                             return (
                               <tr>
-                                <td>{row["Fund Manager"]}</td>
-                                <td>{row["Hedge Fund"]}</td>
+                                <td>{row["Fund Manager kor"]}</td>
+                                <td>{row["Hedge Fund kor"]}</td>
                                 {parseFloat(row["3-Year Performance"]) > 0 ? (
                                   <td className="Green">
                                     {row["3-Year Performance"]}
@@ -181,7 +190,7 @@ const MarketShop = (props) => {
                                 )}
                                 <td>{row["AUM"]}</td>
                                 <td>{row["Turnover"]}</td>
-                                <td>{row["Score"]}</td>
+                                {/* <td>{row["Score"]}</td> */}
                               </tr>
                             );
                           }
@@ -211,21 +220,29 @@ const MarketShop = (props) => {
                               <td>{row["Stock"]}</td>
                               <td>{row["Company Name"]}</td>
                               <td>
-                                {parseFloat(row["% of Portfolio"]).toFixed(1)}
+                                {parseFloat(row["% of Portfolio"]).toFixed(1) + '%'}
                               </td>
-                              <td>{row["Shares Owned"]}</td>
-                              <td>{row["Value"]}</td>
+                              <td>{(row["Shares Owned"]/1000000).toFixed(2) + 'M'}</td>
+                              <td>{'$' + (row["Value"]/1000000).toFixed(2) + 'B'}</td>
+
+
+
+
                               {parseFloat(row["Change in Shares"]) > 0 ? (
                                 <td className="Green">
-                                  {row["Change in Shares"]}
+                                  {row["Change in Shares"] + '%'}
                                 </td>
                               ) : parseFloat(row["Change in Shares"]) < 0 ? (
                                 <td className="Red">
-                                  {row["Change in Shares"]}
+                                  {row["Change in Shares"] + '%'}
                                 </td>
                               ) : (
                                 <td>{row["Change in Shares"]}</td>
                               )}
+
+
+
+
                               {/* <td>{row['Ownership History']}</td> */}
                               <td>{row["Average Buy Price"]}</td>
                               {/* <td>{row['Price History']}</td> */}
@@ -259,8 +276,8 @@ const MarketShop = (props) => {
                             showModal(row["Fund Manager"], rowIndex)
                           }
                         >
-                          <td>{row["Fund Manager"]}</td>
-                          <td>{row["Hedge Fund"]}</td>
+                          <td>{row["Fund Manager kor"]}</td>
+                          <td>{row["Hedge Fund kor"]}</td>
                           {parseFloat(row["3-Year Performance"]) > 0 ? (
                             <td className="Green">
                               {row["3-Year Performance"]}
@@ -279,12 +296,26 @@ const MarketShop = (props) => {
                           )}
                           <td>{row["AUM"]}</td>
                           <td>{row["Turnover"]}</td>
-                          <td>{row["Score"]}</td>
+                          {/* <td>{row["Score"]}</td> */}
                         </tr>
                       );
                     })}
+
+
                   </tbody>
                 </table>
+                <div className="Description2">
+                  <br></br>
+                  <br></br>
+                  ---------<br></br>
+                  *Shares Owned: 해당 날짜를 기준으로 기금이 보유한 주식 수입니다. <br></br>
+                  *value: 기관이 보유한 주식의 달러 가치입니다.     <br></br>
+                  *% of Portfolio: 해당 주식의 가중치로, 기관의 포트폴리오 전체 가치 대비 주식의 비중을 나타냅니다. 높은 값은 해당 주식에 많이 투자하고 있다는 것을 의미합니다. <br></br>  
+                  *Change in Shares: 이전 분기 대비 해당 종목의 수량 변동을 나타냅니다. <br></br> 
+                  *Average Buy Price: 해당 종목 전체 보유수량의 평균 매수가 입니다. <br></br>
+                  <br></br>
+                  <br></br>
+                  </div>
               </div>
             </TableSection>
           </div>
@@ -351,9 +382,16 @@ const TextDiv = styled.div`
     margin-left: 10px;
   }
   .Description {
-    font-size: 20px;
+    font-size: 15px;
     margin-bottom: 20px;
-    margin-left: 10px;
+    margin-left: 30px;
+    margin-right: 30px;
+  }
+  .Description2 {
+    font-size: 11px;
+    margin-bottom: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
   }
   .Wrap {
     display: flex;

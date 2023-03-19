@@ -100,26 +100,31 @@ def suggest_port(port, type):
 
 
 
-@app.route('/di_univ/<strategy>_<sector>_<theme>_<rmticker>', methods=['GET', 'POST'])
-def DI_theme_port(strategy, sector , theme, rmticker):
-    if rmticker=='':
-        rm_ticker = []
-    else:
-        rm_ticker = rmticker.split('|')
+@app.route('/di_univ/<strategy>_<sector>_<theme>_<rmticker>_<num>_<factor>', methods=['GET', 'POST'])
+def DI_theme_port(strategy, sector , theme, rmticker, num, factor):
+    rmticker = rmticker.split('|')
+    factor = factor.split('|')
+
 
     nm_df = get_all_stock_ticker().dropna()
     nm_df['TICKER_rf'] = nm_df['TICKER'].apply(lambda x: x.replace(' EQUITY', '').replace(' ', '-'))
     if strategy=="테마":
-        df = read_pickle('테마DI스코어')
+        # df = read_pickle('테마DI스코어')
+        df = read_pickle('model_score_add2')
 
         df = df[df['theme']==theme]
         total_sum = float(df['mcap'].sum())
-        df['wgt'] = df['mcap'].apply(lambda x : float(x)/total_sum*100)
+        # df = df.sort_values(ascending=False).iloc[:min(num,len(df))]
+        # df['wgt'] = df['mcap'].apply(lambda x : float(x)/total_sum*100)
         df['TF'] = df.apply(lambda row: row.loc['industry'] not in rmticker and row.loc['ticker'] not in rmticker,axis=1)
         df = df[df['TF']==True]
         df = df.dropna(subset=['ticker'])
         nm_dict = nm_df[['COUNTRY_NAME','TICKER_rf']].set_index('TICKER_rf')['COUNTRY_NAME'].to_dict()
         df['country'] = df['ticker'].apply(lambda x:nm_dict[x] if x in nm_dict.keys() else 'etc')
+        for idx, fac in enumerate(factor):
+            df['mcap'] += df[df.columns[idx+7]]*0.01*float(fac)*0.01
+        df = df.sort_values(by='mcap',ascending=False).iloc[:min(int(num),len(df))]
+        df['wgt'] = df['mcap'].apply(lambda x : float(x)/total_sum*100)
     else:
         if theme=="건전한 재무재표 전략지수":
             factor = '400130' # WEBQM..WEB_GQPM_ACCT
@@ -141,7 +146,14 @@ def DI_theme_port(strategy, sector , theme, rmticker):
         df['wgt'] = df['WGT'].apply(lambda x : x/total_sum*100)
         df['country'] = df['COUNTRY_NAME']
 
-
+    table_list = list()
+    for idx, row in df.iterrows():
+        part_dict = {
+            'state': row.loc['industry'],
+            'lastName': row.loc['name'],
+            'Name': round(row.loc['wgt'],2),
+        }
+        table_list.append(part_dict)
     area_data = list()
     for sec in list(set(df['industry'])):
         area_data_ch = list()
@@ -175,6 +187,22 @@ def DI_theme_port(strategy, sector , theme, rmticker):
         print("in_db : {} || no_db : {}".format((in_db), (no_db)))
         total_rtn = (1+total_rtn).cumprod()
 
+        total_list = list()
+        count = 0
+        for idx, dat in zip(total_rtn.index.tolist(), total_rtn.values.tolist()):
+            if count % 3 == 0:
+                total_list.append(
+                    {"x": datetime.strptime(idx,"%Y%m%d").strftime("%y-%m-%d"), "y": round((dat-1)*100,4)})
+            count += 1
+
+        rtn_val_list = total_rtn.values.tolist()
+        rtn_period = [{"address" : str(round((rtn_val_list[-1] / rtn_val_list[-2] - 1) * 100, 4)) + "%",
+        "firstName" : str(round((rtn_val_list[-5] / rtn_val_list[-2] - 1) * 100, 4)) + "%",
+        "lastName" : str(round((rtn_val_list[-22] / rtn_val_list[-2] - 1) * 100, 4)) + "%",
+        "city": str(round((rtn_val_list[-22*6]/rtn_val_list[-2]-1)*100,4))+"%",
+        "state" :str(round((rtn_val_list[-22 * 12] / rtn_val_list[-2] - 1) * 100, 4)) + "%",
+        "state1" : str(round((rtn_val_list[-22*2+15]/rtn_val_list[-2]-1)*100,4))+"%"}]
+
         pie = list()
         pie_data = df.groupby('industry')['wgt'].sum().to_dict()
         for key in pie_data.keys():
@@ -194,13 +222,11 @@ def DI_theme_port(strategy, sector , theme, rmticker):
                 "color": "hsl({}, 70%, 50%)".format(random.randint(2, 300))
             })
         return {"area" : {"name": "포트폴리오", "color": "hsl(336, 70%, 50%)", "children": area_data},
-            "rtn" : {"data":[{ "name": "포트수익률", "data":list(map(lambda x: str(round((x-1)*100,4))+"%", total_rtn.values.tolist()))}], "xaxis":list(map(lambda x: datetime.strptime(x,"%Y%m%d").strftime("%Y-%m-%d"),total_rtn.index.tolist()))},
-                "pie":pie, 'pie_ctr':pie_ctr}
+                "pie":pie, 'pie_ctr':pie_ctr,
+                'rtn_new': [{"data": total_list, "color": "hsl(236, 70%, 50%)", "id": "수익률", }],
+                'explain': read_pickle('sec_explain')[theme], 'table': table_list, "rtn_period" : rtn_period}
     else:
-        return {"area": {"name": "포트폴리오", "color": "hsl(336, 70%, 50%)", "children": area_data},
-                "rtn": {"data": [{"name": "포트수익률", "data": list(
-                    map(lambda x: str(round((x - 1) * 100, 2)) + "%", [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]))}],
-                        "xaxis": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"pie":""}
+        return {"area": {"name": "포트폴리오", "color": "hsl(336, 70%, 50%)", "children": area_data},"pie":"",'rtn_new':"",'explain':"" }
 
 # @app.route('/recent_etf', methods=['GET', 'POST'])
 # def recent_etf():

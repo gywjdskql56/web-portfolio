@@ -13,6 +13,7 @@ def read_pickle(file_nm):
     return df
 
 df = read_pickle('sec_explain')
+score = read_pickle('model_score_add')
 url = "http://43.200.170.131:5001/di_univ/테마_그린_배터리_제외종목"
 
 response = requests.get(url)

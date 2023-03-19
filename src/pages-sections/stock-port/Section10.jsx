@@ -25,6 +25,8 @@ import Line from "components/chart/Linechart";
 import Slider from '@mui/material/Slider';
 import MuiInput from '@mui/material/Input';
 import Stack from '@mui/material/Stack';
+import ReactTable from "components/react-table/Port-Table";
+import PeriodTable from "components/react-table/Period-Table";
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const StyledBazaarCard = styled(BazaarCard)(({
@@ -107,11 +109,11 @@ const [openE, setOpenE] = useState(false);
 const [value, setValue] = useState(50);
 const [portdata, setPortData] = useState("");
 const [rmticker, setRMticker] = useState(["제외종목"]);
-const [valuelist, setValueList] = React.useState([0,0,0,0,0,0,0,0,0,0,0,0,0]);
+const [valuelist, setValueList] = React.useState([0,0,0,0,0,0,0,0]);
 
 function getAreaData() {
-//    console.log(url.concat(`/di_univ/${active3}_${active4}_${active5}_${rmticker.join('|')}`))
-    fetch(url2.concat(`/di_univ2/${active3}_${active4}_${active5}_${rmticker.join('|')}`), { method: 'GET' })
+    console.log(url.concat(`/di_univ/${active3}_${active4}_${active5}_${rmticker.join('|')}_${value}_${valuelist.join('|')}`))
+    fetch(url.concat(`/di_univ/${active3}_${active4}_${active5}_${rmticker.join('|')}_${value}_${valuelist.join('|')}`), { method: 'GET' })
     .then(data => data.json())
     .then(json => {setPortData(json); console.log(json); })
     .then(json => {setOpen(true);})
@@ -120,16 +122,18 @@ function getAreaData() {
   const handleSliderChange = (event, newValue) => {
     setValue(newValue);
   };
-    const handleBlur = () => {
+  const handleBlur = () => {
     if (value < 0) {
       setValue(0);
     } else if (value > 100) {
       setValue(100);
     }
+
   };
 
     const handleInputChange = (event) => {
     setValue(event.target.value === '' ? '' : Number(event.target.value));
+
   };
     const handleSliderChanges = (e, idx, item) => {
 
@@ -144,6 +148,7 @@ function getAreaData() {
       }
     });
     setValueList(nextCounters);
+    getAreaData()
    }
 const factors = ['GROWTH','LIQUIDITY','PRICE_MOM','QUALITY','SENTIMENT','SIZE','VALUE','VOLATILITY']
 useEffect(() => {
@@ -157,6 +162,7 @@ useEffect(() => {
 
 }, [active4]);
 
+
 useEffect(() => {
     console.log(active4)
     console.log(active5)
@@ -164,9 +170,14 @@ useEffect(() => {
 }, [active5]);
 
 useEffect(() => {
+    console.log(value)
+    getAreaData()
+}, [value]);
+
+useEffect(() => {
     console.log(rmticker)
 {/*}    console.log(url.concat(`/di_univ/${active3}_${active4}_${active5}_${rmticker.join('|')}`))*/}
-    fetch(url2.concat(`/di_univ2/${active3}_${active4}_${active5}_${rmticker.join('|')}`), { method: 'GET' })
+    fetch(url.concat(`/di_univ/${active3}_${active4}_${active5}_${rmticker.join('|')}_${value}_${valuelist.join('|')}`), { method: 'GET' })
     .then(data => data.json())
     .then(json => {setPortData(json); console.log(json)})
 }, [rmticker]);
@@ -499,6 +510,11 @@ const state = {
           </StyledBazaarCard>))}
           </Grid>
           <Container sx={{ mb: "20px" }} />
+          <HorizonLine text="초기 포트폴리오" />
+            <Grid item xs={12} md={12} lg={12}>
+                <ReactTable table={portdata.table} />
+            </Grid>
+          <Container sx={{ mb: "20px" }} />
             <Grid item xs={5.5} md={5.5} lg={5.5}>
             <HorizonLine text="섹터별 비중" />
              <div style={{height: 400}}>
@@ -537,6 +553,11 @@ const state = {
                 <Line linedata={portdata.rtn_new}/>
                 </div>
             </Grid>
+            <Container sx={{ mb: "20px" }} />
+            <Grid item xs={12} md={12} lg={12}>
+                <PeriodTable table={portdata.rtn_period} />
+            </Grid>
+
           </Grid>) : (<div />)}
     </Container>;
 };

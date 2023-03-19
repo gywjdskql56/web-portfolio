@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { Box, Stack } from '@mui/material';
 import MaterialReactTable, { MRT_ColumnDef } from 'material-react-table';
-//import { data } from './data';
 
 
 const PeriodTable = ({table}) => {
@@ -19,16 +18,16 @@ const PeriodTable = ({table}) => {
     //column definitions...
     () => [
       {
+        accessorKey: 'address',
+        header: '1일 수익률',
+      },
+      {
         accessorKey: 'firstName',
         header: '1주 수익률',
       },
       {
         accessorKey: 'lastName',
         header: '1개월 수익률',
-      },
-      {
-        accessorKey: 'address',
-        header: '1일 수익률',
       },
       {
         accessorKey: 'city',
@@ -40,7 +39,7 @@ const PeriodTable = ({table}) => {
       },
       {
         accessorKey: 'state1',
-        header: '1년 수익률',
+        header: 'YTD',
       },
     ],
     [],
