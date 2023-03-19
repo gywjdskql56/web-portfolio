@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Box, Container, Grid, styled } from "@mui/material";
+import { Box, Container, Grid, styled, Modal } from "@mui/material";
 import Pie from "components/chart/Piechart";
 import Line from "components/chart/Linechart";
 import LazyImage from "components/LazyImage";
@@ -7,6 +7,7 @@ import BazaarCard from "components/BazaarCard";
 import HorizonLine from "components/HorizontalLine";
 import CategoryIcon from "components/icons/Category";
 import RowSpanning from "components/table";
+import CardMedia from "@mui/material/CardMedia";
 import MyResponsiveTreeMapHtml  from "components/treemap";
 import { Typography } from "@mui/material";
 import Barchart from "components/chart/Barchart";
@@ -56,7 +57,17 @@ const StyledBazaarCard = styled(BazaarCard)(({
       boxShadow: "0 0 0 0.2rem rgba(0,123,255,.5)"
     }
 }));
-
+const ExplainCard_wh = styled(BazaarCard)(({
+  theme
+}) => ({
+  display: "flex",
+  borderRadius: 8,
+  padding: "0.75rem",
+  alignItems: "center",
+  transition: "all 250ms ease-in-out",
+  fontWeight: 100,
+  backgroundColor: "#FFFFFF",
+}));
 const ExplainCard = styled(BazaarCard)(({
   theme
 }) => ({
@@ -67,6 +78,18 @@ const ExplainCard = styled(BazaarCard)(({
   transition: "all 250ms ease-in-out",
 }));
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 1300,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 const Section10 = ({
   categories
 }) => {
@@ -74,30 +97,42 @@ const [hydrated, setHydrated] = useState(false);
 useEffect(() => {
     setHydrated(true);
 },[])
+
 const [value, setValue] = React.useState(30);
 const [valuelist, setValueList] = React.useState([0,0,0,0,0,0,0,0,0,0,0,0,0]);
 const [active1, setActive1] = useState("자산배분포트폴리오 직접생성");
 const [active2, setActive2] = useState("변동성 알고리즘");
 const [open, setOpen] = useState(false);
+const [openF, setOpenF] = useState(false);
 
-const [bardata1, setBarData1] = useState("");
-const [bardata2, setBarData2] = useState("");
-const [bardata3, setBarData3] = useState("");
-const [bardata4, setBarData4] = useState("");
+const [image, setImage] = useState(1);
+const [port, setPort] = useState({"portnum":1});
 
-const [piedata1, setPieData1] = useState("");
-const [piedata2, setPieData2] = useState("");
-
-const [linedata, setLineData] = useState("");
+const handleOpenF = () => setOpenF(true);
+const handleCloseF = () => setOpenF(false);
 
 const factors = ['주식(미국)','주식(EFA)','주식(EM)','금리','크레딧','원자재','인플레이션','원달러','중소형','가치/성장','수익성','회계퀄리티','모멘텀']
+const ExplainCard = styled(BazaarCard)(({
+  theme
+}) => ({
+  display: "flex",
+  borderRadius: 8,
+  padding: "0.75rem",
+  alignItems: "center",
+  transition: "all 250ms ease-in-out",
+  fontWeight: 100,
+  backgroundColor: "#DCDCDC",
+    "&:hover": {
+    boxShadow: theme.shadows[3],
+    backgroundColor: "#C0C0C0",
+  },
+}));
+
 function getBarData() {
     console.log(url.concat(`/alloc-port-set/${active2}_${value}_${valuelist.join("|")}`))
     fetch(url.concat(`/alloc-port-set/${active2}_${value}_${valuelist.join("|")}`), { method: 'GET' })
     .then(data => data.json())
-    .then(json => {console.log("완료"); setBarData1(json.expected_return); setBarData2(json.risk_return);
-    setBarData3(json.exposure_comparison); setBarData4(json.risk_comparison); setPieData1(json.pie_data_bf); setPieData2(json.pie_data_af); setLineData(json.backtest_returns);
-    console.log(json); setOpen(true)})
+    .then(json => {console.log("완료"); setPort(json); console.log(json); setOpen(true)})
 }
 function getSliderData() {
     console.log(url.concat(`/alloc-port-set-pre/${active2}`))
@@ -201,14 +236,44 @@ function valuetexts(value) {
           </Link>
           )}
           <Grid item lg={12} md={12} sm={12} xs={12}>
-          <ExplainCard>
+          <ExplainCard_wh>
             <Box fontWeight="100" ml={1.25} fontSize={15}>
               {"미래에셋 자산운용에서 추천하는 포트폴리오를 기반으로 자산배분 포트폴리오를 직접 구성해볼 수 있습니다."}
             </Box>
-          </ExplainCard>
+          </ExplainCard_wh>
           </Grid>
           <Container sx={{ mb: "20px" }} />
           <HorizonLine text="기초 포트폴리오 선택" />
+          <Grid container spacing={3}>
+          <Grid item lg={2} md={4} sm={5} xs={6}>
+              <ExplainCard onClick={handleOpenF}>
+                <Box fontWeight="300" ml={1.25} color="#696969" fontSize={15}>
+                  {"펀드 설명보기"}
+                </Box>
+              </ExplainCard>
+            </Grid>
+          </Grid>
+      <Modal
+        keepMounted
+        open={openF}
+        onClose={handleCloseF}
+        aria-labelledby="keep-mounted-modal-title"
+        aria-describedby="keep-mounted-modal-description"
+      >
+        <Box sx={style}>
+          <CardMedia
+            src={"/assets/images/port/port_"+port.portnum+".png"}
+            component="img"
+            title={"title"}
+            sx={{
+              maxWidth: "100%",
+              margin: 0,
+              objectFit: "cover",
+              objectPosition: "center",
+            }}
+          />
+        </Box>
+      </Modal>
          {categories1.map((item, ind) =>
         <Grid item lg={4} md={6} sm={6} xs={12} key={ind}>
                 <a>
@@ -311,7 +376,7 @@ function valuetexts(value) {
                    <Typography align="center">
                       기초 포트폴리오
                    </Typography>
-                <Pie piedata={piedata1} />
+                <Pie piedata={port.pie_data_bf} />
              </div>):
            (<div />)
            }
@@ -321,7 +386,7 @@ function valuetexts(value) {
                   <Typography align="center">
                       맞춤형 포트폴리오
                    </Typography>
-                <Pie piedata={piedata2} />
+                <Pie piedata={port.pie_data_af} />
              </div>):
            (<div />)
            }
@@ -332,7 +397,7 @@ function valuetexts(value) {
                       <Typography align="center">
                         국면별 성과
                       </Typography>
-                    <Barchart bardata={bardata1}/>
+                    <Barchart bardata={port.expected_return}/>
                 </div>
           ):
            (<div />)
@@ -344,7 +409,7 @@ function valuetexts(value) {
                       <Typography align="center">
                         리스크-리턴
                       </Typography>
-                    <Barchart bardata={bardata2}/>
+                    <Barchart bardata={port.risk_return}/>
                 </div>
           ):
            (<div />)
@@ -357,7 +422,7 @@ function valuetexts(value) {
                       <Typography align="center">
                         팩터 노출도
                       </Typography>
-                    <Barchart bardata={bardata3}/>
+                    <Barchart bardata={port.exposure_comparison}/>
                 </div>
           ):
            (<div />)
@@ -369,7 +434,7 @@ function valuetexts(value) {
                       <Typography align="center">
                         위험 기여도
                       </Typography>
-                    <Barchart bardata={bardata4}/>
+                    <Barchart bardata={port.risk_comparison}/>
                 </div>
           ):
            (<div />)
@@ -382,7 +447,7 @@ function valuetexts(value) {
                       <Typography align="center">
                         수익률
                       </Typography>
-                    <Line linedata={linedata}/>
+                    <Line linedata={port.backtest_returns}/>
                 </div>
           ):
            (<div />)

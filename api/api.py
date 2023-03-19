@@ -12,6 +12,7 @@ from qpmsdb import *
 from datetime import datetime
 # save_master()
 import random
+import requests
 
 warnings.filterwarnings("ignore")
 app = Flask(__name__)
@@ -27,6 +28,22 @@ def read_pickle(file_nm):
     with open('pkl/{}.pickle'.format((file_nm)), 'rb') as file:
         df = pickle.load(file)
     return df
+
+def portnm2num(port):
+    if port == '미래에셋 추천 포트폴리오':
+        return 0
+    elif port == '테마로테이션':
+        return 3
+    elif port == '변동성 알고리즘':
+        return 1
+    elif port == '멀티에셋 인컴':
+        return 4
+    elif port == '초개인화로보':
+        return 2
+    elif port == '멀티에셋 모멘텀(국내)':
+        return 6
+    else:
+        return 7
 
 
 @app.route('/suggest_port/<port>_<type>', methods=['GET', 'POST'])
@@ -68,21 +85,7 @@ def suggest_port(port, type):
             "data":rows
         }]
 
-
-    if port == '미래에셋 추천 포트폴리오':
-        num = 0
-    elif port == '테마로테이션':
-        num = 3
-    elif port == '변동성 알고리즘':
-        num = 1
-    elif port == '멀티에셋 인컴':
-        num = 4
-    elif port == '초개인화로보':
-        num = 2
-    elif port == '멀티에셋 모멘텀(국내)':
-        num = 6
-    else:
-        num = 7
+    num = portnm2num(port)
     df = read_pickle(port)
     risk = 1
     if type == "공격투자형":
@@ -289,10 +292,11 @@ def alloc_port_set(portnm, te, valuelist):
             "data": rows["Before"]
         }
     ]
+    num = portnm2num(portnm)
 
     return {'expected_return': df2list(result['expected_return']), "risk_return":df2list(result['risk_return']),
             "exposure_comparison":df2list(result['exposure_comparison']), "risk_comparison":df2list(result['risk_comparison']),
-            "pie_data_bf":df2list_pie(result['before_weights']),"pie_data_af":df2list_pie(result['after_weights']), "backtest_returns": prices}
+            "pie_data_bf":df2list_pie(result['before_weights']),"pie_data_af":df2list_pie(result['after_weights']), "backtest_returns": prices, "portnum":num}
 
 @app.route('/recent_etf', methods=['GET', 'POST'])
 def recent_etf():
@@ -316,6 +320,22 @@ def recent_etf():
         total_rows.append(row_dict)
     return {"table": total_rows}
 
+@app.route('/di_univ2/<strategy>_<sector>_<theme>_<rmticker>', methods=['GET', 'POST'])
+def temp(strategy,sector,theme,rmticker):
+    url = "http://43.200.170.131:5001/di_univ/{}_{}_{}_{}".format(strategy,sector,theme,rmticker)
+    response = requests.get(url)
+    result = eval(response.text)
+    total_list = list()
+    count=0
+    for idx, dat in zip(result['rtn']['xaxis'], result['rtn']['data'][0]['data']):
+        if count % 3==0:
+            total_list.append({"x": datetime.strptime(idx,"%Y-%m-%d").strftime('%y-%m-%d'), "y": float(dat.replace("%",''))})
+        count+=1
+    result['rtn_new'] = [{"data": total_list, "color": "hsl(236, 70%, 50%)", "id": "수익률",}]
+    result['explain'] = read_pickle('sec_explain')[theme]
+    return result
+
+
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5001)
     print(1)

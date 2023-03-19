@@ -295,10 +295,10 @@ const data = [
         axisRight={null}
         axisBottom={{
             orient: 'bottom',
-            tickSize: 5,
-            tickPadding: 5,
+            tickSize: 2,
+            tickPadding: 1,
             tickRotation: 90,
-            legend: '날짜',
+            legend: '',
             legendOffset: 36,
             legendPosition: 'middle'
         }}
@@ -307,7 +307,7 @@ const data = [
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: '수익률',
+            legend: '',
             legendOffset: -40,
             legendPosition: 'middle'
         }}

@@ -68,6 +68,18 @@ const ExplainCard = styled(BazaarCard)(({
   },
 }));
 
+const ExplainCard_wh = styled(BazaarCard)(({
+  theme
+}) => ({
+  display: "flex",
+  borderRadius: 8,
+  padding: "0.75rem",
+  alignItems: "center",
+  transition: "all 250ms ease-in-out",
+  fontWeight: 100,
+  backgroundColor: "#FFFFFF",
+}));
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -183,11 +195,11 @@ function handleClick2(val) {
             </Link>
         )}
         <Grid item lg={12} md={12} sm={12} xs={12}>
-          <ExplainCard>
+          <ExplainCard_wh>
             <Box fontWeight="100" ml={1.25} color="#696969" fontSize={15}>
               {"미래에셋 자산운용에서 추천하는 포트폴리오를 확인하실 수 있습니다."}
             </Box>
-          </ExplainCard>
+          </ExplainCard_wh>
           </Grid>
            <Container sx={{ mb: "10px" }} />
         </Grid>
@@ -212,13 +224,6 @@ function handleClick2(val) {
         aria-describedby="keep-mounted-modal-description"
       >
         <Box sx={style}>
-{/*         <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-            알고리즘 설명서
-          </Typography>
-          <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-            알고리즘을 도식화한 내용입니다.
-          </Typography> */}
-
           <CardMedia
             src={"/assets/images/port/port_"+image+".png"}
             component="img"
@@ -268,13 +273,6 @@ function handleClick2(val) {
         aria-describedby="keep-mounted-modal-description"
       >
         <Box sx={style}>
- {/*     <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
-            알고리즘 설명서
-          </Typography>
-          <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
-            알고리즘을 도식화한 내용입니다.
-          </Typography> */}
-
           <CardMedia
             src={"/assets/images/port/risk_"+imageR+".png"}
             component="img"
