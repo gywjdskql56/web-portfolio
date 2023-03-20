@@ -125,6 +125,7 @@ def DI_theme_port(strategy, sector , theme, rmticker, num, factor):
             df['mcap'] += df[df.columns[idx+7]]*0.01*float(fac)*0.01
         df = df.sort_values(by='mcap',ascending=False).iloc[:min(int(num),len(df))]
         df['wgt'] = df['mcap'].apply(lambda x : float(x)/total_sum*100)
+        explain = read_pickle('sec_explain')[theme]
     else:
         if theme=="건전한 재무재표 전략지수":
             factor = '400130' # WEBQM..WEB_GQPM_ACCT
@@ -145,12 +146,13 @@ def DI_theme_port(strategy, sector , theme, rmticker, num, factor):
         total_sum = df['WGT'].sum()
         df['wgt'] = df['WGT'].apply(lambda x : x/total_sum*100)
         df['country'] = df['COUNTRY_NAME']
+        explain = ""
 
     table_list = list()
     for idx, row in df.iterrows():
         part_dict = {
             'state': row.loc['industry'],
-            'lastName': row.loc['name'],
+            'lastName': row.loc['ticker'],
             'Name': round(row.loc['wgt'],2),
         }
         table_list.append(part_dict)
@@ -224,7 +226,7 @@ def DI_theme_port(strategy, sector , theme, rmticker, num, factor):
         return {"area" : {"name": "포트폴리오", "color": "hsl(336, 70%, 50%)", "children": area_data},
                 "pie":pie, 'pie_ctr':pie_ctr,
                 'rtn_new': [{"data": total_list, "color": "hsl(236, 70%, 50%)", "id": "수익률", }],
-                'explain': read_pickle('sec_explain')[theme], 'table': table_list, "rtn_period" : rtn_period}
+                'explain': explain, 'table': table_list, "rtn_period" : rtn_period}
     else:
         return {"area": {"name": "포트폴리오", "color": "hsl(336, 70%, 50%)", "children": area_data},"pie":"",'rtn_new':"",'explain':"" }
 
