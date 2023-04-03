@@ -1,0 +1,21 @@
+const table = [
+    { id: 1, type: "고배당리츠", wgt1: "5%", ticker: "NH올원리츠", wgt2: "10%" },
+    { id: 2, type: "고배당리츠", wgt1: "5%", ticker: "미래에셋글로벌리츠", wgt2: "10%" },
+    { id: 3, type: "원자재", wgt1: "6%", ticker: "TIGER골드선물(H)", wgt2: "12%" },
+    { id: 4, type: "원자재", wgt1: "6%", ticker: "TIGER금속선물", wgt2: "12%" },
+    { id: 5, type: "성장산업 내 실적배당주", wgt1: "3%", ticker: "삼성전자", wgt2: "30%" },
+    { id: 6, type: "성장산업 내 실적배당주", wgt1: "3%", ticker: "LG화학", wgt2: "30%" },
+    { id: 7, type: "성장산업 내 실적배당주", wgt1: "3%", ticker: "기아", wgt2: "30%" },
+    { id: 8, type: "성장산업 내 실적배당주", wgt1: "3%", ticker: "NAVER", wgt2: "30%" },
+    { id: 9, type: "성장산업 내 실적배당주", wgt1: "3%", ticker: "에코프로비엠", wgt2: "30%" },
+    { id: 10, type: "성장산업 내 실적배당주", wgt1: "3%", ticker: "LG이노텍", wgt2: "30%" },
+    { id: 11, type: "성장산업 내 실적배당주", wgt1: "3%", ticker: "씨에드윈드", wgt2: "30%" },
+    { id: 12, type: "성장산업 내 실적배당주", wgt1: "3%", ticker: "JYP Ent", wgt2: "30%" },
+    { id: 13, type: "성장산업 내 실적배당주", wgt1: "3%", ticker: "한솔케미칼", wgt2: "30%"},
+    { id: 14, type: "성장산업 내 실적배당주", wgt1: "3%", ticker: "아프리카TV", wgt2: "30%" },
+    { id: 15, type: "테마 로테이팅", wgt1: "6%", ticker: "TIGER Fn반도체TOP10", wgt2: "18%" },
+    { id: 16, type: "테마 로테이팅", wgt1: "6%", ticker: "TIGER KRX2차전지K-뉴딜", wgt2: "18%" },
+    { id: 17, type: "테마 로테이팅", wgt1: "6%", ticker: "TIGER 중국소비테마", wgt2: "18%" },
+    { id: 18, type: "고금리상품", wgt1: "30%", ticker: "TIGER 투자등급회사채액티브", wgt2: "30%" },
+  ];
+export default table;
