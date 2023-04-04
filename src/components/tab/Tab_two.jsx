@@ -137,9 +137,9 @@ const MenuTab = ({
                   <Link href={`/company-perform`}>
                     <Tab label={(<Typography variant="h8">기업실적발표</Typography>)} />
                   </Link>
-                  <Link href={`/company`}>
+                  {/*<Link href={`/company`}>
                     <Tab label={(<Typography variant="h8">기업컨센추이</Typography>)} />
-                  </Link>
+                  </Link>*/}
                   <Link href={`/recent-etf`}>
                     <Tab label={(<Typography variant="h8">최근출시ETF</Typography>)} />
                   </Link>
