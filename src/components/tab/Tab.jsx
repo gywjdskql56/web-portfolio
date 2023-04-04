@@ -128,14 +128,17 @@ const MenuTab = ({
                   </Link>
                </TabPanel>
                <TabPanel value="two">
-                  <Link href={`/home`}>
+{/*                  <Link href={`/home`}>
                     <Tab label={(<Typography variant="h8">주요시장상황</Typography>)} />
                   </Link>
                   <Link href={`/home`}>
                     <Tab label={(<Typography variant="h8">AI국면모델</Typography>)} />
-                  </Link>
-                  <Link href={`/home`}>
+                  </Link>*/}
+                  <Link href={`/company-perform`}>
                     <Tab label={(<Typography variant="h8">기업실적발표</Typography>)} />
+                  </Link>
+                  <Link href={`/company`}>
+                    <Tab label={(<Typography variant="h8">기업컨센추이</Typography>)} />
                   </Link>
                   <Link href={`/recent-etf`}>
                     <Tab label={(<Typography variant="h8">최근출시ETF</Typography>)} />

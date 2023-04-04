@@ -6,9 +6,9 @@ import { ResponsiveLine } from "@nivo/line";
 
 
 
-const Barchart = ({ bardata }) => {
+const Barchart2 = ({ bardata }) => {
 
-  const keys= ["After", "Before"]
+  const keys= ["역사적 확률", "현재 추정확률"] //.rename(columns={'역사적 확률': 'Historical Probs', '현재 추정확률': 'Recent Probs'})
   const leftAxis= "국면별 기대수익"
   const lineColors= ["#CD0D15", "#2A6800", "purple", "#0092CC", "#2A6800"]
   const barColors= ["#68A300", "#FFB100", "#0092CC", "#CD0D15", "#2A6800"]
@@ -65,4 +65,4 @@ const Barchart = ({ bardata }) => {
   );
 
 };
-export default Barchart;
+export default Barchart2;

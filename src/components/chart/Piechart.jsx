@@ -23,9 +23,11 @@ const Pie = ({
                 ]
             ]
         }}
+        tooltip={function(e){return e.datum.label+": "+e.datum.formattedValue+"%"}}
         arcLinkLabelsSkipAngle={10}
         arcLinkLabelsTextColor="#333333"
         arcLinkLabelsThickness={2}
+        arcLabel={function(e){return e.value+"%"}}
         arcLinkLabelsColor={{ from: 'color' }}
         arcLabelsSkipAngle={10}
         arcLabelsTextColor={{

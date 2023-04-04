@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Box, Stack, Grid } from '@mui/material';
+import { Box, Stack, Grid, Container } from '@mui/material';
 import MaterialReactTable from 'material-react-table';
 import Typography from '@material-ui/core/Typography';
 import Pie from "components/chart/Piechart";
@@ -246,20 +246,13 @@ const ReactTable = ({table}) => {
       enableStickyHeader
       enableStickyFooter
       renderDetailPanel={({ row }) => (
-//        <Box
-//          sx={{
-//            display: 'flex',
-//            justifyContent: 'space-around',
-//            alignItems: 'left',
-//          }}
-//        >
           <Box sx={{ textAlign: 'left' }}>
           <Grid container spacing={3}>
-          <Grid item lg={4} md={4} sm={4} xs={12}>
+          <Grid item lg={5} md={5} sm={5} xs={12}>
+            <Typography variant="h6">ETF 소개</Typography>
+            <Typography>이 펀드는 독점적인 기계 학습 알고리즘을 사용하여 각 주요 헤지 펀드 스타일(장기/단기 주식, 글로벌 매크로, 이벤트 기반, 채권 차익 거래, 신흥 시장 등)의 가장 최근 달 수익률과 가장 잘 일치하는 포트폴리오를 생성함으로써 운용합니다.</Typography>
+            <Container sx={{ mb: "20px" }} />
             <Typography variant="h6">TOP 10 holdings</Typography>
-            {/*<Typography variant="h1">
-              &quot;{row.original.signatureCatchPhrase}&quot;
-            </Typography>*/}
             <table>
               <thead>
                 <tr>

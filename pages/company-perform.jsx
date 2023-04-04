@@ -4,18 +4,18 @@ import SEO from "components/SEO";
 import Setting from "components/Setting";
 // import Newsletter from "components/Newsletter";
 import ShopLayout1 from "components/layouts/ShopLayout";
-import Section1 from "pages-sections/recent-etf/Section1";
-import Section2 from "pages-sections/recent-etf/Section2";
-import Section3 from "pages-sections/recent-etf/Section3";
-import Section4 from "pages-sections/recent-etf/Section4";
-import Section5 from "pages-sections/recent-etf/Section5";
-import Section6 from "pages-sections/recent-etf/Section6";
-import Section7 from "pages-sections/recent-etf/Section7";
-import Section8 from "pages-sections/recent-etf/Section8";
-import Section10 from "pages-sections/recent-etf/Section10";
-import Section11 from "pages-sections/recent-etf/Section11";
-import Section12 from "pages-sections/recent-etf/Section12";
-import Section13 from "pages-sections/recent-etf/Section13";
+import Section1 from "pages-sections/company-perform/Section1";
+import Section2 from "pages-sections/company-perform/Section2";
+import Section3 from "pages-sections/company-perform/Section3";
+import Section4 from "pages-sections/company-perform/Section4";
+import Section5 from "pages-sections/company-perform/Section5";
+import Section6 from "pages-sections/company-perform/Section6";
+import Section7 from "pages-sections/company-perform/Section7";
+import Section8 from "pages-sections/company-perform/Section8";
+import Section10 from "pages-sections/company-perform/Section10";
+import Section11 from "pages-sections/company-perform/Section11";
+import Section12 from "pages-sections/company-perform/Section12";
+import Section13 from "pages-sections/company-perform/Section13";
 import api from "utils/__api__/market-1";
 // =================================================================
 
@@ -26,21 +26,6 @@ const MarketShop = props => {
       {/* CATEGORIES */}
       <Section10 categories={props.bottomCategories} />
 
-      {/* MOBILE PHONES */}
-      {/*<Section7 title="전체" shops={props.mobileShops} brands={props.mobileBrands} productList={props.mobileList} />*/}
-
-
-      {/* HERO SLIDER SECTION */}
-      {/*<Section1 carouselData={props.mainCarouselData} />*/}
-
-
-      {/* SERVICE CARDS */}
-       {/*<Section12 serviceList={props.serviceList} />*/}
-
-      {/* POPUP NEWSLETTER FORM */}
-{/*       <Newsletter /> */}
-
-      {/* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */}
       <Setting />
     </ShopLayout1>;
 };

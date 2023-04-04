@@ -740,7 +740,7 @@ def display_regime(prob, factor_return_regime, regime_probability, regime_list):
     factor_return_regime.index.set_levels(regime_list, level=0, inplace=True)
     factor_return_regime.columns = ['주식_미국', '주식_EFA', '주식_EM', '금리', '크레딧', '원자재', '인플레이션', '원달러', '중소형', '가치/성장',
                                     '수익성', '회계퀄리티', '모멘텀']
-    return regime_probability, factor_return_regime
+    return prob, regime_probability, factor_return_regime
 
 
 def display_weights(before_weights, after_weights):
@@ -1006,7 +1006,7 @@ def match_port_weight(initial_port):
     port_equity = pd.DataFrame({'ACWI': [0.8], 'IEF': [0.2]})
     port_8020 = pd.DataFrame({'ACWI': [0.8], 'IEF': [0.2]})
     port_6040 = pd.DataFrame({'ACWI': [0.6], 'IEF': [0.4]})
-    port_4060 = pd.DataFrame({'ACWI': [0.4], 'IEF': [0.6]})
+    port_4060 = pd.DataFrame({'ACWI': [0.4], 'IGOV': [0.6]})
     port_allweather = pd.DataFrame({'ACWI': [0.3],
                                     'TLT': [0.4],
                                     'IEF': [0.15],
@@ -1016,7 +1016,7 @@ def match_port_weight(initial_port):
         weight = port_equity
     elif initial_port == '멀티에셋 모멘텀':
         weight = port_8020
-    elif initial_port == '초개인화로보':
+    elif initial_port == '초개인화로보' or initial_port == '60:40 포트폴리오':
         weight = port_6040
     elif initial_port == '멀티에셋 인컴':
         weight = port_4060
@@ -1025,21 +1025,47 @@ def match_port_weight(initial_port):
 
     return weight
 
-def run_optimization(prob, factor_return_regime, regime_probability, port_selection, returns, factors, max_active_risk, US_Equity,  EFA_Equity, EM_Equity, Interest_Rates, Credit, Commodity, Inflation, USD, SMB, HML, RMW, CMA, Mom, regression_result, etf_performance, df_yahoo_index, df_factor_summary):
+
+# def display_regime(prob, factor_return_regime, regime_probability, regime_list):
+#     print('\033[1m' + '1. 시장국면' + '\033[0m')  # Bold
+#     regime_probability.columns = regime_list
+#     regime_probability.loc['현재 추정확률'] = prob.iloc[-1, :].values
+#
+#     prob.columns = regime_list
+#
+#     factor_return_regime.index.set_levels(regime_list, level=0, inplace=True)
+#     factor_return_regime.columns = ['주식_미국', '주식_EFA', '주식_EM', '금리', '크레딧', '원자재', '인플레이션', '원달러', '중소형', '가치/성장',
+#                                     '수익성', '회계퀄리티', '모멘텀']
+#     return prob, factor_return_regime
+    # fig, ax = plt.subplots(1, 2, figsize=(20, 6))
+    # ax = np.ravel(ax)
+    #
+    # prob.plot.area(stacked=True, color=['steelblue', 'yellow', 'red', 'green'], title='역사적 국면변화', ax=ax[0])
+    # plt.gca().yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))
+    #
+    # regime_probability.plot.bar(title='국면별 확률', ax=ax[1])
+    # plt.gca().yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))
+    #
+    # plt.show()
+    #
+    # display(factor_return_regime)
+
+def run_optimization(prob, factor_return_regime, regime_probability, port_selection, returns, factors, max_active_risk, US_Equity,  EFA_Equity, EM_Equity, Interest_Rates, Credit, Commodity, Inflation, USD, SMB, HML, RMW, CMA, Mom, regression_result, etf_performance, df_yahoo_index, df_factor_summary, opts):
     clear_output(wait=True)
-    initial_weight = match_port_weight(port_selection)
+    initial_weight = opts[port_selection]
     initial_weight = make_weight_dataframe(factors, initial_weight)
     target_exposure=pd.Series([US_Equity,EFA_Equity, EM_Equity,Interest_Rates, Credit, Commodity, Inflation, USD, SMB, HML, RMW, CMA, Mom], index=factors.index)
 
     weights = optimize_portfolio(returns, factors, target_exposure, initial_portfolio=initial_weight, cov=regression_result.cov*annualization, max_active_risk=max_active_risk, max_assets=15)
     weights = pd.DataFrame(weights, index=factors.columns, columns=['weight'])
-    regime_probability, factor_return_regime = display_regime(prob, factor_return_regime, regime_probability, regime_list=['상승국면', '인플레이션 국면', '하락국면', '급락국면'])
+    prob, regime_probability, factor_return_regime = display_regime(prob, factor_return_regime, regime_probability, regime_list=['상승국면', '인플레이션 국면', '하락국면', '급락국면'])
     before_weights = initial_weight.T
     after_weights = weights
     expected_return, risk_return = display_summary(after_weights=weights.T, before_weights=initial_weight, cov=regression_result.cov*annualization, expected_return=etf_performance)
     exposure_comparison, risk_comparison = display_risk(before_weights=initial_weight, after_weights=weights.T, regression_result=regression_result, df_factor_summary=df_factor_summary)
     backtest_returns = display_performance(before_weights=initial_weight, after_weights=weights.T, data=df_yahoo_index)
     return {
+        "prob":prob,
         "regime_probability": regime_probability,
         "factor_return_regime": factor_return_regime,
         "before_weights": before_weights,

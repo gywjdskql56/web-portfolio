@@ -1,5 +1,6 @@
 // 카테고리 데이터
 export const categories1 = [
+    { name: "60:40 포트폴리오"},
     { name: "변동성 알고리즘"},
     { name: "멀티에셋 인컴"},
     { name: "테마로테이션"},

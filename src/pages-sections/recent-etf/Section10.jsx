@@ -54,7 +54,7 @@ const Section10 = ({
 }) => {
 
 const categories1 = [
-    { name: "미래에셋 추천 포트폴리오"},
+    { name: "미래에셋 추천 포트폴리오(국내)"},
     { name: "변동성 알고리즘"},
     { name: "멀티에셋 인컴"},
     { name: "테마로테이션"},

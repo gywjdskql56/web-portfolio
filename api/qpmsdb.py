@@ -13,11 +13,17 @@ def read_pickle(file_nm):
 
 def get_df(sql):
     conn = pymssql.connect(host='10.93.20.65', user='quant', password='mirae', database='MARKET',
-                           charset='utf8')  # 개발DB
+                           charset='EUC-KR')  # 개발DB
     result = pd.read_sql(sql, con=conn)
     return result
 
-def get_all_ticker_pr(ticker_list, td, nm_df,is_ticker = True):
+def get_df_utf(sql):
+    conn = pymssql.connect(host='10.93.20.65', user='quant', password='mirae', database='MARKET',
+                           charset='UTF8')  # 개발DB
+    result = pd.read_sql(sql, con=conn)
+    return result
+
+def get_all_ticker_pr(ticker_list, td, nm_df, is_ticker = True):
     df = nm_df
     if is_ticker:
         kr_ticker = list(set(list(filter(lambda x: x.split('-')[1]=='KS' and x in ticker_list, df['TICKER_rf']))))
@@ -49,6 +55,25 @@ def get_all_ticker_pr(ticker_list, td, nm_df,is_ticker = True):
         None
     return pr_df
 
+def get_us_stock_pr_by_ticker(id_list, td):
+    id_ticker = get_all_stock_ticker()
+    id_ticker = id_ticker[['TICKER', 'FSYM_ID']].dropna()
+    id_ticker['TICKER'] = id_ticker['TICKER'].apply(lambda x: x.split(' ')[0] + '-' + x.split(' ')[1] if len(x.split(' '))>2 else x  )
+    ticker2id = id_ticker.set_index('TICKER')['FSYM_ID'].to_dict()
+    id2ticker = id_ticker.set_index('FSYM_ID')['TICKER'].to_dict()
+    id_list = list(map(lambda x: ticker2id[x] if x in ticker2id.keys() else x, id_list))
+    sql = '''
+    select FSYM_ID, BASE_DT, P_PRICE
+    from EUMQNTDB..FP_PRICE_ADJ 
+    where FSYM_ID in ('{}')
+    and base_dt > '{}'
+    '''.format('\',\''.join(id_list), td)
+
+    result = get_df(sql)
+    result = result.pivot(index='BASE_DT', columns='FSYM_ID', values='P_PRICE').bfill().ffill()
+    result.columns = list(map(lambda x: id2ticker[x] if x in id2ticker.keys() else x, result.columns))
+    return result
+
 def get_us_stock_pr(id_list, id2ticker, td):
     sql = '''
     select FSYM_ID, BASE_DT, P_PRICE
@@ -62,13 +87,23 @@ def get_us_stock_pr(id_list, id2ticker, td):
     return result
 
 
-
 def get_all_stock_ticker():
     sql = '''
     select TICKER, FSYM_ID, ISIN, SEDOL, GICS_INDUSTRYGROUP, COUNTRY_NAME
-    from EUMQNTDB..GQPM_MAST3
+    from EUMQNTDB..GQPM_MAST3 
+    '''
+    # EUMQNTDB..WEB_GQPM_MAST
+    result = get_df(sql)
+    return result
+
+def get_all_theme_ticker():
+    sql = '''
+    select *
+    from WEBQM..theme_stock_raw
+    where 1=1
     '''
     result = get_df(sql)
+    result.columns = list(map(lambda x : x.upper(), result.columns))
     return result
 
 def get_kr_stock_ticker():
@@ -79,15 +114,23 @@ def get_kr_stock_ticker():
     result = get_df(sql)
     return result
 
+def get_gics():
+    sql = '''
+    SELECT DISTINCT INDUSTRY_GROUP, INDUSTRY_GROUP_NAME 
+    FROM AGGR..MSCI_GICS_CODE 
+    '''
+    result = get_df(sql)
+    return result
+
 def get_kr_stock_pr(id_list, td):
     sql = '''
-    SELECT CODE, TD, CLOSE_P
+    SELECT CODE, TD, CLOSE_AP
     FROM MARKET..MB
     WHERE TD > '{}'
     AND CODE in ('{}')
     '''.format(td, '\',\''.join(id_list))
     result = get_df(sql)
-    result = result.rename(columns={"CODE":"FSYM_ID", "TD":"BASE_DT", "CLOSE_P":"P_PRICE"})
+    result = result.rename(columns={"CODE":"FSYM_ID", "TD":"BASE_DT", "CLOSE_AP":"P_PRICE"})
     result["FSYM_ID"] = result["FSYM_ID"].apply(lambda x: x+'-KS')
     result = result.pivot(index='BASE_DT', columns='FSYM_ID', values='P_PRICE').bfill().ffill()
     return result
@@ -197,7 +240,372 @@ def get_dps():
     df = get_df(sql).dropna()
     df['score'] = df['FF_DPS_SECS'].apply(lambda x: float(x))
     return df.sort_values(by=['score'], ascending=False).iloc[:50]
+def get_perform(ticker_list, st_dt):
+    sql = '''
+     select B.TD ,B.CODE ,C.CLOSE_AP ,B.YM ,B.GB ,B.SALES ,B.OP ,B.NI
+    from 
+    ( SELECT FD 
+    FROM MARKET..MA  -- 국내달력
+    WHERE FD >= CONVERT(varchar(8),dateadd(yy,-1,(SELECT MAX(FD) FROM MARKET..MA WHERE TR = '1')),112)
+    AND TR ='1' ) A
+    ,IBES..ZKC_Q_IFRS B  -- 국내컨센 Q
+    ,MARKET..MB C  -- 국내주가 
+    where 1=1
+    and A.FD = B.TD
+    and A.FD = C.TD
+    and B.CODE in ('{}')  --종목코드 선택가능
+    and B.CODE = C.CODE
+    AND B.EST_GB = 'D' -- 'B:별도 / D:연결'
+    and B.TD > '{}'
+    '''.format('\',\''.join(ticker_list), st_dt)
+    result = get_df(sql)
+    return result
 
+def get_perform_table():
+    sql = '''
+    -- DROP TABLE #REPORT1
+    
+    
+    declare @std_date VARCHAR(8)
+    set @std_date = '20230101'
+    print(@std_date)
+    
+    
+    CREATE TABLE #REPORT1 
+            ( ANNOUN_DT VARCHAR(8)
+            , REPORT_GB VARCHAR(8)
+             , GICODE VARCHAR(20)
+             , GS_YM VARCHAR(8)
+             , GS_GB VARCHAR(8)
+             , JM_NAME VARCHAR(50)
+             , INDEX_NAME_KR VARCHAR(20)
+             , INDEX_WEIGHT FLOAT
+             , SEC_NM VARCHAR(50)
+             , IND_NM VARCHAR(50)
+             , SALES FLOAT
+             , OPER_PROFIT FLOAT
+             , BF_TAX_PROFIT FLOAT
+             , NET_PROFIT FLOAT
+             , SIZE VARCHAR(20)
+             , PREV_Q_GS_YM VARCHAR(8)
+             , PREV_Y_GS_YM VARCHAR(8)
+             )
+    INSERT INTO #REPORT1 (
+    ANNOUN_DT
+    ,REPORT_GB
+    ,GICODE
+    ,GS_YM
+    ,GS_GB
+    ,JM_NAME
+    ,INDEX_NAME_KR
+    ,INDEX_WEIGHT 
+    ,SEC_NM
+    ,IND_NM
+    ,SALES
+    ,OPER_PROFIT
+    ,BF_TAX_PROFIT
+    ,NET_PROFIT
+    ,SIZE
+    ,PREV_Q_GS_YM
+    ,PREV_Y_GS_YM
+    )
+    SELECT 
+     A.ANNOUN_DT	
+    ,A.REPORT_GB	
+    ,A.GICODE	
+    ,A.GS_YM	
+    ,A.GS_GB	
+    , A_INFO.itemabbrnm as JM_NAME
+    , REPLACE(IDX.INDEX_NAME_KR,'지수','') AS INDEX_NAME_KR
+    , IDX.INDEX_WEIGHT
+    , SECTOR.K1 AS SEC_NM
+    , SECTOR.K2 AS IND_NM
+    ,A.SALES	
+    ,A.OPER_PROFIT	
+    ,A.BF_TAX_PROFIT	
+    ,A.NET_PROFIT
+    ,A_INFO.SIZE
+    ,A.PREV_Q_GS_YM	
+    ,A.PREV_Y_GS_YM	
+    from (
+            
+            select A.*
+                 --, LEFT(B.gs_pyear,6) AS PREV_Y_GS_YM
+                 , left(convert(char(10), dateadd(year, -1, CONVERT(datetime,A.gs_ym+'01') ) , 112),6) AS PREV_Y_GS_YM
+                 , LEFT(B.gs_pquarter,6) AS PREV_Q_GS_YM
+                 , count(A.ANNOUN_DT) over() cnt 
+            from FNFDB..FNF_REAL_FS_N A  -- 잠정실적
+            left outer join fnsdb..fns_stocks_d B  -- 결산년월
+            on (A.GICODE = B.gicode and A.ANNOUN_DT = B.trd_dt)
+            where 1=1
+            and A.ANNOUN_DT > @std_date
+            and A.gs_gb in ('1','2','3','4')
+        )A left outer join AGGR..KRX_PKG_CONST IDX
+        on (A.ANNOUN_DT = IDX.FILE_DATE and A.GICODE = IDX.CONSTITUENT_CODE)
+        , ( select A.SCODE, A.CODE, B.K1, B.K2
+              from SECTOR..SAC A
+                 , SECTOR..SA B
+             where 1=1
+               and A.scode like 'B%'
+               and A.scode  = B.scode 
+               and len(A.scode) > 4
+         ) SECTOR
+    , (select gicode, itemcd, mkt_gb, itemabbrnm, kospi200_use_gb, 
+                       case when mkt_cap_size = '02' then '코스피대'
+                            when mkt_cap_size = '03' then '코스피중'
+                            when mkt_cap_size = '04' then '코스피소'
+                            when mkt_cap_size = '1' then '코스닥대'
+                            when mkt_cap_size = '2' then '코스닥중'
+                            when mkt_cap_size = '3' then '코스닥소'
+                            when mkt_cap_size = '0' then '제외'
+                            else '기타'
+                            end as SIZE
+                from FNSDB..FNS_J_MAST   -- 종목 마스터
+                where 1=1
+                and use_yn = 'Y'       -- 상폐아닌 종목만
+                and (reits_gb = '0' or reits_gb is null)  -- 리츠 제외
+                --and etf_gb = '00'  -- etf 제외
+                and mkt_gb in ('1','2')
+        ) A_INFO
+    where 1=1
+    and IDX.INDEX_ISIN in ( 'KRD020020008', 'KRD020040006')
+    and REPLACE(A.GICODE,'A','') = SECTOR.CODE
+    and A.GICODE = A_INFO.gicode
+    
+    ---- 현황판
+    
+    SELECT 
+     RESULT.ANNOUN_DT
+     ,(CASE WHEN RESULT.REPORT_GB = 'D' then '연결'
+           WHEN RESULT.REPORT_GB = 'B' then '별도'
+           ELSE ' ' END) AS REPORT_GB	
+    ,RESULT.GICODE	
+    ,RESULT.JM_NAME	
+    ,RESULT.INDEX_NAME_KR	
+    ,RESULT.INDEX_WEIGHT	
+    ,RESULT.SEC_NM	
+    ,RESULT.IND_NM	
+    ,RESULT.GS_YM	
+    ,RESULT.GS_GB	
+    ,RESULT.SALES	
+    ,RESULT.OPER_PROFIT	
+    ,RESULT.NET_PROFIT	
+    ,NULLIF(RESULT.prev_q_SALES / 100000,0) -1 as prev_q_SALES
+    ,NULLIF(RESULT.prev_q_OPER_INC / 100000,0) -1 as prev_q_OPER_PROFIT
+    ,NULLIF(RESULT.prev_q_NET_INC / 100000,0) -1 as prev_q_NET_PROFIT
+    ,NULLIF(RESULT.prev_y_SALES / 100000,0) -1 as prev_y_SALES
+    ,NULLIF(RESULT.prev_y_OPER_INC / 100000,0) -1 as prev_y_OPER_PROFIT
+    ,NULLIF(RESULT.prev_y_NET_INC / 100000,0) -1 as prev_y_NET_PROFIT
+    ,NULLIF(RESULT.SALES	 /  RESULT.con_cur_SALES -1,'')  * 100 AS comp_S
+    ,NULLIF(RESULT.OPER_PROFIT	 /  RESULT.con_cur_OP -1,'') * 100 AS comp_OP
+    ,NULLIF(RESULT.NET_PROFIT	 /  RESULT.con_cur_NI -1,'') * 100 AS comp_NI
+    ,NULLIF(RESULT.SALES	 /  NULLIF(RESULT.prev_q_SALES / 100000 ,0) -1,'') * 100 AS qoq_S
+    ,NULLIF(RESULT.OPER_PROFIT	 /  NULLIF(RESULT.prev_q_OPER_INC / 100000,0) -1,'') * 100 AS qoq_OP
+    ,NULLIF(RESULT.NET_PROFIT	 /  NULLIF(RESULT.prev_q_NET_INC / 100000,0) -1,'') * 100 AS qoq_NI
+    ,NULLIF(RESULT.SALES	 /  NULLIF(RESULT.prev_y_SALES / 100000,0) -1,'') * 100 AS yoy_S
+    ,NULLIF(RESULT.OPER_PROFIT	 /  NULLIF(RESULT.prev_y_OPER_INC / 100000,0) -1,'') * 100 AS yoy_OP
+    ,NULLIF(RESULT.NET_PROFIT	 /  NULLIF(RESULT.prev_y_NET_INC / 100000,0) -1,'') * 100 AS yoy_NI
+    ,RESULT.SIZE
+    FROM (
+    
+    select A.ANNOUN_DT	
+            ,A.REPORT_GB	
+            ,A.GICODE	
+            ,A.GS_YM	
+            ,A.GS_GB	
+            ,A.JM_NAME	
+            ,A.INDEX_NAME_KR	
+            ,A.INDEX_WEIGHT	
+            ,A.SEC_NM	
+            ,A.IND_NM	
+            ,A.SALES	
+            ,A.OPER_PROFIT	
+            ,A.NET_PROFIT	
+            ,A.SIZE	
+            ,A.PREV_Q_GS_YM	
+            ,A.PREV_Y_GS_YM	
+            ,A.GB	
+            ,A.con_cur_SALES	
+            ,A.con_cur_OP	
+            ,A.con_cur_NI		
+         , sum( case when RIGHT(A.ACCOUNT,6) = '904001' then A.AMOUNT else 0 end ) as prev_q_SALES
+         , sum( case when RIGHT(A.ACCOUNT,6) = '906001' then A.AMOUNT else 0 end ) as prev_q_OPER_INC
+         , sum( case when RIGHT(A.ACCOUNT,6) = '908004' then A.AMOUNT else 0 end ) as prev_q_NET_INC
+         , sum( case when RIGHT(y1.ACCOUNT,6) = '904001' then y1.AMOUNT else 0 end ) as prev_y_SALES
+         , sum( case when RIGHT(y1.ACCOUNT,6) = '906001' then y1.AMOUNT else 0 end ) as prev_y_OPER_INC
+         , sum( case when RIGHT(y1.ACCOUNT,6) = '908004' then y1.AMOUNT else 0 end ) as prev_y_NET_INC
+    from (
+            select A.ANNOUN_DT
+                 , A.REPORT_GB
+                 , A.GICODE
+                 , A.GS_YM
+                 , A.GS_GB
+                 , A.JM_NAME
+                 , A.INDEX_NAME_KR
+                 , A.INDEX_WEIGHT 
+                 , A.SEC_NM
+                 , A.IND_NM
+                 , A.SALES
+                 , A.OPER_PROFIT
+                 , A.NET_PROFIT
+                 , A.SIZE
+                 , A.PREV_Q_GS_YM
+                 , A.PREV_Y_GS_YM
+                 , CON.GB
+                 , CON.SALES as con_cur_SALES
+                 , CON.OP as con_cur_OP
+                 , CON.NI as con_cur_NI
+                 , q1.AMOUNT
+                 , f2.ACCOUNT 
+            from #REPORT1 A
+            left outer join IBES..ZKC_Q_IFRS CON -- 컨센  -- 이게 오래걸리네.
+            on (REPLACE(A.GICODE,'A','') = CON.CODE
+                            AND A.ANNOUN_DT = CON.TD
+                            and A.GS_YM = CON.YM 
+                            and A.REPORT_GB  =CON.EST_GB)
+            , fnjdb..fnj_aa f1
+            , fnjdb..fnj_ga_ifrs_n f2  -- 코드 
+            left outer join fnjdb..fnj_za_ifrs_n q1 -- Q_연결
+            on ( f2.ACCOUNT = q1.ACCOUNT )
+            where 1=1
+            --and A.ANNOUN_DT > '20230301'
+            and A.REPORT_GB = 'D' -- 연결
+            and (CON.GB  = 'A' or CON.GB IS NULL)  -- 컨센 평균
+            and A.GICODE = f1.gicode
+            and f1.u_gb = f2.U_GB 
+            and f2.REPORT_GB = '60'   -- 연결 리포트
+            and f2.ACCOUNT_MAIN in ('904001' , '906001' , '908001' , '908004')
+            --qoq
+            and A.GICODE = q1.gicode
+            and A.PREV_Q_GS_YM = q1.GS_YM
+            and q1.GS_GB in ('1','2','3','4')
+            ) A
+    left outer join fnjdb..fnj_za_ifrs_n y1 -- Y_연결 --yoy
+    on ( A.GICODE = y1.GICODE AND A.PREV_Y_GS_YM = y1.GS_YM AND A.ACCOUNT = y1.ACCOUNT )
+    where 1=1
+    and y1.GS_GB in ('1','2','3','4')
+    group by A.ANNOUN_DT ,A.REPORT_GB	
+            ,A.GICODE	
+            ,A.GS_YM	
+            ,A.GS_GB	
+            ,A.JM_NAME	
+            ,A.INDEX_NAME_KR	
+            ,A.INDEX_WEIGHT	
+            ,A.SEC_NM	
+            ,A.IND_NM	
+            ,A.SALES	
+            ,A.OPER_PROFIT	
+            ,A.NET_PROFIT	
+            ,A.SIZE	
+            ,A.PREV_Q_GS_YM	
+            ,A.PREV_Y_GS_YM	
+            ,A.GB	
+            ,A.con_cur_SALES	
+            ,A.con_cur_OP	
+            ,A.con_cur_NI
+    union all
+    select A.ANNOUN_DT	
+            ,A.REPORT_GB	
+            ,A.GICODE	
+            ,A.GS_YM	
+            ,A.GS_GB	
+            ,A.JM_NAME	
+            ,A.INDEX_NAME_KR	
+            ,A.INDEX_WEIGHT	
+            ,A.SEC_NM	
+            ,A.IND_NM	
+            ,A.SALES	
+            ,A.OPER_PROFIT	
+            ,A.NET_PROFIT	
+            ,A.SIZE	
+            ,A.PREV_Q_GS_YM	
+            ,A.PREV_Y_GS_YM	
+            ,A.GB	
+            ,A.con_cur_SALES	
+            ,A.con_cur_OP	
+            ,A.con_cur_NI		
+         , sum( case when RIGHT(A.ACCOUNT,6) = '904001' then A.AMOUNT else 0 end ) as prev_q_SALES
+         , sum( case when RIGHT(A.ACCOUNT,6) = '906001' then A.AMOUNT else 0 end ) as prev_q_OPER_INC
+         , sum( case when RIGHT(A.ACCOUNT,6) = '908004' then A.AMOUNT else 0 end ) as prev_q_NET_INC
+         , sum( case when RIGHT(y1.ACCOUNT,6) = '904001' then y1.AMOUNT else 0 end ) as prev_y_SALES
+         , sum( case when RIGHT(y1.ACCOUNT,6) = '906001' then y1.AMOUNT else 0 end ) as prev_y_OPER_INC
+         , sum( case when RIGHT(y1.ACCOUNT,6) = '908004' then y1.AMOUNT else 0 end ) as prev_y_NET_INC
+    from (
+            select A.ANNOUN_DT
+                 , A.REPORT_GB
+                 , A.GICODE
+                 , A.GS_YM
+                 , A.GS_GB
+                 , A.JM_NAME
+                 , A.INDEX_NAME_KR
+                 , A.INDEX_WEIGHT 
+                 , A.SEC_NM
+                 , A.IND_NM
+                 , A.SALES
+                 , A.OPER_PROFIT
+                 , A.NET_PROFIT
+                 , A.SIZE
+                 , A.PREV_Q_GS_YM
+                 , A.PREV_Y_GS_YM
+                 , CON.GB
+                 , CON.SALES as con_cur_SALES
+                 , CON.OP as con_cur_OP
+                 , CON.NI as con_cur_NI
+                 , q1.AMOUNT
+                 , f2.ACCOUNT 
+            from #REPORT1 A
+            left outer join IBES..ZKC_Q_IFRS CON -- 컨센  -- 이게 오래걸리네.
+            on (REPLACE(A.GICODE,'A','') = CON.CODE
+                            AND A.ANNOUN_DT = CON.TD
+                            and A.GS_YM = CON.YM 
+                            and A.REPORT_GB  =CON.EST_GB)
+            , fnjdb..fnj_aa f1
+            , fnjdb..fnj_ga_ifrs_n f2  -- 코드 
+            left outer join fnjdb..fnj_la_ifrs_n q1 -- Q_연결
+            on ( f2.ACCOUNT = q1.ACCOUNT )
+            where 1=1
+            --and A.ANNOUN_DT > '20230301'
+            and A.REPORT_GB = 'B' -- 별도
+            and (CON.GB  = 'A' or CON.GB IS NULL)  -- 컨센 평균
+            and A.GICODE = f1.gicode
+            and f1.u_gb = f2.U_GB 
+            and f2.REPORT_GB = '30'   -- 연결 리포트
+            and f2.ACCOUNT_MAIN in ('904001' , '906001' , '908001' , '908004')
+            --qoq
+            and A.GICODE = q1.gicode
+            and A.PREV_Q_GS_YM = q1.GS_YM
+            and q1.GS_GB in ('1','2','3','4')
+            ) A
+    left outer join fnjdb..fnj_la_ifrs_n y1 -- Y_별도 --yoy
+    on ( A.GICODE = y1.GICODE AND A.PREV_Y_GS_YM = y1.GS_YM AND A.ACCOUNT = y1.ACCOUNT )
+    where 1=1
+    and y1.GS_GB in ('1','2','3','4')
+    group by A.ANNOUN_DT	
+            ,A.REPORT_GB	
+            ,A.GICODE	
+            ,A.GS_YM	
+            ,A.GS_GB	
+            ,A.JM_NAME	
+            ,A.INDEX_NAME_KR	
+            ,A.INDEX_WEIGHT	
+            ,A.SEC_NM	
+            ,A.IND_NM	
+            ,A.SALES	
+            ,A.OPER_PROFIT	
+            ,A.NET_PROFIT	
+            ,A.SIZE	
+            ,A.PREV_Q_GS_YM	
+            ,A.PREV_Y_GS_YM	
+            ,A.GB	
+            ,A.con_cur_SALES	
+            ,A.con_cur_OP	
+            ,A.con_cur_NI
+    )RESULT
+    order by RESULT.ANNOUN_DT desc
+    ;
+    '''
+    result = get_df(sql)
+    return result
 
 if __name__ == "__main__":
     df = get_factor(factor='400130', td='20220101')

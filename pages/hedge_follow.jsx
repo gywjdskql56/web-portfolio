@@ -2,7 +2,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import SEO from "components/SEO";
 import Setting from "components/Setting";
 // import Newsletter from "components/Newsletter";
-import ShopLayout1 from "components/layouts/ShopLayout1";
+import ShopLayout1 from "components/layouts/ShopLayout";
 import api from "utils/__api__/market-1";
 // =================================================================
 import React, { useState } from "react";

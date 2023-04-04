@@ -22,8 +22,12 @@ const ReactTable = ({table}) => {
         accessorKey: 'state',
       },
       {
-        header: '종목명',
+        header: '티커명',
         accessorKey: 'lastName',
+      },
+      {
+        header: '종목명',
+        accessorKey: 'lastName2',
       },
       {
         header: '비중',
@@ -48,7 +52,7 @@ const ReactTable = ({table}) => {
         density: 'compact',
         expanded: true, //expand all groups by default
         grouping: ['state'], //an array of columns to group by by default (can be multiple)
-        pagination: { pageIndex: 0, pageSize: 20 },
+        pagination: { pageIndex: 0, pageSize: 30 },
         sorting: [{ id: 'state', desc: false }], //sort by state by default
       }}
       muiToolbarAlertBannerChipProps={{ color: 'primary' }}

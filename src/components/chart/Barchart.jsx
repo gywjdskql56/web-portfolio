@@ -46,7 +46,7 @@ const Barchart = ({ bardata }) => {
               tickRotation: 0,
               legendPosition: "middle",
               legendOffset: -40,
-              tickValues: [-6,-4,-2,0, 2, 4, 6, 8, 10,]
+              //tickValues: [-6,-4,-2,0, 2, 4, 6, 8, 10,]
             }}
             yScale={{ type: "linear", min: "auto", max: "auto" }}
             labelSkipWidth={12}

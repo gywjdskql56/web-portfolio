@@ -302,20 +302,19 @@ def load_data():
 
     port_equity = pd.DataFrame({'ACWI': [0.8], 'IEF' : [0.2]})
     port_8020 = pd.DataFrame({'ACWI': [0.8], 'IEF' : [0.2]})
-    port_6040 = pd.DataFrame({'ACWI': [0.6], 'IEF' : [0.4]})
+    port_6040 = pd.DataFrame({'SPY': [0.6], 'TLT' : [0.4]})
     port_4060 = pd.DataFrame({'ACWI': [0.4], 'IEF' : [0.6]})
-    port_allweather = pd.DataFrame({'ACWI': [0.3],
-                                    'TLT': [0.4],
-                                    'IEF': [0.15],
-                                    'DBC': [0.075],
-                                    'GLD': [0.075]})
+    port_theme = pd.DataFrame({'IGF': [0.2], 'BUG' : [0.1], 'BOTZ' : [0.1], 'CLOU' : [0.1], 'DIA' : [0.1], 'ICVT' : [0.1], 'LIT' : [0.1], 'QQQ' : [0.1], 'URA' : [0.1]})
+    port_income = pd.DataFrame({'SCHD': [0.2], 'PFF' : [0.1], 'ICVT' : [0.1], 'CWB' : [0.1], 'SDY' : [0.5]})
+    port_allweather = pd.DataFrame({'ACWI': [0.3], 'TLT': [0.4], 'IEF': [0.15], 'DBC': [0.075], 'GLD': [0.075]})
 
     opts = {
         '초개인화로보': port_allweather,
-        '테마로테이션': port_equity,
+        '테마로테이션': port_theme,
         '변동성 알고리즘': port_8020,
-        '멀티에셋 인컴': port_6040,
-        '멀티에셋 모멘텀': port_4060
+        '멀티에셋 인컴': port_income,
+        '멀티에셋 모멘텀': port_4060,
+        "60:40 포트폴리오": port_6040
         }
 
 
@@ -323,6 +322,10 @@ def load_data():
              "factor_return_regime" :factor_return_regime, "regime_probability" : regime_probability,
              "returns" : returns, "factors" : factors, "max_active_risk" : 0.05,
              "etf_performance" : etf_performance, "df_yahoo_index" : df_yahoo_index,}
+
+
+
+
 
 if __name__ =='__main__':
     # # props = load_data()

@@ -3,7 +3,7 @@ import Sticky from "components/Sticky";
 import Topbar from "components/Topbar";
 import { Footer1 } from "components/footer";
 import Header from "components/header/Header";
-import MenuTab from "components/tab/Tab";
+import MenuTab from "components/tab/Tab_two";
 import Navbar from "components/navbar/Navbar";
 import { MobileNavigationBar } from "components/mobile-navigation";
 import SearchInputWithCategory from "components/search-box/SearchInputWithCategory";

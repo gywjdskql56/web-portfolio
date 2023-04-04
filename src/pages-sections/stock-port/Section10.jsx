@@ -106,7 +106,7 @@ const [active5, setActive5] = useState("배터리");
 const [open, setOpen] = useState(false);
 const [openF, setOpenF] = useState(false);
 const [openE, setOpenE] = useState(false);
-const [value, setValue] = useState(50);
+const [value, setValue] = useState(10);
 const [portdata, setPortData] = useState("");
 const [rmticker, setRMticker] = useState(["제외종목"]);
 const [valuelist, setValueList] = React.useState([0,0,0,0,0,0,0,0]);
@@ -148,7 +148,6 @@ function getAreaData() {
       }
     });
     setValueList(nextCounters);
-    getAreaData()
    }
 const factors = ['GROWTH','LIQUIDITY','PRICE_MOM','QUALITY','SENTIMENT','SIZE','VALUE','VOLATILITY']
 useEffect(() => {
@@ -173,6 +172,12 @@ useEffect(() => {
     console.log(value)
     getAreaData()
 }, [value]);
+
+useEffect(() => {
+    console.log(value)
+    getAreaData()
+}, [valuelist]);
+
 
 useEffect(() => {
     console.log(rmticker)
@@ -390,6 +395,11 @@ const state = {
                 }
                 label="id"
                 data={portdata.area}
+                 tooltip={({ node }) => (
+                   <strong>
+                       {node.pathComponents.join(' / ')} : {node.formattedValue}%
+                   </strong>
+                )}
                 identity="name"
                 value="loc"
                 valueFormat=".02s"
@@ -424,8 +434,8 @@ const state = {
             onBlur={handleBlur}
             inputProps={{
               step: 1,
-              min: 0,
-              max: 100,
+              min: 10,
+              max: 50,
               type: 'number',
               'aria-labelledby': 'input-slider',
             }}
@@ -504,7 +514,7 @@ const state = {
                 onClick={() => {setRMticker((prev) => prev.filter(prevelem=>{return (prevelem=="제외종목" || prevelem!=ticker)}));}}
                 style={{ backgroundColor: "black", color: "white"   }}
                 elevation={1}>
-                  <Box fontWeight="600" ml={1.25} fontSize={20}>
+                  <Box fontWeight="600" ml={1.25} fontSize={15}>
                     {ticker}
                   </Box>
           </StyledBazaarCard>))}

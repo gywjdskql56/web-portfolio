@@ -95,9 +95,9 @@ const Header = ({
         <StyledContainer>
           <FlexBetween width="100%">
             {/* LEFT CONTENT - NAVIGATION ICON BUTTON */}
-            <Box flex={1}>
+            {/*<Box flex={1}>
               <MobileMenu />
-            </Box>
+            </Box>*/}
 
             {/* MIDDLE CONTENT - LOGO */}
             <Link href="/">

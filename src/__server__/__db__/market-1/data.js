@@ -4,7 +4,7 @@ export const mainCarouselData = [{
   imgUrl: "/assets/images/magi/magi_building.png",
   description: `다양한 투자자산에 대한 장기적인 운용 노하우를 보유하고 있는 미래에셋자산운용의 추천포트폴리오도 확인하실 수 있습니다.`,
   buttonText: "추천 포트폴리오 바로가기",
-  buttonLik: "#"
+  buttonLik: "/suggest-port"
 }, {
   title: "현재 경제상황들을 다양한 자료로 확인하세요.",
   imgUrl: "/assets/images/magi/magi_building.png",

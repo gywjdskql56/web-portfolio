@@ -3,7 +3,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import SEO from "components/SEO";
 import Setting from "components/Setting";
 // import Newsletter from "components/Newsletter";
-import ShopLayout1 from "components/layouts/ShopLayout1";
+import ShopLayout1 from "components/layouts/ShopLayout";
 import Section1 from "pages-sections/recent-etf/Section1";
 import Section2 from "pages-sections/recent-etf/Section2";
 import Section3 from "pages-sections/recent-etf/Section3";

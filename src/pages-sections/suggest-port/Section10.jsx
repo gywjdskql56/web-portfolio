@@ -4,6 +4,7 @@ import CardMedia from "@mui/material/CardMedia";
 import { Modal, Button, debounce, Checkbox, TextField, IconButton, FormControlLabel, ClickAwayListener } from "@mui/material";
 import { Box, Container, Grid, styled } from "@mui/material";
 import Line from "components/chart/Linechart";
+
 import LazyImage from "components/LazyImage";
 import BazaarCard from "components/BazaarCard";
 import HorizonLine from "components/HorizontalLine";
@@ -14,7 +15,7 @@ import RowSpanning from "components/table";
 import Pie from "components/chart/Piechart";
 import table from "./table";
 import pie from "./pie";
-import ReactTable from "components/react-table/Port-Table";
+import ReactTable from "components/react-table/PortS-Table";
 import Typography from '@material-ui/core/Typography';
 import CategorySectionHeader from "components/CategorySectionHeader";
 import {
@@ -98,7 +99,9 @@ const Section10 = ({
 }) => {
 
 const categories1 = [
-    { name: "미래에셋 추천 포트폴리오"},
+    { name: "미래에셋 추천 포트폴리오(국내)"},
+    { name: "미래에셋 추천 포트폴리오(해외)"},
+    { name: "미래에셋 추천 포트폴리오(연금)"},
     { name: "변동성 알고리즘"},
     { name: "멀티에셋 인컴"},
     { name: "테마로테이션"},
@@ -113,7 +116,7 @@ const categories2 = [
     { name: "안정추구형"},
 ];
 const [active1, setActive1] = useState("추천 포트폴리오");
-const [active2, setActive2] = useState("미래에셋 추천 포트폴리오");
+const [active2, setActive2] = useState("미래에셋 추천 포트폴리오(국내)");
 const [active3, setActive3] = useState("적극투자형");
 const [linedata, setLineData] = useState(null);
 const [tabledata, setTableData] = useState(null);
@@ -124,6 +127,7 @@ typeof window !== 'undefined' ? sessionStorage.setItem("pages", 20) : null;
 const [piedata, setPieData] = useState(pie);
 const [rtndata, setRtnData] = useState(null);
 const [open, setOpen] = React.useState(false);
+const [openport, setOpenPort] = React.useState(false);
 const [openF, setOpenF] = React.useState(false);
 const [openR, setOpenR] = React.useState(false);
 const [image, setImage] = React.useState("0");
@@ -151,23 +155,24 @@ const columns = [
   ];
 
 
-
 function handleClick1(val) {
     console.log(val);
     setActive2(val);
-    console.log(active2);
+    console.log(url.concat(`/suggest_port/${val}_${active3}`));
     fetch(url.concat(`/suggest_port/${val}_${active3}`), { method: 'GET' })
     .then(data => data.json())
-    .then(json => {console.log(json.tableN); setLineData(json.line); setTableDataN(json.tableN); setTableData(json.table); setTableDataP(json.tableP); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage); setImage(json.imagenum); setImageR(json.risknum); setOpen(true)})
+    .then(json => {console.log(json.tableN); setLineData(json.line); setTableDataN(json.tableN); setTableData(json.table); setTableDataP(json.tableP); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage); setImage(json.imagenum); setImageR(json.risknum); setOpen(true);
+    if(active2!="미래에셋"){setOpenPort(true)}})
 }
 
 function handleClick2(val) {
     console.log(val);
     setActive3(val);
-    console.log(active3);
+    console.log(url.concat(`/suggest_port/${active2}_${val}`));
     fetch(url.concat(`/suggest_port/${active2}_${val}`), { method: 'GET' })
     .then(data => data.json())
-    .then(json => {console.log(json.tableN); setLineData(json.line); setTableDataN(json.tableN); setTableData(json.table); setTableDataP(json.tableP); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage); setImage(json.imagenum); setImageR(json.risknum);setOpen(true)})
+    .then(json => {console.log(json.tableN); setLineData(json.line); setTableDataN(json.tableN); setTableData(json.table); setTableDataP(json.tableP); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage); setImage(json.imagenum); setImageR(json.risknum);setOpen(true);
+    if(active2!="미래에셋"){setOpenPort(true)}})
 }
 
   return <Container sx={{
@@ -303,9 +308,11 @@ function handleClick2(val) {
           </Grid>
             <Container sx={{ mb: "40px" }} />
           <Grid container spacing={3}>
-          {open&active2!="미래에셋 추천 포트폴리오"? (
+          {openport? (
           <Grid container spacing={3}>
-          <HorizonLine text="포트폴리오 상세" />
+          <Container sx={{ mb: "40px" }} />
+          <HorizonLine text="포트폴리오 상세(2023-02-28 기준)" />
+          <Container sx={{ mb: "40px" }} />
             <Grid item xs={6} md={6} lg={6}>
              <div style={{height: 400}}>
                 <Pie piedata={piedata} />
@@ -331,9 +338,10 @@ function handleClick2(val) {
           </Grid>):
           (<div> </div>)}
 
-          {open&active2=="미래에셋 추천 포트폴리오"? (
+          {open==true&&openport==false? (
           <Grid container spacing={3}>
-          <HorizonLine text="포트폴리오 상세" />
+          <Container sx={{ mb: "40px" }} />
+          <HorizonLine text="포트폴리오 상세(2023-02-28 기준)" />
             <Grid item xs={6} md={6} lg={6}>
              <div style={{height: 400}}>
                 <Pie piedata={piedata} />

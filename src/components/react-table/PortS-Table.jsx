@@ -26,10 +26,6 @@ const ReactTable = ({table}) => {
         accessorKey: 'lastName',
       },
       {
-        header: '종목명',
-        accessorKey: 'lastName2',
-      },
-      {
         header: '비중',
         accessorKey: 'Name',
         Cell: ({ cell }) => <div>{cell.getValue()}%</div>,
@@ -56,7 +52,7 @@ const ReactTable = ({table}) => {
         sorting: [{ id: 'state', desc: false }], //sort by state by default
       }}
       muiToolbarAlertBannerChipProps={{ color: 'primary' }}
-      muiTableContainerProps={{ sx: { maxHeight: 700 } }}
+      muiTableContainerProps={{ sx: { maxHeight: 1000 } }}
     />
   );
 };

@@ -11,6 +11,7 @@ import CardMedia from "@mui/material/CardMedia";
 import MyResponsiveTreeMapHtml  from "components/treemap";
 import { Typography } from "@mui/material";
 import Barchart from "components/chart/Barchart";
+import Barchart2 from "components/chart/Barchart2";
 import {httpGet, url} from "components/config";
 import CategorySectionHeader from "components/CategorySectionHeader";
 import { DataGrid, gridPageCountSelector, gridPageSelector, useGridApiContext, useGridSelector, } from '@mui/x-data-grid';
@@ -102,16 +103,21 @@ const [value, setValue] = React.useState(30);
 const [valuelist, setValueList] = React.useState([0,0,0,0,0,0,0,0,0,0,0,0,0]);
 const [active1, setActive1] = useState("자산배분포트폴리오 직접생성");
 const [active2, setActive2] = useState("변동성 알고리즘");
+const [openpre, setOpenPre] = useState(false);
 const [open, setOpen] = useState(false);
 const [openF, setOpenF] = useState(false);
 
 const [image, setImage] = useState(1);
 const [port, setPort] = useState({"portnum":1});
+const [regime, setRegime] = useState(null);
+
 
 const handleOpenF = () => setOpenF(true);
 const handleCloseF = () => setOpenF(false);
 
 const factors = ['주식(미국)','주식(EFA)','주식(EM)','금리','크레딧','원자재','인플레이션','원달러','중소형','가치/성장','수익성','회계퀄리티','모멘텀']
+const factors_up = ['미국시장 상승수혜','선진시장 상승수혜','신흥시장 상승수혜','금리 하락수혜','크레딧 리스크 하락수혜','원자재 상승수혜','인플레이션 하락수혜','달러 상승수혜','중소형','가치','수익성 높음','퀄리티 높음','모멘텀 높음']
+const factors_down = ['미국시장 하락수혜','선진시장 하락수혜','신흥시장 하락수혜','금리 상승수혜','크레딧 리스크 상승수혜','원자재 하락수혜','인플레이션 상승수혜','달러 하락수혜','대형','성장','수익성 낮음','퀄리티 낮음','모멘텀 낮음']
 const ExplainCard = styled(BazaarCard)(({
   theme
 }) => ({
@@ -128,12 +134,20 @@ const ExplainCard = styled(BazaarCard)(({
   },
 }));
 
+function getRegime() {
+    console.log(url.concat(`/alloc-port-set-regime/`))
+    fetch(url.concat(`/alloc-port-set-regime/`), { method: 'GET' })
+    .then(data => data.json())
+    .then(json => {console.log("완료"); setRegime(json); console.log(json);setOpenPre(true);})
+}
+
 function getBarData() {
     console.log(url.concat(`/alloc-port-set/${active2}_${value}_${valuelist.join("|")}`))
     fetch(url.concat(`/alloc-port-set/${active2}_${value}_${valuelist.join("|")}`), { method: 'GET' })
     .then(data => data.json())
     .then(json => {console.log("완료"); setPort(json); console.log(json); setOpen(true)})
 }
+
 function getSliderData() {
     console.log(url.concat(`/alloc-port-set-pre/${active2}`))
     fetch(url.concat(`/alloc-port-set-pre/${active2}`), { method: 'GET' })
@@ -158,9 +172,13 @@ function getSliderData() {
     setValueList(nextCounters);
    }
 
-   useEffect(() => {
+  useEffect(() => {
    "change"
 }, [valuelist]);
+
+  useEffect(() => {
+   getRegime()
+}, []);
 
   const handleInputChange = (event) => {
     setValue(event.target.value === '' ? '' : Number(event.target.value));
@@ -216,6 +234,32 @@ function valuetexts(value) {
   }}>
       <CategorySectionHeader seeMoreLink="" title="" />
         <Grid container spacing={3}>
+        <HorizonLine text="국면 추이정보" />
+        <Container sx={{ mb: "10px" }} />
+           <Grid item lg={6} md={6} sm={12} xs={12}>
+          { openpre?(
+                <div style={{height: 300}}>
+                      <Typography align="center">
+                        과거 국면 추이
+                      </Typography>
+                    <Line linedata={regime.probs}/>
+                </div>
+          ):
+           (<div />)
+           }
+           </Grid>
+           <Grid item lg={6} md={6} sm={12} xs={12}>
+          { openpre?(
+                <div style={{height: 300}}>
+                      <Typography align="center">
+                        현재 국면
+                      </Typography>
+                    <Barchart2 bardata={regime.regime_probs}/>
+                </div>
+          ):
+           (<div />)
+           }
+           </Grid>
         <Container sx={{ mb: "30px" }} />
         <HorizonLine text="자산배분포트폴리오 직접생성" />
         {categories.map((item, ind) =>
@@ -326,11 +370,16 @@ function valuetexts(value) {
       </Grid>
     </Grid>
     <Container sx={{ mb: "20px" }} />
-    <Stack sx={{ height: 200 }} spacing={4} direction="row">
+    <Stack sx={{ height: 300 }} spacing={4} direction="row">
     {factors.map((item, idx)=>
-      <Stack item lg={4} md={12/factors.length} sm={12/factors.length} xs={12/factors.length}>
-          <Typography id="input-slider" gutterBottom>
+      <Stack lg={2} md={4} sm={6} xs={6} item>
+          <Typography sx={{ fontSize: 15 }}>
             {item}
+          </Typography>
+
+          <Container sx={{ mb: "10px" }} />
+          <Typography variant='body2'>
+            {factors_up[idx]}
           </Typography>
           <Slider
             min = {-1}
@@ -359,6 +408,9 @@ function valuetexts(value) {
               'aria-labelledby': 'input-slider',
             }}
           />
+          <Typography variant='body2'>
+            {factors_down[idx]}
+          </Typography>
       </Stack>)}
     </Stack>
      <Container sx={{ mb: "30px" }} />
@@ -368,10 +420,12 @@ function valuetexts(value) {
        <ColorButton variant="contained" onClick={() => {getBarData(); }}>맞춤형 포트폴리오 생성하기</ColorButton>
     </Grid>
     </Grid>
-
-          <Container sx={{ mb: "30px" }} />
+    <Container sx={{ mb: "30px" }} />
           <HorizonLine text="맞춤형 포트폴리오 분석" />
-                     <Grid item xs={6} md={6} lg={6}>
+          <Container sx={{ mb: "30px" }} />
+
+
+            <Grid item xs={6} md={6} lg={6}>
              { open?(<div style={{height: 400}}>
                    <Typography align="center">
                       기초 포트폴리오
