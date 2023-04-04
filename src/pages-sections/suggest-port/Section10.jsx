@@ -130,7 +130,7 @@ const [open, setOpen] = React.useState(false);
 const [openport, setOpenPort] = React.useState(false);
 const [openF, setOpenF] = React.useState(false);
 const [openR, setOpenR] = React.useState(false);
-const [image, setImage] = React.useState("0");
+const [image, setImage] = React.useState("00");
 const [imageR, setImageR] = React.useState("1");
 const handleOpen = () => setOpenF(true);
 const handleClose = () => setOpenF(false);
