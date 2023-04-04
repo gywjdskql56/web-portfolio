@@ -11,8 +11,9 @@ const StyledBox = styled(FlexBetween)(({
     fontSize: 40,
     marginTop: 0,
     lineHeight: 1.2,
-    marginBottom: "1.35rem"
+    marginBottom: "1.35rem",
   },
+
   [theme.breakpoints.up("sm")]: {
     ".grid-item": {
       minHeight: 424,
@@ -59,8 +60,8 @@ const CarouselCard1 = ({
   return <StyledBox>
       <Grid container spacing={3} alignItems="center" justifyContent="center">
         <Grid item className="grid-item" sm={5} xs={12}>
-          <h1 className="title">{title}</h1>
-          <Paragraph color="secondary.main" mb={2.7}>
+          <h1 className="title" style={{whiteSpace: 'pre-wrap'}}>{title}</h1>
+          <Paragraph color="secondary.main" style={{whiteSpace: 'pre-wrap'}} mb={2.7}>
             {description}
           </Paragraph>
 

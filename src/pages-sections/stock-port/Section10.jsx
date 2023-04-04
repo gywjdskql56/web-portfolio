@@ -275,7 +275,7 @@ const state = {
                     style={{ backgroundColor: active1==item.name ? "#043B72" : "", color: active1==item.name ? "white" : "black"  }}
                 elevation={1}>
                   <LazyImage width={52} height={52} alt="fashion" src={item.image} objectFit="contain" borderRadius="8px" />
-                  <Box fontWeight="600" ml={1.25} fontSize={20}>
+                  <Box fontWeight="600" ml={1.25} fontSize={20} style={{whiteSpace: 'pre-wrap'}}>
                     {item.name}
                   </Box>
                 </StyledBazaarCard>

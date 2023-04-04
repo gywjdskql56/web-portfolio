@@ -1,12 +1,12 @@
 // carousel-data
 export const mainCarouselData = [{
-  title: "관심 있는 지수, 테마 등을 선택하여 포트폴리오를 직접 생성해보세요.",
+  title: "관심 있는 지수, 테마 등을 선택하여 포트폴리오를 \n직접 생성해보세요.",
   imgUrl: "/assets/images/magi/magi_building.png",
-  description: `다양한 투자자산에 대한 장기적인 운용 노하우를 보유하고 있는 미래에셋자산운용의 추천포트폴리오도 확인하실 수 있습니다.`,
+  description: `다양한 투자자산에 대한 장기적인 운용 노하우를 보유하고 있는 \n미래에셋자산운용의 추천포트폴리오도 확인하실 수 있습니다.`,
   buttonText: "추천 포트폴리오 바로가기",
   buttonLik: "/suggest-port"
 }, {
-  title: "현재 경제상황들을 다양한 자료로 확인하세요.",
+  title: "현재 경제상황들을 \n다양한 자료로 확인하세요.",
   imgUrl: "/assets/images/magi/magi_building.png",
   description: `미래에셋 AI금융공학부문에서 직접 만드는 자료들을 확인하실 수 있습니다.`,
   buttonText: "리서치 자료 바로가기",
@@ -27,7 +27,7 @@ export const categories = [  {
   }
 }, {
   id: "5144e1aa-c745-44ae-a40b-a41a35229d27",
-  name: "주식포트폴리오 직접생성",
+  name: "주식포트폴리오 직접생성\n(다이렉트 인덱싱)",
   icon: null,
   slug: "stock-port",
   image: "/assets/images/products/Health&Beauty/12.BeautySocietyantiacnemask.png",

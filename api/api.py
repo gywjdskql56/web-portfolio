@@ -458,6 +458,11 @@ def alloc_port_set(portnm, te, valuelist):
     ]
     num = portnm2num(portnm)
     props['regime_probability'] = props['regime_probability'].transpose().fillna(0)
+    final = {'expected_return': df2list(result['expected_return']), "risk_return":df2list(result['risk_return']),
+            "exposure_comparison":df2list(result['exposure_comparison']), "risk_comparison":df2list(result['risk_comparison']),
+            "pie_data_bf":df2list_pie(result['before_weights']),"pie_data_af":df2list_pie(result['after_weights']),
+            "backtest_returns": prices, "portnum":num, "probs":probs, "regime_probs":df2list(props['regime_probability'])}
+    save_pickle(final, 'final_{}'.format(portnm))
     return {'expected_return': df2list(result['expected_return']), "risk_return":df2list(result['risk_return']),
             "exposure_comparison":df2list(result['exposure_comparison']), "risk_comparison":df2list(result['risk_comparison']),
             "pie_data_bf":df2list_pie(result['before_weights']),"pie_data_af":df2list_pie(result['after_weights']),
