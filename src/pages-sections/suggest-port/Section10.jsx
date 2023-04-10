@@ -178,6 +178,8 @@ function handleClick2(val) {
 }
 
 useEffect(() => {
+    console.log(active2)
+    console.log(active3)
     fetch(url.concat(`/suggest_port/${active2}_${active3}`), { method: 'GET' })
     .then(data => data.json())
     .then(json => {console.log(json.tableN); setLineData(json.line); setTableDataN(json.tableN); setTableData(json.table); setTableDataP(json.tableP); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage); setImage(json.imagenum); setImageR(json.risknum);setOpen(true);})
