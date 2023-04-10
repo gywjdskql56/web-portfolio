@@ -257,7 +257,7 @@ const ReactTable = ({table}) => {
               <thead>
                 <tr>
                   {columnlist.map((column) => (
-                    <th key={column}><Typography variant="h8">{column} </Typography></th>
+                    <th key={column}><Typography variant="subtitle2">{column} </Typography></th>
                   ))}
                 </tr>
               </thead>

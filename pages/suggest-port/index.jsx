@@ -16,15 +16,20 @@ import Section10 from "pages-sections/suggest-port/Section10";
 import Section11 from "pages-sections/suggest-port/Section11";
 import Section12 from "pages-sections/suggest-port/Section12";
 import Section13 from "pages-sections/suggest-port/Section13";
+import queryString from "query-string";
 import api from "utils/__api__/market-1";
+import { useLocation, useParams } from 'react-router';
+import QueryString from 'qs';
 // =================================================================
 
 const MarketShop = props => {
+//    const location=useLocation();
+
   return <ShopLayout1>
       <SEO title="Market v1" />
 
       {/* CATEGORIES */}
-      <Section10 categories={props.bottomCategories} />
+      <Section10 categories={props.bottomCategories} slug={props.slug} />
 
       {/* MOBILE PHONES */}
       {/*<Section7 title="전체" shops={props.mobileShops} brands={props.mobileBrands} productList={props.mobileList} />*/}
@@ -41,52 +46,17 @@ const MarketShop = props => {
 {/*       <Newsletter /> */}
 
       {/* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */}
-      {/*<Setting />*/}
+      <Setting />
     </ShopLayout1>;
 };
-export const getStaticProps = async ({
-  locale
-}) => {
-  const carList = await api.getCarList();
-  const carBrands = await api.getCarBrands();
-  const moreItems = await api.getMoreItems();
-  const mobileList = await api.getMobileList();
-  const opticsList = await api.getOpticsList();
-  const mobileShops = await api.getMobileShops();
-  const opticsShops = await api.getOpticsShops();
-  const serviceList = await api.getServiceList();
-  const mobileBrands = await api.getMobileBrands();
-  const flashDealsData = await api.getFlashDeals();
-  const opticsBrands = await api.getOpticsBrands();
+export const getStaticProps = async () => {
+
   const bottomCategories = await api.getCategories();
-  const topCategories = await api.getTopCategories();
-  const topRatedBrands = await api.getTopRatedBrand();
-  const mainCarouselData = await api.getMainCarousel();
-  const newArrivalsList = await api.getNewArrivalList();
-  const bigDiscountList = await api.getBigDiscountList();
-  const topRatedProducts = await api.getTopRatedProduct();
-  let locales = await serverSideTranslations(locale ?? "en", ["common"]);
+  const slug = "추천_미래에셋 추천 포트폴리오(국내)_적극투자형"
   return {
     props: {
-      ...locales,
-      carList,
-      carBrands,
-      moreItems,
-      mobileList,
-      opticsList,
-      serviceList,
-      mobileShops,
-      opticsShops,
-      mobileBrands,
-      opticsBrands,
-      topCategories,
-      flashDealsData,
-      topRatedBrands,
-      newArrivalsList,
-      bigDiscountList,
-      mainCarouselData,
-      topRatedProducts,
-      bottomCategories
+      bottomCategories,
+      slug
     }
   };
 };

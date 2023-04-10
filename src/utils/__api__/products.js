@@ -15,7 +15,7 @@ const getProduct = async slug => {
   return response.data;
 };
 
-// search profucts
+// search products
 const searchProducts = async (name, category) => {
   const response = await axios.get("/api/products/search", {
     params: {

@@ -35,7 +35,8 @@ export const StyledBox = styled(({
     animation: `${slideDown} 400ms ${theme.transitions.easing.easeInOut}`
   },
   "& + .section-after-sticky": {
-    paddingTop: fixed ? componentHeight : 0
+    //paddingTop: "-3000px",//fixed ? componentHeight : 0,
+    top : "-300px"
   }
 }));
 const Sticky = ({

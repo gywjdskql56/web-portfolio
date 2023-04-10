@@ -118,13 +118,13 @@ const MenuTab = ({
             </TabList>
                <TabPanel value="one">
                   <Link href={`/suggest-port`}>
-                    <Tab label={(<Typography variant="h8">추천 포트폴리오</Typography>)} />
+                    <Tab label={(<Typography variant="subtitle2">추천 포트폴리오</Typography>)} />
                   </Link>
                   <Link href={`/stock-port`}>
-                    <Tab label={(<Typography variant="h8">포트폴리오 직접 생성</Typography>)} />
+                    <Tab label={(<Typography variant="subtitle2">포트폴리오 직접 생성</Typography>)} />
                   </Link>
                   <Link href={`/alloc-port`}>
-                    <Tab label={(<Typography variant="h8">자산배분포트폴리오 직접생성</Typography>)} />
+                    <Tab label={(<Typography variant="subtitle2">자산배분포트폴리오 직접생성</Typography>)} />
                   </Link>
                </TabPanel>
                <TabPanel value="two">
@@ -135,16 +135,16 @@ const MenuTab = ({
                     <Tab label={(<Typography variant="h8">AI국면모델</Typography>)} />
                   </Link>*/}
                   <Link href={`/company-perform`}>
-                    <Tab label={(<Typography variant="h8">기업실적발표</Typography>)} />
+                    <Tab label={(<Typography variant="subtitle2">기업실적발표</Typography>)} />
                   </Link>
                   {/*<Link href={`/company`}>
                     <Tab label={(<Typography variant="h8">기업컨센추이</Typography>)} />
                   </Link>*/}
                   <Link href={`/recent-etf`}>
-                    <Tab label={(<Typography variant="h8">최근출시ETF</Typography>)} />
+                    <Tab label={(<Typography variant="subtitle2">최근출시ETF</Typography>)} />
                   </Link>
                   <Link href={`/hedge_follow`}>
-                    <Tab label={(<Typography variant="h8">Popular 해외 포트폴리오</Typography>)} />
+                    <Tab label={(<Typography variant="subtitle2">Popular 해외 포트폴리오</Typography>)} />
                   </Link>
 
                </TabPanel>

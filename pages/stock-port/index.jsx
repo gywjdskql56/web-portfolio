@@ -1,4 +1,3 @@
-
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import SEO from "components/SEO";
 import Setting from "components/Setting";
@@ -24,8 +23,7 @@ const MarketShop = props => {
       <SEO title="Market v1" />
 
       {/* CATEGORIES */}
-      <Section10 categories={props.bottomCategories} title="주식포트폴리오 직접생성" />
-
+      <Section10 categories={props.bottomCategories} slug={props.slug} title="주식포트폴리오 직접생성\n(다이렉트 인덱싱)" />
 
       {/* MOBILE PHONES */}
       {/*<Section7 title="전체" shops={props.mobileShops} brands={props.mobileBrands} productList={props.mobileList} />*/}
@@ -42,52 +40,16 @@ const MarketShop = props => {
 {/*       <Newsletter /> */}
 
       {/* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */}
-      {/*<Setting />*/}
+      <Setting />
     </ShopLayout1>;
 };
-export const getStaticProps = async ({
-  locale
-}) => {
-  const carList = await api.getCarList();
-  const carBrands = await api.getCarBrands();
-  const moreItems = await api.getMoreItems();
-  const mobileList = await api.getMobileList();
-  const opticsList = await api.getOpticsList();
-  const mobileShops = await api.getMobileShops();
-  const opticsShops = await api.getOpticsShops();
-  const serviceList = await api.getServiceList();
-  const mobileBrands = await api.getMobileBrands();
-  const flashDealsData = await api.getFlashDeals();
-  const opticsBrands = await api.getOpticsBrands();
+export const getStaticProps = async () => {
   const bottomCategories = await api.getCategories();
-  const topCategories = await api.getTopCategories();
-  const topRatedBrands = await api.getTopRatedBrand();
-  const mainCarouselData = await api.getMainCarousel();
-  const newArrivalsList = await api.getNewArrivalList();
-  const bigDiscountList = await api.getBigDiscountList();
-  const topRatedProducts = await api.getTopRatedProduct();
-  let locales = await serverSideTranslations(locale ?? "en", ["common"]);
+  const slug="테마_그린_배터리";
   return {
     props: {
-      ...locales,
-      carList,
-      carBrands,
-      moreItems,
-      mobileList,
-      opticsList,
-      serviceList,
-      mobileShops,
-      opticsShops,
-      mobileBrands,
-      opticsBrands,
-      topCategories,
-      flashDealsData,
-      topRatedBrands,
-      newArrivalsList,
-      bigDiscountList,
-      mainCarouselData,
-      topRatedProducts,
       bottomCategories,
+      slug
     }
   };
 };

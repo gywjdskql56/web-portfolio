@@ -200,7 +200,7 @@ def DI_theme_port(strategy, sector , theme, rmticker, num, factor):
         gics = get_gics()
         gics_dict = gics.set_index('INDUSTRY_GROUP')['INDUSTRY_GROUP_NAME'].to_dict()
         df['industry'] = df['industry'].apply(lambda x: gics_dict[x] if x in gics_dict.keys() else '기타')
-        df['TF'] = df.apply(lambda row: row.loc['industry'] not in rmticker and row.loc['ticker'] not in rmticker,
+        df['TF'] = df.apply(lambda row: row.loc['industry'] not in rmticker and row.loc['TICKER'] not in rmticker,
                             axis=1)
         df = df[df['TF'] == True]
         total_sum = df['WGT'].sum()

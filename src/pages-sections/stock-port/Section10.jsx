@@ -95,14 +95,23 @@ function valuetexts(value) {
 }
 
 const Section10 = ({
-  categories
+  categories,
+  slug
 }) => {
 
-const [active1, setActive1] = useState("주식포트폴리오 직접생성");
+console.log(categories)
+console.log(slug)
+const [active1, setActive1] = useState("주식포트폴리오 직접생성\n(다이렉트 인덱싱)");
 const [active2, setActive2] = useState("글로벌 주식");
-const [active3, setActive3] = useState("테마");
-const [active4, setActive4] = useState("그린");
-const [active5, setActive5] = useState("배터리");
+const [active3, setActive3] = useState(slug.split('_')[0]);
+const [active4, setActive4] = useState(slug.split('_')[1]);
+//const [active4, setActive4] = useState('그린');
+const [active5, setActive5] = useState(slug.split('_')[2]);
+//const [active5, setActive5] = useState('배터리');
+console.log(slug)
+console.log(active4)
+console.log(active5)
+const [load, setLoad] = useState(false);
 const [open, setOpen] = useState(false);
 const [openF, setOpenF] = useState(false);
 const [openE, setOpenE] = useState(false);
@@ -156,8 +165,24 @@ useEffect(() => {
 }, [active3]);
 
 useEffect(() => {
-    console.log(categories4[active4][0].name)
+    console.log(categories4[active4])
+    console.log({'name': active5})
+    console.log({name: active5})
+    console.log((categories4[active4]).includes({'name': active5}))
+    console.log((categories4[active4]).includes({name: active5}))
+    var tf = false
+    for (var ac5 of (categories4[active4])){
+    if (ac5.name ==active5){
+    tf=true
+    }
+    }
+    console.log('tf')
+    console.log(tf)
+    if (tf==false){
     setActive5(categories4[active4][0].name)
+    }
+    console.log(active5)
+    setLoad(true)
 
 }, [active4]);
 
@@ -265,7 +290,7 @@ const state = {
       <CategorySectionHeader seeMoreLink="" title="" />
         <Grid container spacing={3}>
         <Container sx={{ mb: "30px" }} />
-        <HorizonLine text="주식포트폴리오 직접생성" />
+        <HorizonLine text="주식포트폴리오 직접생성 (다이렉트 인덱싱)" />
         {categories.map((item, ind) =>
         <Link href={item.slug}>
         <Grid item lg={4} md={6} sm={6} xs={12} key={ind}>

@@ -10,7 +10,7 @@ import BazaarCard from "components/BazaarCard";
 import HorizonLine from "components/HorizontalLine";
 import CategoryIcon from "components/icons/Category";
 import {httpGet, url} from "components/config";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import RowSpanning from "components/table";
 import Pie from "components/chart/Piechart";
 import table from "./table";
@@ -95,7 +95,8 @@ const style = {
 
 
 const Section10 = ({
-  categories
+  categories,
+  slug
 }) => {
 
 const categories1 = [
@@ -115,9 +116,10 @@ const categories2 = [
     { name: "위험중립형"},
     { name: "안정추구형"},
 ];
+console.log(slug);
 const [active1, setActive1] = useState("추천 포트폴리오");
-const [active2, setActive2] = useState("미래에셋 추천 포트폴리오(국내)");
-const [active3, setActive3] = useState("적극투자형");
+const [active2, setActive2] = useState(slug.split('_')[1]);
+const [active3, setActive3] = useState(slug.split('_')[2]);
 const [linedata, setLineData] = useState(null);
 const [tabledata, setTableData] = useState(null);
 const [tabledataP, setTableDataP] = useState(null);
@@ -174,6 +176,12 @@ function handleClick2(val) {
     .then(json => {console.log(json.tableN); setLineData(json.line); setTableDataN(json.tableN); setTableData(json.table); setTableDataP(json.tableP); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage); setImage(json.imagenum); setImageR(json.risknum);setOpen(true);
     if(active2!="미래에셋"){setOpenPort(true)}})
 }
+
+useEffect(() => {
+    fetch(url.concat(`/suggest_port/${active2}_${active3}`), { method: 'GET' })
+    .then(data => data.json())
+    .then(json => {console.log(json.tableN); setLineData(json.line); setTableDataN(json.tableN); setTableData(json.table); setTableDataP(json.tableP); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage); setImage(json.imagenum); setImageR(json.risknum);setOpen(true);})
+}, [active2]);
 
   return <Container sx={{
     mb: "100px"

@@ -7,7 +7,7 @@ import MenuTab from "components/tab/Tab";
 import Navbar from "components/navbar/Navbar";
 import { MobileNavigationBar } from "components/mobile-navigation";
 import SearchInputWithCategory from "components/search-box/SearchInputWithCategory";
-
+import ChatBot from 'react-simple-chatbot';
 /**
  *  Used in:
  *  1. market-1, matket-2, gadget-shop,
@@ -46,13 +46,31 @@ const ShopLayout1 = ({
         <MenuTab isFixed={isFixed} searchInput={<SearchInputWithCategory />} />
       </Sticky>
 
+      {/*<Sticky fixedOn={100} onSticky={toggleIsFixed} scrollDistance={0} notifyPosition={true}>
+         <div>
+         <ChatBot
+          steps={[
+            {
+              id: 'hello-world',
+              message: 'Hello World!',
+              end: false,
+            },
+          ]}
+        />
+        </div>
+      </Sticky>*/}
+
       <div className="section-after-sticky">
         {/* NAVIGATION BAR */}
          {/*{showNavbar && <Navbar elevation={0} border={1} />}*/}
 
         {/* BODY CONTENT */}
         {children}
+
       </div>
+
+
+
 
       {/* SMALL DEVICE BOTTOM NAVIGATION */}
       {/*<MobileNavigationBar />*/}

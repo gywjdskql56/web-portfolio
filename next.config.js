@@ -8,5 +8,13 @@ module.exports = {
     theme: "DEFAULT",
     currency: "USD",
   },
+  webpack5: true,
+  webpack: (config) => {
+    config.resolve.fallback = { fs: false };
+
+    return config;
+  },
   staticPageGenerationTimeout: 1000,
+  reactStrictMode: false,
+
 };

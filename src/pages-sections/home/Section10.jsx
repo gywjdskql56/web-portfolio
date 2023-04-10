@@ -4,6 +4,8 @@ import LazyImage from "components/LazyImage";
 import BazaarCard from "components/BazaarCard";
 import CategoryIcon from "components/icons/Category";
 import CategorySectionHeader from "components/CategorySectionHeader";
+import ChatBot from 'react-simple-chatbot';
+import Sticky from "components/Sticky";
 const StyledBazaarCard = styled(BazaarCard)(({
   theme
 }) => ({
@@ -41,6 +43,10 @@ const Section10 = ({
               </a>
             </Link>
           </Grid>)}
+     <Grid item lg={6} md={3} sm={4} xs={12} />
+     <Grid item lg={6} md={3} sm={4} xs={12}>
+
+      </Grid>
       </Grid>
     </Container>;
 };

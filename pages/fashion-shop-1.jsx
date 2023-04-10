@@ -49,7 +49,7 @@ const FashionShop1 = props => {
 {/*         <Newsletter /> */}
 
         {/* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */}
-        {/*<Setting />*/}
+        <Setting />
       </Box>
     </ShopLayout1>;
 };

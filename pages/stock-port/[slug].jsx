@@ -10,8 +10,23 @@ import RelatedProducts from "components/products/RelatedProducts";
 import FrequentlyBought from "components/products/FrequentlyBought";
 import ProductDescription from "components/products/ProductDescription";
 import { getFrequentlyBought, getRelatedProducts } from "utils/__api__/related-products";
-import api from "utils/__api__/products";
-
+import SEO from "components/SEO";
+import Setting from "components/Setting";
+// import Newsletter from "components/Newsletter";
+import Section1 from "pages-sections/stock-port/Section1";
+import Section2 from "pages-sections/stock-port/Section2";
+import Section3 from "pages-sections/stock-port/Section3";
+import Section4 from "pages-sections/stock-port/Section4";
+import Section5 from "pages-sections/stock-port/Section5";
+import Section6 from "pages-sections/stock-port/Section6";
+import Section7 from "pages-sections/stock-port/Section7";
+import Section8 from "pages-sections/stock-port/Section8";
+import Section10 from "pages-sections/stock-port/Section10";
+import Section11 from "pages-sections/stock-port/Section11";
+import Section12 from "pages-sections/stock-port/Section12";
+import Section13 from "pages-sections/stock-port/Section13";
+import api from "utils/__api__/market-1";
+import ChatBot from 'react-simple-chatbot';
 // styled component
 const StyledTabs = styled(Tabs)(({
   theme
@@ -32,50 +47,26 @@ const StyledTabs = styled(Tabs)(({
 // ===============================================================
 
 const ProductDetails = props => {
-  const {
-    frequentlyBought,
-    relatedProducts,
-    product
-  } = props;
+
   const router = useRouter();
   const [selectedOption, setSelectedOption] = useState(0);
   const handleOptionClick = (_, value) => setSelectedOption(value);
+  console.log(props.slug)
 
   // Show a loading state when the fallback is rendered
   if (router.isFallback) {
     return <h1>Loading...</h1>;
   }
   return <ShopLayout1>
-      <Container sx={{
-      my: 4
-    }}>
-        {/* PRODUCT DETAILS INFO AREA */}
-        {product ? <ProductIntro product={product} /> : <H2>Loading...</H2>}
+      <SEO title="Market v1" />
+      <Section10 categories={props.bottomCategories} slug={props.slug} title="주식포트폴리오 직접생성\n(다이렉트 인덱싱)" />
 
-        {/* PRODUCT DESCRIPTION AND REVIEW */}
-        <StyledTabs textColor="primary" value={selectedOption} indicatorColor="primary" onChange={handleOptionClick}>
-          <Tab className="inner-tab" label="상품 설명" />
-          <Tab className="inner-tab" label="상품 후기 (3)" />
-        </StyledTabs>
-
-        <Box mb={6}>
-          {selectedOption === 0 && <ProductDescription />}
-          {selectedOption === 1 && <ProductReview />}
-        </Box>
-
-        {frequentlyBought && <FrequentlyBought productsData={frequentlyBought} />}
-
-        <AvailableShops />
-
-        {relatedProducts && <RelatedProducts productsData={relatedProducts} />}
-      </Container>
+      <Setting />
     </ShopLayout1>;
 };
 export const getStaticPaths = async () => {
-  const paths = await api.getSlugs();
-  console.log(paths)
   return {
-    paths: paths,
+    paths: [],
     //indicates that no page needs be created at build time
     fallback: "blocking" //indicates the type of fallback
   };
@@ -84,16 +75,15 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ({
   params
 }) => {
-  const relatedProducts = await getRelatedProducts();
-  const frequentlyBought = await getFrequentlyBought();
-  const product = await api.getProduct(params.slug);
-  console.log(params)
-  console.log(params.slug)
+  const bottomCategories = await api.getCategories();
+  const slug = params.slug;
+  const mainCarouselData = await api.getMainCarousel();
+
   return {
     props: {
-      frequentlyBought,
-      relatedProducts,
-      product
+      slug,
+      bottomCategories,
+      mainCarouselData,
     }
   };
 };
