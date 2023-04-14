@@ -182,7 +182,7 @@ useEffect(() => {
     console.log(active3)
     fetch(url.concat(`/suggest_port/${active2}_${active3}`), { method: 'GET' })
     .then(data => data.json())
-    .then(json => {console.log(json.tableN); setLineData(json.line); setTableDataN(json.tableN); setTableData(json.table); setTableDataP(json.tableP); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage); setImage(json.imagenum); setImageR(json.risknum);setOpen(true);})
+    .then(json => {console.log(json.tableN); setLineData(json.line); setTableDataN(json.tableN); setTableData(json.table); setTableDataP(json.tableP); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage); setImage(json.imagenum); setImageR(json.risknum);setOpen(true);if(active2!="미래에셋"){setOpenPort(true)}})
 }, [active2]);
 
   return <Container sx={{

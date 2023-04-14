@@ -26,8 +26,9 @@ def save_pickle(df, file_nm):
         pickle.dump(df, file, protocol = pickle.HIGHEST_PROTOCOL)
 
 def read_pickle(file_nm):
-    with open('pkl/{}.pickle'.format((file_nm)), 'rb') as file:
-        df = pickle.load(file)
+    df = pd.read_pickle(open('pkl/{}.pickle'.format((file_nm)), 'rb'))
+    # with open('pkl/{}.pickle'.format((file_nm)), 'rb') as file:
+    #     df = pickle.load(file)
     return df
 
 def portnm2num(port):
@@ -103,7 +104,7 @@ def suggest_port(port, type):
         wgt_dict = magi_port[['코드2', '비중2']].set_index('코드2')['비중2'].to_dict()
         for col in list(set(wgt_dict.keys()) & set(returns.columns)):
             returns['total'] += returns[col] * wgt_dict[col]
-        total_returns = (returns_pre.loc[:'20230401'][['total']]).append(returns.loc['20230401':][['total']])
+        total_returns = pd.concat([returns_pre.loc[:'20230401'][['total']], returns.loc['20230401':][['total']]])
         total_returns = (total_returns + 1).cumprod()
         rows = list()
         count = 0
@@ -190,6 +191,8 @@ def DI_theme_port(strategy, sector , theme, rmticker, num, factor):
             factor = '400120'
         df = get_factor(factor, td='20230201')
         wgt_df = get_factor('600100', td='20230201')
+        df = df.drop_duplicates(subset=['FSYM_ID'])
+        wgt_df = wgt_df.drop_duplicates(subset=['FSYM_ID'])
         df = pd.merge(df, wgt_df[['FSYM_ID', 'VAL']].dropna().drop_duplicates('FSYM_ID').rename(
             columns={'VAL': 'WGT'}), left_on=['FSYM_ID'], right_on=['FSYM_ID'], how='left').sort_values(by=['VAL'],ascending=False).dropna().iloc[:min(int(num),len(df))]
         df = pd.merge(nm_df, df, left_on='FSYM_ID', right_on='FSYM_ID', how='right')
@@ -203,6 +206,7 @@ def DI_theme_port(strategy, sector , theme, rmticker, num, factor):
         df['TF'] = df.apply(lambda row: row.loc['industry'] not in rmticker and row.loc['TICKER'] not in rmticker,
                             axis=1)
         df = df[df['TF'] == True]
+
         total_sum = df['WGT'].sum()
         df['wgt'] = df['WGT'].apply(lambda x : x/total_sum*100)
         df['country'] = df['COUNTRY_NAME']
@@ -223,7 +227,7 @@ def DI_theme_port(strategy, sector , theme, rmticker, num, factor):
         area_data_ch = list()
         sub_df = df[df['industry']==sec].fillna(0)
         for t, w, n in zip(sub_df['ticker'], sub_df['wgt'], sub_df['name']):
-            child_ch = {"name": t+" ({})".format(n), "color": "hsl({}, 70%, 50%)".format(random.randint(5, 200)),"loc": round(w,2)}
+            child_ch = {"name": str(t)+" ({})".format(str(n)), "color": "hsl({}, 70%, 50%)".format(str(random.randint(5, 200))),"loc": round(w,2)}
             area_data_ch.append(child_ch)
         child = {"name": sec,'id':sec, "color": "hsl({}, 70%, 50%)".format(random.randint(200, 350)), "children": area_data_ch}
         area_data.append(child)
