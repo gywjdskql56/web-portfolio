@@ -321,7 +321,7 @@ useEffect(() => {
           {openport? (
           <Grid container spacing={3}>
           <Container sx={{ mb: "40px" }} />
-          <HorizonLine text="포트폴리오 상세(2023-02-28 기준)" />
+          <HorizonLine text="포트폴리오 상세(2023-04-24 기준)" />
           <Container sx={{ mb: "40px" }} />
             <Grid item xs={6} md={6} lg={6}>
              <div style={{height: 400}}>
@@ -351,7 +351,7 @@ useEffect(() => {
           {open==true&&openport==false? (
           <Grid container spacing={3}>
           <Container sx={{ mb: "40px" }} />
-          <HorizonLine text="포트폴리오 상세(2023-02-28 기준)" />
+          <HorizonLine text="포트폴리오 상세(2023-04-24 기준)" />
             <Grid item xs={6} md={6} lg={6}>
              <div style={{height: 400}}>
                 <Pie piedata={piedata} />
