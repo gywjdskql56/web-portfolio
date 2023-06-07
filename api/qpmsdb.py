@@ -87,10 +87,18 @@ def get_us_stock_pr(id_list, id2ticker, td):
     return result
 
 
+# def get_all_stock_ticker():
+#     sql = '''
+#     select TICKER, FSYM_ID, ISIN, SEDOL, GICS_INDUSTRYGROUP, COUNTRY_NAME
+#     from EUMQNTDB..GQPM_MAST3
+#     '''
+#     # EUMQNTDB..WEB_GQPM_MAST
+#     result = get_df(sql)
+#     return result
 def get_all_stock_ticker():
     sql = '''
     select TICKER, FSYM_ID, ISIN, SEDOL, GICS_INDUSTRYGROUP, COUNTRY_NAME
-    from EUMQNTDB..GQPM_MAST3 
+    from WEBQM..WEB_GQPM_MAST
     '''
     # EUMQNTDB..WEB_GQPM_MAST
     result = get_df(sql)
@@ -608,6 +616,7 @@ def get_perform_table():
     return result
 
 if __name__ == "__main__":
+    tickers = get_all_stock_ticker_new()
     df = get_factor(factor='400130', td='20220101')
     df = get_dps()
     df = get_sh()

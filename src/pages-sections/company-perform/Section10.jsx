@@ -69,7 +69,7 @@ useEffect(()=>{
       <CategorySectionHeader seeMoreLink="" title="" />
           <Container sx={{ mb: "40px" }} />
           <Grid container spacing={3}>
-          <HorizonLine text="최근 출시된 ETF" />
+          <HorizonLine text="기업실적발표" />
             <Grid item xs={12} md={12} lg={12}>
                 <ReactTable table={tabledata} />
             </Grid>

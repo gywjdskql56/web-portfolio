@@ -328,7 +328,7 @@ def load_data():
 
 
 if __name__ =='__main__':
-    # # props = load_data()
+    props = load_data()
     # props = read_pickle('props')
     # port_selection=widgets.RadioButtons(
     #     options=props.opts.keys(),

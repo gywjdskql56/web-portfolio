@@ -29,6 +29,7 @@ import ReactTable from "components/react-table/Port-Table";
 import PeriodTable from "components/react-table/Period-Table";
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
+
 const StyledBazaarCard = styled(BazaarCard)(({
   theme
 }) => ({

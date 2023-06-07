@@ -6,6 +6,7 @@ import { ResponsivePie } from '@nivo/pie'
 const Pie = ({
   piedata
 }) => {
+  console.log(piedata)
   return  <ResponsivePie
         data={piedata}
         margin={{ top: 40, right: 80, bottom: 80, left: 80 }}

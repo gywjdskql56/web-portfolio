@@ -88,6 +88,7 @@ def get_code_df(id_list):
 ###########################
 
 file_list = ['미래에셋 추천 포트폴리오(국내)','미래에셋 추천 포트폴리오(해외)','미래에셋 추천 포트폴리오(연금)','변동성 알고리즘','테마로테이션','멀티에셋 인컴','초개인화로보','멀티에셋 모멘텀(해외)','멀티에셋 모멘텀(국내)']
+file_list = ['멀티에셋 인컴']
 ## 추천포트폴리오 엑셀 변환
 for file_nm in file_list:
     port1 = pd.read_excel('org-data/suggest/{}.xlsx'.format(file_nm), sheet_name='적극투자형')
@@ -138,7 +139,8 @@ for file_nm in file_list:
     def df2list_pie(df):
         total_list = list()
         df = df[['구분','비중1']].drop_duplicates(subset=['구분'])
-        color = ["hsl(164, 70%, 50%)", "hsl(206, 70%, 50%)", "hsl(165, 70%, 50%)", "hsl(173, 70%, 50%)", "hsl(17, 70%, 50%)"]
+        color = ["hsl(164, 70%, 50%)", "hsl(206, 70%, 50%)", "hsl(65, 70%, 50%)", "hsl(173, 70%, 50%)", "hsl(17, 70%, 50%)", "hsl(117, 70%, 50%)", "hsl(80, 70%, 50%)", "hsl(18, 70%, 50%)"]
+        count = 0
         for idx, row in df.iterrows():
             print(idx)
             print(row)
@@ -146,9 +148,10 @@ for file_nm in file_list:
                 'id': row.loc['구분'],
                 'value': round(row.loc['비중1'] * 100, 1),
                 'label': row.loc['구분'].split(" ")[-1],
-                'color': color[idx%len(color)],
+                'color': color[count%len(color)],
             }
             total_list.append(part_dict)
+            count+=1
         return total_list
 
     total_dict = dict()
