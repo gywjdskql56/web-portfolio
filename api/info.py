@@ -1,7 +1,7 @@
 import pandas as pd
 from config import *
 from qpmsdb import *
-import pickle
+import pickle5 as pickle
 def save_pickle(df, file_nm):
     with open('pkl/{}.pickle'.format((file_nm)), 'wb') as file:
         pickle.dump(df, file, protocol = pickle.HIGHEST_PROTOCOL)
