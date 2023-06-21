@@ -11,9 +11,9 @@ from matplotlib import colors
 # Data Reader
 # import yfinance as yf
 import statsmodels.api as sm
-from pandas_datareader.data import DataReader
-from pandas_datareader.fred import FredReader
-from pandas_datareader.famafrench import get_available_datasets
+# from pandas_datareader.data import DataReader
+# from pandas_datareader.fred import FredReader
+# from pandas_datareader.famafrench import get_available_datasets
 
 
 # Ploty Visuallization
@@ -178,44 +178,44 @@ def returns_to_index(df_returns, base):
 #     return data
 
 
-def famafrench_download(start, end, frequency):  # 야후 데이타 다운로드
-    datasets = get_available_datasets()
-    # print('No. of datasets:{0}'.format(len(datasets)))
-    # datasets # comment out if you want to see all the datasets
-
-    # Fama-French 5 Factor Download
-    df_5_factor = [dataset for dataset in datasets if '5' in dataset and 'Factor' in dataset]
-    df_factors_return = DataReader(df_5_factor[1], 'famafrench', start=start, end=end)
-    df_factors_return = df_factors_return[0]
-    display(df_factors_return.tail())
-
-    # Momentum Factor Download
-    df_momfactor_return = [dataset for dataset in datasets if 'Momentum' in dataset and 'Factor' in dataset]
-    df_momfactor_return = DataReader(df_momfactor_return[1], 'famafrench', start=start, end=end)
-    df_momfactor_return = df_momfactor_return[0]
-
-    # Concat 5-Factors and Momentum Factor
-    df_factors_return = pd.concat([df_factors_return, df_momfactor_return], axis=1)
-    df_factors_return = df_factors_return.drop(['Mkt-RF', 'RF'], axis=1)  # 무위험수익 배제
-    df_factors_index = returns_to_index(df_factors_return, 100)
-
-    # display(df_factors_return.tail())
-    # display(df_factors_index.tail())
-
-    if frequency == 'M':
-        df_factors_index = df_factors_index.resample('M').last()  # 일간데이터를 월간데이터로 변환
-    elif frequency == 'Q':
-        df_factors_index = df_factors_index.resample('Q').last()  # 일간데이터를 분기데이터로 변환
-    elif frequency == 'W':
-        df_factors_index = df_factors_index.resample('W').last()  # 일간데이터를 분기데이터로 변환
-    else:
-        pass
-
-    df_factors_return = df_factors_index.pct_change()
-    df_factors_return.columns = ['SMB', 'HML', 'RMW', 'CMA', 'Mom']
-    df_factors_index.columns = ['SMB', 'HML', 'RMW', 'CMA', 'Mom']
-
-    return df_factors_index, df_factors_return
+# def famafrench_download(start, end, frequency):  # 야후 데이타 다운로드
+#     datasets = get_available_datasets()
+#     # print('No. of datasets:{0}'.format(len(datasets)))
+#     # datasets # comment out if you want to see all the datasets
+#
+#     # Fama-French 5 Factor Download
+#     df_5_factor = [dataset for dataset in datasets if '5' in dataset and 'Factor' in dataset]
+#     df_factors_return = DataReader(df_5_factor[1], 'famafrench', start=start, end=end)
+#     df_factors_return = df_factors_return[0]
+#     display(df_factors_return.tail())
+#
+#     # Momentum Factor Download
+#     df_momfactor_return = [dataset for dataset in datasets if 'Momentum' in dataset and 'Factor' in dataset]
+#     df_momfactor_return = DataReader(df_momfactor_return[1], 'famafrench', start=start, end=end)
+#     df_momfactor_return = df_momfactor_return[0]
+#
+#     # Concat 5-Factors and Momentum Factor
+#     df_factors_return = pd.concat([df_factors_return, df_momfactor_return], axis=1)
+#     df_factors_return = df_factors_return.drop(['Mkt-RF', 'RF'], axis=1)  # 무위험수익 배제
+#     df_factors_index = returns_to_index(df_factors_return, 100)
+#
+#     # display(df_factors_return.tail())
+#     # display(df_factors_index.tail())
+#
+#     if frequency == 'M':
+#         df_factors_index = df_factors_index.resample('M').last()  # 일간데이터를 월간데이터로 변환
+#     elif frequency == 'Q':
+#         df_factors_index = df_factors_index.resample('Q').last()  # 일간데이터를 분기데이터로 변환
+#     elif frequency == 'W':
+#         df_factors_index = df_factors_index.resample('W').last()  # 일간데이터를 분기데이터로 변환
+#     else:
+#         pass
+#
+#     df_factors_return = df_factors_index.pct_change()
+#     df_factors_return.columns = ['SMB', 'HML', 'RMW', 'CMA', 'Mom']
+#     df_factors_index.columns = ['SMB', 'HML', 'RMW', 'CMA', 'Mom']
+#
+#     return df_factors_index, df_factors_return
 
 
 # def db_download():  # 동현매니저 작업한 DB데이타 다운로드
