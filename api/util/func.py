@@ -3,8 +3,8 @@
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
-from hmmlearn.hmm import GaussianHMM
-from hmmlearn.hmm import GMMHMM
+# from hmmlearn.hmm import GaussianHMM
+# from hmmlearn.hmm import GMMHMM
 from sklearn.mixture import GaussianMixture
 
 from matplotlib import colors
@@ -365,48 +365,48 @@ def get_best_gmm_model(X, max_states, max_iter=10000):  # Gaussian HMM 모델
     return best_model
 
 
-def get_best_hmm_model(X, max_states, max_iter=10000):  # Gaussian HMM 모델
-    best_score = -(10 ** 10)
-    best_state = 0
+# def get_best_hmm_model(X, max_states, max_iter=10000):  # Gaussian HMM 모델
+#     best_score = -(10 ** 10)
+#     best_state = 0
+#
+#     for state in range(2, max_states + 1):
+#         #        hmm_model = mix.GaussianMixture(n_components = state, random_state = 100,
+#         hmm_model = GaussianHMM(n_components=state, random_state=100,
+#                                 covariance_type="diag", n_iter=max_iter).fit(X)
+#         if hmm_model.score(X) > best_score:
+#             best_score = hmm_model.score(X)
+#             best_state = state
+#
+#     #    best_model = mix.GaussianMixture(n_components = best_state, random_state = 100,
+#     best_model = GaussianHMM(n_components=best_state, random_state=100,
+#                              covariance_type="diag", n_iter=max_iter).fit(X)
+#     # print('Transition Matrix')
+#     # print(best_model.transmat_)
+#     return best_model
 
-    for state in range(2, max_states + 1):
-        #        hmm_model = mix.GaussianMixture(n_components = state, random_state = 100,
-        hmm_model = GaussianHMM(n_components=state, random_state=100,
-                                covariance_type="diag", n_iter=max_iter).fit(X)
-        if hmm_model.score(X) > best_score:
-            best_score = hmm_model.score(X)
-            best_state = state
 
-    #    best_model = mix.GaussianMixture(n_components = best_state, random_state = 100,
-    best_model = GaussianHMM(n_components=best_state, random_state=100,
-                             covariance_type="diag", n_iter=max_iter).fit(X)
-    # print('Transition Matrix')
-    # print(best_model.transmat_)
-    return best_model
-
-
-def get_best_gmmhmm_model(X, max_states, max_iter=10000):  # GMM-HMM모델 (관측치 분포가 Gaussian Mixture)
-    best_score = -(10 ** 10)
-    best_state = 0
-
-    for state in range(2, max_states + 1):
-        #        hmm_model = mix.GaussianMixture(n_components = state, random_state = 100,
-        hmm_model = GMMHMM(n_components=state, n_mix=2, random_state=108,
-                           covariance_type="diag", n_iter=max_iter).fit(X)
-        if hmm_model.score(X) > best_score:
-            best_score = hmm_model.score(X)
-            best_state = state
-
-    #    best_model = mix.GaussianMixture(n_components = best_state, random_state = 100,
-    best_model = GMMHMM(n_components=best_state, n_mix=2, random_state=100, min_covar=0.001, covariance_type="diag",
-                        n_iter=max_iter).fit(X)
-    # print('Transition Matrix')
-    # print(best_model.transmat_)
-    # print('Gaussian Model Weights')
-    # print(best_model.weights_)
-
-    # prob_next_step = best_model.transmat_[state_sequence[-1], :]
-    return best_model
+# def get_best_gmmhmm_model(X, max_states, max_iter=10000):  # GMM-HMM모델 (관측치 분포가 Gaussian Mixture)
+#     best_score = -(10 ** 10)
+#     best_state = 0
+#
+#     for state in range(2, max_states + 1):
+#         #        hmm_model = mix.GaussianMixture(n_components = state, random_state = 100,
+#         hmm_model = GMMHMM(n_components=state, n_mix=2, random_state=108,
+#                            covariance_type="diag", n_iter=max_iter).fit(X)
+#         if hmm_model.score(X) > best_score:
+#             best_score = hmm_model.score(X)
+#             best_state = state
+#
+#     #    best_model = mix.GaussianMixture(n_components = best_state, random_state = 100,
+#     best_model = GMMHMM(n_components=best_state, n_mix=2, random_state=100, min_covar=0.001, covariance_type="diag",
+#                         n_iter=max_iter).fit(X)
+#     # print('Transition Matrix')
+#     # print(best_model.transmat_)
+#     # print('Gaussian Model Weights')
+#     # print(best_model.weights_)
+#
+#     # prob_next_step = best_model.transmat_[state_sequence[-1], :]
+#     return best_model
 
 
 def compute_turbulence(df, years=1, alpha=0.01, frequency='D'):  # Turbulence 지표 계산
