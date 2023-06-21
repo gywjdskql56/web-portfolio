@@ -19,7 +19,7 @@ def save_pickle(df, file_nm):
         pickle.dump(df, file, protocol = pickle.HIGHEST_PROTOCOL)
 
 def read_pickle(file_nm):
-    df = pd.read_pickle(open('pkl/{}.pickle'.format((file_nm)), 'rb'), protocol=2)
+    df = pd.read_pickle(open('pkl/{}.pickle'.format((file_nm)), 'rb'))
     # with open('pkl/{}.pickle'.format((file_nm)), 'rb') as file:
     #     df = pickle.load(file)
     return df
