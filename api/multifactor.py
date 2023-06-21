@@ -21,11 +21,11 @@ def load_data():
 
     print('1: ',datetime.now())
     # Download Yahoo Data
-    if start_download==1:
-        df_yahoo_index=yahoo_download(tickers, start, end, frequency)
-        df_yahoo_index.to_pickle("pkl/df_yahoo_index.pkl")
-    else:
-        df_yahoo_index = pd.read_pickle("pkl/df_yahoo_index.pkl")
+    # if start_download==1:
+    #     df_yahoo_index=yahoo_download(tickers, start, end, frequency)
+    #     df_yahoo_index.to_pickle("pkl/df_yahoo_index.pkl")
+    # else:
+    df_yahoo_index = pd.read_pickle("pkl/df_yahoo_index.pkl")
 
 
     df_db_index=read_pickle('df_db_index')

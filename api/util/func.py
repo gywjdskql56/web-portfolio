@@ -9,7 +9,7 @@ from sklearn.mixture import GaussianMixture
 
 from matplotlib import colors
 # Data Reader
-import yfinance as yf
+# import yfinance as yf
 import statsmodels.api as sm
 from pandas_datareader.data import DataReader
 from pandas_datareader.fred import FredReader
@@ -160,22 +160,22 @@ def returns_to_index(df_returns, base):
     return df_index
 
 
-def yahoo_download(tickers, start, end, frequency):  # 야후 데이타 다운로드
-    data = yf.download(tickers, start=start, end=end)
-    data = data['Adj Close']
-    print(data.describe())
-    # data=data.dropna()
-
-    if frequency == 'M':
-        data = data.resample('M').last()  # 일간데이터를 월간데이터로 변환
-    elif frequency == 'Q':
-        data = data.resample('Q').last()  # 일간데이터를 분기데이터로 변환
-    elif frequency == 'W':
-        data = data.resample('W').last()  # 일간데이터를 분기데이터로 변환
-    else:
-        pass
-
-    return data
+# def yahoo_download(tickers, start, end, frequency):  # 야후 데이타 다운로드
+#     data = yf.download(tickers, start=start, end=end)
+#     data = data['Adj Close']
+#     print(data.describe())
+#     # data=data.dropna()
+#
+#     if frequency == 'M':
+#         data = data.resample('M').last()  # 일간데이터를 월간데이터로 변환
+#     elif frequency == 'Q':
+#         data = data.resample('Q').last()  # 일간데이터를 분기데이터로 변환
+#     elif frequency == 'W':
+#         data = data.resample('W').last()  # 일간데이터를 분기데이터로 변환
+#     else:
+#         pass
+#
+#     return data
 
 
 def famafrench_download(start, end, frequency):  # 야후 데이타 다운로드
