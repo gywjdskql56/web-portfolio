@@ -38,7 +38,7 @@ display(HTML("<style>.container { width:95% !important; }</style>")) #화면 옆
 
 # etc
 import bt
-import riskfolio as rp
+# import riskfolio as rp
 
 # 한글설정
 from matplotlib import rcParams
@@ -559,108 +559,108 @@ def Markov_Regression_4regime(df_factor_ret, df_asset_ret, min_timeseries=252,
     return df_result
 
 
-class factor_model:
-
-    def __init__(self, df_asset_ret, df_factor_ret, regression='PCR'):
-        self.df_asset_ret = df_asset_ret
-        self.df_factor_ret = df_factor_ret
-        self.regression = regression
-        self.check_timeseries(self.df_asset_ret, self.df_factor_ret)
-        self.factorstats = self.calculate_stats(self.df_factor_ret)
-        self.corr = self.calculate_factorcorr(self.df_factor_ret)
-        self.exposures = self.calculate_factorexposures(self.df_asset_ret, self.df_factor_ret)
-        self.mu, self.cov = self.estimate_parameters_stepwise(self.df_asset_ret, self.df_factor_ret)
-
-    def check_timeseries(self, df_asset_ret, df_factor_ret):
-        if len(df_asset_ret.index) == len(df_factor_ret.index):
-            pass
-        else:
-            print('The timeseries lengths of assets and factors are not matching!')
-
-        return
-
-    def calculate_stats(self, df_factor_ret):
-        df_factor_index = bt.ffn.core.to_price_index(df_factor_ret, start=1000)
-
-        df_factorstats = pd.DataFrame.from_dict({k: v.stats for k, v in bt.ffn.calc_stats(df_factor_index).items()})
-
-        return df_factorstats
-
-    def calculate_factorcorr(self, df_factor_ret):
-        corr = df_factor_ret.corr()
-        return corr
-
-    def calculate_factorexposures(self, df_asset_ret, df_factor_ret):
-        # display(df_asset_ret.tail())
-        # display(df_factor_ret.tail())
-
-        if self.regression == 'stepwise':
-            step = 'Forward'
-            exposures = rp.ParamsEstimation.loadings_matrix(X=df_factor_ret, Y=df_asset_ret, stepwise=step,
-                                                            threshold=0.05)
-        else:
-            feature_selection = 'PCR'
-            n_components = 0.95
-            exposures = rp.ParamsEstimation.loadings_matrix(X=df_factor_ret, Y=df_asset_ret,
-                                                            feature_selection=feature_selection,
-                                                            n_components=n_components)
-
-        exposures.style.format("{:.4f}").background_gradient(cmap='RdYlGn')
-        return exposures
-
-    def estimate_parameters(self, df_asset_ret, df_factor_ret):
-        # Building the portfolio object
-        port = rp.Portfolio(returns=df_asset_ret)
-
-        # Select method and estimate input parameters:
-        method_mu = 'hist'  # Method to estimate expected returns based on historical data.
-        method_cov = 'hist'  # Method to estimate covariance matrix based on historical data.
-        port.factors = df_factor_ret.copy()
-
-        if self.regression == 'stepwise':
-            port.factors_stats(method_mu=method_mu, method_cov=method_cov, d=0.94)
-        else:
-            feature_selection = 'PCR'
-            n_components = 0.95
-            port.factors_stats(method_mu=method_mu,
-                               method_cov=method_cov,
-                               dict_risk=dict(feature_selection=feature_selection,
-                                              n_components=n_components)
-                               )
-
-        port.mu_fm = port.mu_fm
-        port.cov_fm = port.cov_fm
-        expected_return = port.mu_fm
-        risk_model = port.cov_fm
-
-        return expected_return, risk_model
-
-    def estimate_parameters_stepwise(self, df_asset_ret, df_factor_ret):
-        # Building the portfolio object
-        port = rp.Portfolio(returns=df_asset_ret)
-
-        # Select method and estimate input parameters:
-        method_mu = 'hist'  # Method to estimate expected returns based on historical data.
-        method_cov = 'hist'  # Method to estimate covariance matrix based on historical data.
-        port.factors = df_factor_ret.copy()
-
-        # step_regression=rp.ParamsEstimation.forward_regression(X=df_factor_ret.dropna(), y=df_asset_ret.dropna()['VOO'], criterion='pvalue', threshold=0.05, verbose=False)
-        # print('step_regression', step_regression)
-
-        risk_factors = rp.ParamsEstimation.risk_factors(X=df_factor_ret.dropna(), Y=df_asset_ret.dropna(),
-                                                        stepwise='Forward', threshold=0.1)
-        # display(risk_factors[0]*12) #연율화 기대수익 출력
-        # display((risk_factors[1]*12)**(0.5)) #연율화 COV Matrix출력
-        # display(risk_factors[2])
-
-        port.factors_stats(method_mu=method_mu, method_cov=method_cov, d=0.94)
-        port.mu_fm = port.mu_fm
-        port.cov_fm = port.cov_fm
-        expected_return = port.mu_fm
-        risk_model = port.cov_fm
-        return expected_return, risk_model
-
-
+# class factor_model:
+#
+#     def __init__(self, df_asset_ret, df_factor_ret, regression='PCR'):
+#         self.df_asset_ret = df_asset_ret
+#         self.df_factor_ret = df_factor_ret
+#         self.regression = regression
+#         self.check_timeseries(self.df_asset_ret, self.df_factor_ret)
+#         self.factorstats = self.calculate_stats(self.df_factor_ret)
+#         self.corr = self.calculate_factorcorr(self.df_factor_ret)
+#         self.exposures = self.calculate_factorexposures(self.df_asset_ret, self.df_factor_ret)
+#         self.mu, self.cov = self.estimate_parameters_stepwise(self.df_asset_ret, self.df_factor_ret)
+#
+#     def check_timeseries(self, df_asset_ret, df_factor_ret):
+#         if len(df_asset_ret.index) == len(df_factor_ret.index):
+#             pass
+#         else:
+#             print('The timeseries lengths of assets and factors are not matching!')
+#
+#         return
+#
+#     def calculate_stats(self, df_factor_ret):
+#         df_factor_index = bt.ffn.core.to_price_index(df_factor_ret, start=1000)
+#
+#         df_factorstats = pd.DataFrame.from_dict({k: v.stats for k, v in bt.ffn.calc_stats(df_factor_index).items()})
+#
+#         return df_factorstats
+#
+#     def calculate_factorcorr(self, df_factor_ret):
+#         corr = df_factor_ret.corr()
+#         return corr
+#
+#     def calculate_factorexposures(self, df_asset_ret, df_factor_ret):
+#         # display(df_asset_ret.tail())
+#         # display(df_factor_ret.tail())
+#
+#         if self.regression == 'stepwise':
+#             step = 'Forward'
+#             exposures = rp.ParamsEstimation.loadings_matrix(X=df_factor_ret, Y=df_asset_ret, stepwise=step,
+#                                                             threshold=0.05)
+#         else:
+#             feature_selection = 'PCR'
+#             n_components = 0.95
+#             exposures = rp.ParamsEstimation.loadings_matrix(X=df_factor_ret, Y=df_asset_ret,
+#                                                             feature_selection=feature_selection,
+#                                                             n_components=n_components)
+#
+#         exposures.style.format("{:.4f}").background_gradient(cmap='RdYlGn')
+#         return exposures
+#
+#     def estimate_parameters(self, df_asset_ret, df_factor_ret):
+#         # Building the portfolio object
+#         port = rp.Portfolio(returns=df_asset_ret)
+#
+#         # Select method and estimate input parameters:
+#         method_mu = 'hist'  # Method to estimate expected returns based on historical data.
+#         method_cov = 'hist'  # Method to estimate covariance matrix based on historical data.
+#         port.factors = df_factor_ret.copy()
+#
+#         if self.regression == 'stepwise':
+#             port.factors_stats(method_mu=method_mu, method_cov=method_cov, d=0.94)
+#         else:
+#             feature_selection = 'PCR'
+#             n_components = 0.95
+#             port.factors_stats(method_mu=method_mu,
+#                                method_cov=method_cov,
+#                                dict_risk=dict(feature_selection=feature_selection,
+#                                               n_components=n_components)
+#                                )
+#
+#         port.mu_fm = port.mu_fm
+#         port.cov_fm = port.cov_fm
+#         expected_return = port.mu_fm
+#         risk_model = port.cov_fm
+#
+#         return expected_return, risk_model
+#
+#     def estimate_parameters_stepwise(self, df_asset_ret, df_factor_ret):
+#         # Building the portfolio object
+#         port = rp.Portfolio(returns=df_asset_ret)
+#
+#         # Select method and estimate input parameters:
+#         method_mu = 'hist'  # Method to estimate expected returns based on historical data.
+#         method_cov = 'hist'  # Method to estimate covariance matrix based on historical data.
+#         port.factors = df_factor_ret.copy()
+#
+#         # step_regression=rp.ParamsEstimation.forward_regression(X=df_factor_ret.dropna(), y=df_asset_ret.dropna()['VOO'], criterion='pvalue', threshold=0.05, verbose=False)
+#         # print('step_regression', step_regression)
+#
+#         risk_factors = rp.ParamsEstimation.risk_factors(X=df_factor_ret.dropna(), Y=df_asset_ret.dropna(),
+#                                                         stepwise='Forward', threshold=0.1)
+#         # display(risk_factors[0]*12) #연율화 기대수익 출력
+#         # display((risk_factors[1]*12)**(0.5)) #연율화 COV Matrix출력
+#         # display(risk_factors[2])
+#
+#         port.factors_stats(method_mu=method_mu, method_cov=method_cov, d=0.94)
+#         port.mu_fm = port.mu_fm
+#         port.cov_fm = port.cov_fm
+#         expected_return = port.mu_fm
+#         risk_model = port.cov_fm
+#         return expected_return, risk_model
+#
+#
 def optimize_portfolio(returns, factors, target_exposure, initial_portfolio, cov, max_active_risk, max_assets):
     """
     Optimizes a portfolio to target specific factor exposures.
