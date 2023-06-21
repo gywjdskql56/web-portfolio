@@ -103,13 +103,13 @@ const categories1 = [
     { name: "미래에셋 추천 포트폴리오(국내)"},
     { name: "미래에셋 추천 포트폴리오(해외)"},
     { name: "미래에셋 추천 포트폴리오(연금)"},
-    { name: "변동성 알고리즘"},
+];
+{/*    { name: "변동성 알고리즘"},
     { name: "멀티에셋 인컴"},
     { name: "테마로테이션"},
     { name: "초개인화로보"},
     { name: "멀티에셋 모멘텀(국내)"},
-    { name: "멀티에셋 모멘텀(해외)"},
-];
+    { name: "멀티에셋 모멘텀(해외)"},*/}
 
 const categories2 = [
     { name: "적극투자형"},
@@ -253,7 +253,7 @@ useEffect(() => {
         </Box>
       </Modal>
          {categories1.map((item, ind) =>
-          <Grid item lg={3} md={4} sm={4} xs={12} key={ind}>
+          <Grid item lg={4} md={4} sm={4} xs={12} key={ind}>
             <a>
             <StyledBazaarCard
                 onClick={() => handleClick1(item.name)}

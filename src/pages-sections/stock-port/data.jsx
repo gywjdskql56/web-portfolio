@@ -1,7 +1,8 @@
 // 카테고리 데이터
 export const categories1 = [
-{  name: "글로벌 주식" },
-{  name: "국내 주식(KOSPI+KOSDAQ)"}
+{  name: "글로벌 유니버스" },
+{  name: "중국 유니버스" },
+{  name: "국내 유니버스"}
 ];
 export const categories2 = [
 {  name: "테마"},

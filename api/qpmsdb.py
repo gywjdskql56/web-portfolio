@@ -23,6 +23,12 @@ def get_df_utf(sql):
     result = pd.read_sql(sql, con=conn)
     return result
 
+def get_df_cp949(sql):
+    conn = pymssql.connect(host='10.93.20.65', user='quant', password='mirae', database='MARKET',
+                           charset='CP949')  # 개발DB
+    result = pd.read_sql(sql, con=conn)
+    return result
+
 def get_all_ticker_pr(ticker_list, td, nm_df, is_ticker = True):
     df = nm_df
     if is_ticker:
@@ -74,6 +80,19 @@ def get_us_stock_pr_by_ticker(id_list, td):
     result.columns = list(map(lambda x: id2ticker[x] if x in id2ticker.keys() else x, result.columns))
     return result
 
+def get_kr_stock_pr_by_ticker(id_list, td):
+
+    # id_list_new = list(map(lambda x: x.replace("-KS",""), id_list))
+    sql = '''
+    select *
+    from MARKET..MB 
+    where CODE in ('{}')
+    and TD > '{}'
+    '''.format('\',\''.join(id_list), td)
+    result = get_df(sql)
+    result = result.pivot(index='TD', columns='CODE', values='OPEN_P').bfill().ffill()
+    return result
+
 def get_us_stock_pr(id_list, id2ticker, td):
     sql = '''
     select FSYM_ID, BASE_DT, P_PRICE
@@ -85,20 +104,25 @@ def get_us_stock_pr(id_list, id2ticker, td):
     result = result.pivot(index='BASE_DT', columns='FSYM_ID', values='P_PRICE').bfill().ffill()
     result.columns = list(map(lambda x: id2ticker[x], result.columns))
     return result
-
-
-# def get_all_stock_ticker():
-#     sql = '''
-#     select TICKER, FSYM_ID, ISIN, SEDOL, GICS_INDUSTRYGROUP, COUNTRY_NAME
-#     from EUMQNTDB..GQPM_MAST3
-#     '''
-#     # EUMQNTDB..WEB_GQPM_MAST
-#     result = get_df(sql)
-#     return result
+def get_all_theme_ch():
+    sql = '''
+    select *
+    from WEBQM..WEB_GQPM_MAST_CHN
+    '''
+    result = get_df(sql)
+    return result
 def get_all_stock_ticker():
     sql = '''
     select TICKER, FSYM_ID, ISIN, SEDOL, GICS_INDUSTRYGROUP, COUNTRY_NAME
     from WEBQM..WEB_GQPM_MAST
+    '''
+    # EUMQNTDB..WEB_GQPM_MAST
+    result = get_df(sql)
+    return result
+def get_all_stock_ticker_kr():
+    sql = '''
+    select *
+    from MARKET..CA
     '''
     # EUMQNTDB..WEB_GQPM_MAST
     result = get_df(sql)
@@ -120,6 +144,21 @@ def get_kr_stock_ticker():
     FROM MARKET..CA
     '''
     result = get_df(sql)
+    return result
+
+def get_global_theme(): #글로벌 테마
+    sql = '''SELECT * FROM WEBQM..THEME_MAST '''
+    result = get_df_cp949(sql)
+    return result
+
+def get_global_theme(): #국내 테마
+    sql = '''SELECT * FROM WEBQM..KR_THEME_MAST '''
+    result = get_df_cp949(sql)
+    return result
+
+def get_global_theme_univ():
+    sql = '''SELECT * FROM WEBQM..WEB_GQPM_MAST'''
+    result = get_df_cp949(sql)
     return result
 
 def get_gics():
@@ -150,8 +189,6 @@ def get_factor(factor, td):
      and td > '{}' """.format(factor, td)
     df = get_df(sql).dropna(subset=['VAL'])
     return df
-
-
 
 def get_capex_by_ticker(ticker):
     sql = """DECLARE @zedwqry VARCHAR(4000)
@@ -616,7 +653,7 @@ def get_perform_table():
     return result
 
 if __name__ == "__main__":
-    tickers = get_all_stock_ticker_new()
+    china = get_all_theme_ch()
     df = get_factor(factor='400130', td='20220101')
     df = get_dps()
     df = get_sh()

@@ -1,18 +1,11 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 from flask import Flask
 from flask_cors import CORS
 import warnings
-import pickle
-import random
-import pymssql
 from multifactor import *
 from qpmsdb import *
-# from redis_save import *
 from datetime import datetime
-# save_master()
 import random
-import requests
 import re
 
 warnings.filterwarnings("ignore")
@@ -81,17 +74,52 @@ def suggest_port(port, type):
             } ]
         print(1)
     else:
-        magi_port_pre = pd.read_excel('org-data/suggest/{}_22.xlsx'.format(port), sheet_name=type)
-        magi_port_pre['코드'] = magi_port_pre['코드'].apply(lambda x: '0' * (6 - len(str(x))) + str(x) if len(str(re.sub('[0-9]','',str(x))))==0 else str(x))
-        magi_port_pre['코드2'] = magi_port_pre['코드'].apply(lambda x: x + "-KS" if len(str(re.sub('[0-9]','',str(x))))==0 else x+'-US' )
-        pr_df_pre = get_us_stock_pr_by_ticker(magi_port_pre['코드2'].tolist(), td='20221231')
-        returns_pre = pr_df_pre.pct_change().fillna(0)
+        if port[-4:] == "(해외)":
+            magi_port_pre = pd.read_excel('org-data/suggest/{}_22.xlsx'.format(port), sheet_name=type)
+            magi_port_pre['코드'] = magi_port_pre['코드'].apply(lambda x: '0' * (6 - len(str(x))) + str(x) if len(str(re.sub('[0-9]','',str(x))))==0 else str(x))
+            magi_port_pre['코드2'] = magi_port_pre['코드'].apply(lambda x: x+"-KS" if len(str(re.sub('[0-9]','',str(x))))==0 else x+'-US' )
+            pr_df_pre = get_us_stock_pr_by_ticker(magi_port_pre['코드2'].tolist(), td='20221231')
+            returns_pre = pr_df_pre.pct_change().fillna(0)
+            magi_port = pd.read_excel('org-data/suggest/{}.xlsx'.format(port), sheet_name=type)
+            magi_port['코드'] = magi_port['코드'].apply(
+                lambda x: '0' * (6 - len(str(x))) + str(x) if len(str(re.sub('[0-9]', '', str(x)))) == 0 else str(x))
+            magi_port['코드2'] = magi_port['코드'].apply(
+                lambda x: x + "-KS" if len(str(re.sub('[0-9]', '', str(x)))) == 0 else x + '-US')
+            pr_df = get_us_stock_pr_by_ticker(magi_port['코드2'].tolist(), td='20221231')
+            returns = pr_df.pct_change().fillna(0)
+        elif port[-4:] == "(국내)":
+            magi_port_pre = pd.read_excel('org-data/suggest/{}_22.xlsx'.format(port), sheet_name=type)
+            magi_port_pre['코드'] = magi_port_pre['코드'].apply(lambda x: '0' * (6 - len(str(x))) + str(x) if len(str(re.sub('[0-9]','',str(x))))==0 else str(x))
+            magi_port_pre['코드2'] = magi_port_pre['코드'].apply(lambda x: x if len(str(re.sub('[0-9]','',str(x))))==0 else x+'-US' )
+            pr_df_pre = get_kr_stock_pr_by_ticker(magi_port_pre['코드2'].tolist(), td='20221231')
+            returns_pre = pr_df_pre.pct_change().fillna(0)
 
-        magi_port = pd.read_excel('org-data/suggest/{}.xlsx'.format(port), sheet_name=type)
-        magi_port['코드'] = magi_port['코드'].apply(lambda x: '0' * (6 - len(str(x))) + str(x) if len(str(re.sub('[0-9]','',str(x))))==0 else str(x))
-        magi_port['코드2'] = magi_port['코드'].apply(lambda x: x + "-KS" if len(str(re.sub('[0-9]','',str(x))))==0 else x+'-US' )
-        pr_df = get_us_stock_pr_by_ticker(magi_port['코드2'].tolist(), td='20221231')
-        returns = pr_df.pct_change().fillna(0)
+            magi_port = pd.read_excel('org-data/suggest/{}.xlsx'.format(port), sheet_name=type)
+            magi_port['코드'] = magi_port['코드'].apply(lambda x: '0' * (6 - len(str(x))) + str(x) if len(str(re.sub('[0-9]','',str(x))))==0 else str(x))
+            magi_port['코드2'] = magi_port['코드'].apply(lambda x: x if len(str(re.sub('[0-9]','',str(x))))==0 else x+'-US' )
+            pr_df = get_kr_stock_pr_by_ticker(magi_port['코드2'].tolist(), td='20221231')
+            returns = pr_df.pct_change().fillna(0)
+        else:
+            magi_port_pre = pd.read_excel('org-data/suggest/{}_22.xlsx'.format(port), sheet_name=type)
+            magi_port_pre['코드'] = magi_port_pre['코드'].apply(lambda x: '0' * (6 - len(str(x))) + str(x) if len(str(re.sub('[0-9]','',str(x))))==0 else str(x))
+            magi_port_pre['코드2'] = magi_port_pre['코드'].apply(lambda x: x+'-KS' if len(str(re.sub('[0-9]','',str(x))))==0 else x+'-US' )
+            pr_df_pre_us = get_us_stock_pr_by_ticker(magi_port_pre['코드2'].tolist(), td='20221231')
+            pr_df_pre_kr = get_kr_stock_pr_by_ticker(list(map(lambda x:x.replace("-KS",'') ,magi_port_pre['코드2'].tolist())), td='20221231')
+            pr_df_pre = pd.merge(pr_df_pre_kr, pr_df_pre_us,left_index=True,right_index=True)
+            returns_pre = pr_df_pre.pct_change().fillna(0)
+
+            magi_port = pd.read_excel('org-data/suggest/{}.xlsx'.format(port), sheet_name=type)
+            magi_port['코드'] = magi_port['코드'].apply(lambda x: '0' * (6 - len(str(x))) + str(x) if len(str(re.sub('[0-9]','',str(x))))==0 else str(x))
+            magi_port['코드2'] = magi_port['코드'].apply(lambda x: x if len(str(re.sub('[0-9]','',str(x))))==0 else x+'-US' )
+            pr_df_us = get_us_stock_pr_by_ticker(magi_port['코드2'].tolist(), td='20221231')
+            pr_df_kr = get_kr_stock_pr_by_ticker(list(map(lambda x:x.replace("-KS",'') ,magi_port_pre['코드2'].tolist())), td='20221231')
+            if len(pr_df_us) > 0 and len(pr_df_kr)>0:
+                pr_df = pd.merge(pr_df_us, pr_df_kr,left_index=True,right_index=True)
+            elif len(pr_df_us) > 0:
+                pr_df = pr_df_us
+            elif len(pr_df_kr) > 0:
+                pr_df = pr_df_kr
+            returns = pr_df.pct_change().fillna(0)
 
         # returns_pre = (returns_pre+1).cumprod()
         returns_pre['total'] = 0
@@ -380,92 +408,92 @@ def alloc_port_set_pre(portnm):
 
 @app.route('/alloc-port-set/<portnm>_<te>_<valuelist>', methods=['GET', 'POST'])
 def alloc_port_set(portnm, te, valuelist):
-    # props = load_data()
-    # save_pickle(props, 'props')
-    # valuelist = list(map(lambda x: float(x), valuelist.split('|')))
-    # props = read_pickle('props')
+    props = load_data()
+    save_pickle(props, 'props')
+    valuelist = list(map(lambda x: float(x), valuelist.split('|')))
+    props = read_pickle('props')
     # portfolio_weight, portfolio_risk = risk_analysis(props['regression_result'].exposures.drop('const', axis=1),
     #                                                  # factor exposure (n * f)
     #                                                  props['df_factor_summary']['Annualized Volatility'],
     #                                                  # factor volatility (f * 1)
     #                                                  props['opts'][portnm])
     print('risk_analysis 완료')
-    # result = run_optimization(prob=props['prob'], factor_return_regime=props['factor_return_regime'], regime_probability=props['regime_probability'],
-    #                  port_selection=portnm, returns=props['returns'], factors=props['factors'], max_active_risk=0.05,
-    #                  US_Equity=valuelist[0], EFA_Equity=valuelist[1],
-    #                  EM_Equity=valuelist[2], Interest_Rates=valuelist[3],
-    #                  Credit=valuelist[4], Commodity=valuelist[5],
-    #                  Inflation=valuelist[6], USD=valuelist[7],
-    #                  SMB=valuelist[8], HML=valuelist[9],
-    #                  RMW=valuelist[10], CMA=valuelist[11],
-    #                  Mom=valuelist[12], regression_result=props['regression_result'],
-    #                  etf_performance=props['etf_performance'], df_yahoo_index=props['df_yahoo_index'],
-    #                  df_factor_summary=props['df_factor_summary'],opts=props['opts'])
-    #
-    #
-    # returns = (result["backtest_returns"].dropna().sort_index().pct_change().fillna(0) + 1).cumprod()
-    # rows = dict()
-    # for col in ['After','Before']:
-    #     row_list = list()
-    #     count=0
-    #     for idx, val in zip(returns[col].index, returns[col].values):
-    #         if count%25==0:
-    #             idx = idx.strftime('%y/%m/%d')
-    #             row_list.append({"x": idx, "y": round(float(val),2)})
-    #         count += 1
-    #     rows[col] = row_list
-    #
-    # prices = [
-    #     {
-    #         "id": "After",
-    #         "color": "hsl(236, 70%, 50%)",
-    #         "data":rows["After"]
-    #     },
-    #     {
-    #         "id": "Before",
-    #         "color": "hsl(236, 70%, 50%)",
-    #         "data": rows["Before"]
-    #     }
-    # ]
-    # p_rows = dict()
-    # for col in ['상승국면','인플레이션 국면','하락국면','급락국면']:
-    #     row_list = list()
-    #     count=0
-    #     for idx, val in zip(props['prob'][col].index, props['prob'][col].values):
-    #         if count%25==0:
-    #             idx = idx.strftime('%y/%m/%d')
-    #             row_list.append({"x": idx, "y": round(float(val),2)})
-    #         count += 1
-    #     p_rows[col] = row_list
-    #
-    # probs = [
-    #     {
-    #         "id": "상승국면",
-    #         "color": "hsl(10, 70%, 50%)",
-    #         "data":p_rows["상승국면"]
-    #     },
-    #     {
-    #         "id": "인플레이션 국면",
-    #         "color": "hsl(60, 70%, 50%)",
-    #         "data": p_rows["인플레이션 국면"]
-    #     },
-    #     {
-    #         "id": "하락국면",
-    #         "color": "hsl(110, 70%, 50%)",
-    #         "data": p_rows["하락국면"]
-    #     },
-    #     {
-    #         "id": "급락국면",
-    #         "color": "hsl(160, 70%, 50%)",
-    #         "data": p_rows["급락국면"]
-    #     }
-    # ]
-    # num = portnm2num(portnm)
-    # props['regime_probability'] = props['regime_probability'].transpose().fillna(0)
-    # final = {'expected_return': df2list(result['expected_return']), "risk_return":df2list(result['risk_return']),
-    #         "exposure_comparison":df2list(result['exposure_comparison']), "risk_comparison":df2list(result['risk_comparison']),
-    #         "pie_data_bf":df2list_pie(result['before_weights']),"pie_data_af":df2list_pie(result['after_weights']),
-    #         "backtest_returns": prices, "portnum":num, "probs":probs, "regime_probs":df2list(props['regime_probability'])}
+    result = run_optimization(prob=props['prob'], factor_return_regime=props['factor_return_regime'], regime_probability=props['regime_probability'],
+                     port_selection=portnm, returns=props['returns'], factors=props['factors'], max_active_risk=0.05,
+                     US_Equity=valuelist[0], EFA_Equity=valuelist[1],
+                     EM_Equity=valuelist[2], Interest_Rates=valuelist[3],
+                     Credit=valuelist[4], Commodity=valuelist[5],
+                     Inflation=valuelist[6], USD=valuelist[7],
+                     SMB=valuelist[8], HML=valuelist[9],
+                     RMW=valuelist[10], CMA=valuelist[11],
+                     Mom=valuelist[12], regression_result=props['regression_result'],
+                     etf_performance=props['etf_performance'], df_yahoo_index=props['df_yahoo_index'],
+                     df_factor_summary=props['df_factor_summary'],opts=props['opts'])
+
+
+    returns = (result["backtest_returns"].dropna().sort_index().pct_change().fillna(0) + 1).cumprod()
+    rows = dict()
+    for col in ['After','Before']:
+        row_list = list()
+        count=0
+        for idx, val in zip(returns[col].index, returns[col].values):
+            if count%25==0:
+                idx = idx.strftime('%y/%m/%d')
+                row_list.append({"x": idx, "y": round(float(val),2)})
+            count += 1
+        rows[col] = row_list
+
+    prices = [
+        {
+            "id": "After",
+            "color": "hsl(236, 70%, 50%)",
+            "data":rows["After"]
+        },
+        {
+            "id": "Before",
+            "color": "hsl(236, 70%, 50%)",
+            "data": rows["Before"]
+        }
+    ]
+    p_rows = dict()
+    for col in ['상승국면','인플레이션 국면','하락국면','급락국면']:
+        row_list = list()
+        count=0
+        for idx, val in zip(props['prob'][col].index, props['prob'][col].values):
+            if count%25==0:
+                idx = idx.strftime('%y/%m/%d')
+                row_list.append({"x": idx, "y": round(float(val),2)})
+            count += 1
+        p_rows[col] = row_list
+
+    probs = [
+        {
+            "id": "상승국면",
+            "color": "hsl(10, 70%, 50%)",
+            "data":p_rows["상승국면"]
+        },
+        {
+            "id": "인플레이션 국면",
+            "color": "hsl(60, 70%, 50%)",
+            "data": p_rows["인플레이션 국면"]
+        },
+        {
+            "id": "하락국면",
+            "color": "hsl(110, 70%, 50%)",
+            "data": p_rows["하락국면"]
+        },
+        {
+            "id": "급락국면",
+            "color": "hsl(160, 70%, 50%)",
+            "data": p_rows["급락국면"]
+        }
+    ]
+    num = portnm2num(portnm)
+    props['regime_probability'] = props['regime_probability'].transpose().fillna(0)
+    final = {'expected_return': df2list(result['expected_return']), "risk_return":df2list(result['risk_return']),
+            "exposure_comparison":df2list(result['exposure_comparison']), "risk_comparison":df2list(result['risk_comparison']),
+            "pie_data_bf":df2list_pie(result['before_weights']),"pie_data_af":df2list_pie(result['after_weights']),
+            "backtest_returns": prices, "portnum":num, "probs":probs, "regime_probs":df2list(props['regime_probability'])}
     # save_pickle(final, 'final_{}'.format(portnm.replace(':','')))
     final = read_pickle('final_{}'.format(portnm.replace(':','')))
     return final

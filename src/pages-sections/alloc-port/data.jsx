@@ -9,7 +9,9 @@ export const categories1 = [
 ];
 export const categories2 = [
 {  name: "테마",},
-{  name: "전략",},];
+{  name: "섹터",},
+{  name: "전략",},
+];
 
 export const categories3 = {
  "테마": [{  name: "그린",},
