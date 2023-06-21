@@ -6,7 +6,7 @@ from multifactor import *
 from qpmsdb import *
 from datetime import datetime
 import random
-import rel
+import re
 
 warnings.filterwarnings("ignore")
 app = Flask(__name__)
