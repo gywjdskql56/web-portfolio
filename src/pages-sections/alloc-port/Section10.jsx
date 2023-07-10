@@ -26,6 +26,7 @@ import MuiInput from '@mui/material/Input';
 import Stack from '@mui/material/Stack';
 import dynamic from 'next/dynamic'
 import Button from '@mui/material/Button';
+import pie from "./pie";
 
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -90,6 +91,19 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+const categories_port = [
+    { name: "변동성 알고리즘"},
+    { name: "멀티에셋 인컴"},
+    { name: "테마로테이션"},
+    { name: "초개인화로보"},
+    { name: "멀티에셋 모멘텀(국내)"},
+    { name: "멀티에셋 모멘텀(해외)"},];
+
+const categories_port_type = [
+    { name: "적극투자형"},
+    { name: "위험중립형"},
+    { name: "안정추구형"},
+];
 
 const Section10 = ({
   categories
@@ -102,7 +116,7 @@ useEffect(() => {
 const [value, setValue] = React.useState(30);
 const [valuelist, setValueList] = React.useState([0,0,0,0,0,0,0,0,0,0,0,0,0]);
 const [active1, setActive1] = useState("자산배분포트폴리오 직접생성");
-const [active2, setActive2] = useState("60:40 포트폴리오");
+const [active2, setActive2] = useState("변동성 알고리즘");
 const [openpre, setOpenPre] = useState(false);
 const [open, setOpen] = useState(false);
 const [openF, setOpenF] = useState(false);
@@ -114,6 +128,28 @@ const [regime, setRegime] = useState(null);
 
 const handleOpenF = () => setOpenF(true);
 const handleCloseF = () => setOpenF(false);
+
+const [active3, setActive3] = useState("적극투자형");
+const [linedata, setLineData] = useState(null);
+const [tabledata, setTableData] = useState(null);
+const [tabledataP, setTableDataP] = useState(null);
+const [tabledataN, setTableDataN] = useState(null);
+const [tablepage, setTablePage] = useState(20);
+const [piedata, setPieData] = useState(pie);
+const [rtndata, setRtnData] = useState(null);
+const [openN, setOpenN] = React.useState(false);
+const [openport, setOpenPort] = React.useState(false);
+const [imageR, setImageR] = React.useState("1");
+
+function handleClick2(val) {
+    console.log(val);
+    setActive3(val);
+    console.log(url.concat(`/suggest_port/${active2}_${val}`));
+    fetch(url.concat(`/suggest_port/${active2}_${val}`), { method: 'GET' })
+    .then(data => data.json())
+    .then(json => {console.log(json.tableN); setLineData(json.line); setTableDataN(json.tableN); setTableData(json.table); setTableDataP(json.tableP); setPieData(json.pie); setTablePage(json.tablepage); sessionStorage.setItem("pages", json.tablepage); setImage(json.imagenum); setImageR(json.risknum);setOpenN(true);
+    if(active2!="미래에셋"){setOpenPort(true)}})
+}
 
 const factors = ['주식(미국)','주식(EFA)','주식(EM)','금리','크레딧','원자재','인플레이션','원달러','중소형','가치/성장','수익성','회계퀄리티','모멘텀']
 const factors_up = ['미국시장 상승수혜','선진시장 상승수혜','신흥시장 상승수혜','금리 하락수혜','크레딧 리스크 하락수혜','원자재 상승수혜','인플레이션 하락수혜','달러 상승수혜','중소형','가치','수익성 높음','퀄리티 높음','모멘텀 높음']
@@ -229,6 +265,8 @@ function valuetexts(value) {
 }
 
 
+
+
   return <Container sx={{
     mb: "100px"
   }}>
@@ -332,6 +370,23 @@ function valuetexts(value) {
               </a>
           </Grid>
           )}
+
+      <Container sx={{ mb: "20px" }} />
+      <HorizonLine text="투자자 성향 선택" />
+         {categories_port_type.map((item, ind) =>
+            <Grid item lg={4} md={4} sm={4} xs={4} key={ind}>
+                <a>
+                <StyledBazaarCard
+                    onClick={() => handleClick2(item.name)}
+                    style={{ backgroundColor: active3==item.name ? "#043B72" : "", color: active3==item.name ? "white" : "black"  }}
+                    elevation={1}>
+                  <Box fontWeight="600" ml={1.25} fontSize={20}>
+                    {item.name}
+                  </Box>
+                </StyledBazaarCard>
+              </a>
+            </Grid>
+            )}
       <Container sx={{ mb: "20px" }} />
       <HorizonLine text="맞춤형 포트폴리오 구성" />
       <Grid item lg={12} md={12} sm={12} xs={12}>

@@ -25,7 +25,7 @@ import plotly.graph_objs as go
 import seaborn as sns
 import plotly.graph_objects as go
 import ipywidgets as widgets
-import pickle5 as pickle
+import pickle
 # notebook formatting
 from IPython.display import clear_output
 from IPython.core.display import HTML, display

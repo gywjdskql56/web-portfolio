@@ -1,4 +1,4 @@
-import pickle5 as pickle
+import pickle
 import pandas as pd
 import pymssql
 
@@ -10,6 +10,9 @@ def read_pickle(file_nm):
     with open('pkl/{}.pickle'.format((file_nm)), 'rb') as file:
         df = pickle.load(file)
     return df
+
+
+
 
 def get_df(sql):
     conn = pymssql.connect(host='10.93.20.65', user='quant', password='mirae', database='MARKET',
@@ -62,7 +65,7 @@ def get_all_ticker_pr(ticker_list, td, nm_df, is_ticker = True):
     return pr_df
 
 def get_us_stock_pr_by_ticker(id_list, td):
-    id_ticker = get_all_stock_ticker()
+    id_ticker = get_global_sector_master()
     id_ticker = id_ticker[['TICKER', 'FSYM_ID']].dropna()
     id_ticker['TICKER'] = id_ticker['TICKER'].apply(lambda x: x.split(' ')[0] + '-' + x.split(' ')[1] if len(x.split(' '))>2 else x  )
     ticker2id = id_ticker.set_index('TICKER')['FSYM_ID'].to_dict()
@@ -93,7 +96,7 @@ def get_kr_stock_pr_by_ticker(id_list, td):
     result = result.pivot(index='TD', columns='CODE', values='OPEN_P').bfill().ffill()
     return result
 
-def get_us_stock_pr(id_list, id2ticker, td):
+def get_us_stock_pr(id_list, td):
     sql = '''
     select FSYM_ID, BASE_DT, P_PRICE
     from EUMQNTDB..FP_PRICE_ADJ 
@@ -102,31 +105,34 @@ def get_us_stock_pr(id_list, id2ticker, td):
     '''.format('\',\''.join(id_list), td)
     result = get_df(sql)
     result = result.pivot(index='BASE_DT', columns='FSYM_ID', values='P_PRICE').bfill().ffill()
-    result.columns = list(map(lambda x: id2ticker[x], result.columns))
+    # result.columns = list(map(lambda x: id2ticker[x], result.columns))
     return result
-def get_all_theme_ch():
+
+def get_gics_master():
     sql = '''
-    select *
-    from WEBQM..WEB_GQPM_MAST_CHN
+    SELECT *
+    FROM AGGR..MSCI_GICS_CODE
     '''
     result = get_df(sql)
     return result
-def get_all_stock_ticker():
+
+def get_global_sector_master():
     sql = '''
-    select TICKER, FSYM_ID, ISIN, SEDOL, GICS_INDUSTRYGROUP, COUNTRY_NAME
+    select *
     from WEBQM..WEB_GQPM_MAST
     '''
     # EUMQNTDB..WEB_GQPM_MAST
     result = get_df(sql)
     return result
-def get_all_stock_ticker_kr():
+
+def get_global_factor_master():
     sql = '''
-    select *
-    from MARKET..CA
+    select * from WEBQM..WEB_GQPM_ACCT
     '''
     # EUMQNTDB..WEB_GQPM_MAST
     result = get_df(sql)
     return result
+
 
 def get_all_theme_ticker():
     sql = '''
@@ -137,29 +143,79 @@ def get_all_theme_ticker():
     result = get_df(sql)
     result.columns = list(map(lambda x : x.upper(), result.columns))
     return result
-
-def get_kr_stock_ticker():
+def get_kr_sector_master():
     sql = '''
-    SELECT *
-    FROM MARKET..CA
+    select *
+    from WEBQM..WEB_KR_MAST_SUB 
+    '''
+    result = get_df(sql)
+    return result
+def get_ch_sector_master():
+    sql = '''
+    select *
+    from WEBQM..WEB_GQPM_MAST_CHN
     '''
     result = get_df(sql)
     return result
 
-def get_global_theme(): #글로벌 테마
+def get_ch_theme_master():
+    sql = '''
+    select *
+    from WEBQM..THEME_MAST_CHN
+    '''
+    result = get_df(sql)
+    return result
+
+# todo :
+def get_global_theme_master(): #글로벌 테마
     sql = '''SELECT * FROM WEBQM..THEME_MAST '''
     result = get_df_cp949(sql)
     return result
 
-def get_global_theme(): #국내 테마
-    sql = '''SELECT * FROM WEBQM..KR_THEME_MAST '''
+def get_global_theme_ticker():
+    sql = '''SELECT * FROM WEBQM..STOCK_THEME_MAPPING'''
     result = get_df_cp949(sql)
     return result
 
-def get_global_theme_univ():
-    sql = '''SELECT * FROM WEBQM..WEB_GQPM_MAST'''
-    result = get_df_cp949(sql)
+def get_global_theme_mapping():
+    sql = '''
+    select top 100 *
+    FROM WEBQM..DI_UNIV
+    '''
+    # EUMQNTDB..WEB_GQPM_MAST
+    result = get_df(sql)
     return result
+
+def get_kr_theme_univ():
+    sql = '''
+    select *
+    from WEBQM..KR_THEME_MAST
+    '''
+    # EUMQNTDB..WEB_GQPM_MAST
+    result = get_df(sql)
+    return result
+
+def get_kr_theme_ticker():
+    sql = '''
+    select *
+    from WEBQM..KR_STOCK_THEME_MAPPING
+    '''
+    # EUMQNTDB..WEB_GQPM_MAST
+    result = get_df(sql)
+    return result
+
+def get_kr_theme_mapping():
+    sql = '''
+    select top 100 *
+    FROM WEBQM..DI_UNIV
+    where 1=1
+    and ticker like '%-KR'
+    '''
+    # EUMQNTDB..WEB_GQPM_MAST
+    result = get_df(sql)
+    return result
+
+
 
 def get_gics():
     sql = '''
@@ -178,7 +234,7 @@ def get_kr_stock_pr(id_list, td):
     '''.format(td, '\',\''.join(id_list))
     result = get_df(sql)
     result = result.rename(columns={"CODE":"FSYM_ID", "TD":"BASE_DT", "CLOSE_AP":"P_PRICE"})
-    result["FSYM_ID"] = result["FSYM_ID"].apply(lambda x: x+'-KS')
+    # result["FSYM_ID"] = result["FSYM_ID"].apply(lambda x: x+'-KS')
     result = result.pivot(index='BASE_DT', columns='FSYM_ID', values='P_PRICE').bfill().ffill()
     return result
 
@@ -187,6 +243,26 @@ def get_factor(factor, td):
     from WEBQM..WEB_GQPM_DATA
      where ac_code = '{}'
      and td > '{}' """.format(factor, td)
+    df = get_df(sql).dropna(subset=['VAL'])
+    return df
+
+def get_global_factor_data(code_list):
+    sql = """ select * 
+    from WEBQM..WEB_GQPM_DATA
+    where TD = (select max(TD)
+    from WEBQM..WEB_GQPM_DATA)
+    and AC_CODE in ('{}')
+ """.format('\',\''.join(code_list))
+    df = get_df(sql).dropna(subset=['VAL'])
+    return df
+
+def get_kr_factor_data(code_list):
+    sql = """ select * 
+    from WEBQM..WEB_KR_QPM_DATA
+    where TD = (select max(TD)
+    from WEBQM..WEB_KR_QPM_DATA)
+    and AC_CODE in ('{}')
+ """.format('\',\''.join(code_list))
     df = get_df(sql).dropna(subset=['VAL'])
     return df
 
@@ -653,7 +729,10 @@ def get_perform_table():
     return result
 
 if __name__ == "__main__":
-    china = get_all_theme_ch()
+    # china = get_all_theme_ch()
+    kr_ticker = get_kr_theme_ticker()
+    kr = get_kr_theme_univ()
+    kr_univ = pd.merge(kr, kr_ticker, left_on='LV3', right_on='THEME_CODE', how='right')
     df = get_factor(factor='400130', td='20220101')
     df = get_dps()
     df = get_sh()

@@ -1,70 +1,99 @@
 // 카테고리 데이터
-export const categories1 = [
-{  name: "글로벌 유니버스" },
-{  name: "중국 유니버스" },
-{  name: "국내 유니버스"}
-];
-export const categories2 = [
-{  name: "테마"},
-{  name: "전략"}];
+export const categories1 = [ "글로벌 유니버스", "중국 유니버스" , "국내 유니버스" ];
+export const categories2 = [ "테마", "전략","섹터" ];
 
 export const categories3 = {
- "테마": [{  name: "그린"},
-    {  name: "디지털"},
-    {  name: "바이오"},
-    {  name: "인플레이션"},
-    {  name: "기타"}],
-"전략": [{  name: "펀더멘탈"},
-    {  name: "기업현금흐름"},
-    {  name: "매출 및 배당성장"},
-    {  name: "인플레이션 수혜/피해"}]
+ "테마": [ "그린", "디지털", "바이오", "인플레이션", "기타" ],
+"전략": [ "펀더멘탈","기업현금흐름","매출 및 배당성장", "인플레이션 수혜/피해"],
+"섹터": ["MATERIALS","COMMUNICATION SERVICES","HEALTH CARE","REAL ESTATE","INFORMATION TECHNOLOGY","CONSUMER STAPLES","CONSUMER DISCRETIONARY","ENERGY","FINANCIALS","INDUSTRIALS","UTILITIES"],
 };
 
 export const categories4 = {
- "그린": [{  name: "배터리"},
-    {  name: "수소"},
-    {  name: "수자원"},
-    {  name: "스마트그리드"},
-    {  name: "전기차"},
-    {  name: "중국친환경"},
-    {  name: "친환경금속"},
-    {  name: "친환경종합"},
-    {  name: "태양광"},
-    {  name: "폐기물"},
-    {  name: "풍력"},
-    {  name: "원자력"}],
-"디지털": [{  name: "5g"},
-    {  name: "AI,로보"},
-    {  name: "Agr Tech"},
-    {  name: "게임"},
-    {  name: "반도체"},
-    {  name: "블록체인.NFT"},
-    {  name: "사이버보안"},
-    {  name: "원격의료"},
-    {  name: "인터넷"},
-    {  name: "클라우드"},
-    {  name: "플랫폼"},
-    {  name: "핀테크"},
-    {  name: "IOT"}],
-"바이오": [{  name: "고령화"},
-    {  name: "바이오텍"},
-    {  name: "의료기기"},],
-"인플레이션": [{  name: "금리인상"},
-    {  name: "달러강세"},
-    {  name: "원자재"},
-    {  name: "인프라"},
-    {  name: "퀄리티고배당"},
-    {  name: "농업"}],
-"기타": [{  name: "대마초"},
-    {  name: "반려동물"},
-    {  name: "우주"},
-    {  name: "자원"},
-    {  name: "수목"}],
-"펀더멘탈": [{  name: "건전한 재무재표 전략지수"}],
-"기업현금흐름": [{  name: "주주환원지수"},
-    {  name: "Capex와 R&D 지수"}],
-"인플레이션 수혜/피해": [{  name: "인플레이션 수혜기업"},
-    {  name: "인플레이션 피해기업"}],
-"매출 및 배당성장": [{  name: "배당성장주"}]
+ "그린": ["배터리","수소","수자원","스마트그리드","전기차","중국친환경","친환경금속","친환경종합","태양광","폐기물","풍력","원자력"],
+"디지털": ["5g","AI,로보","Agr Tech","게임","반도체","블록체인.NFT","사이버보안","원격의료","인터넷","클라우드","플랫폼","핀테크","IOT"],
+"바이오": [ "고령화","바이오텍","의료기기",],
+"인플레이션": ["금리인상","달러강세","원자재","인프라","퀄리티고배당","농업"],
+"기타": ["대마초","반려동물","우주","자원","수목"],
+"펀더멘탈": ["건전한 재무재표 전략지수"],
+"기업현금흐름": [ "주주환원지수","Capex와 R&D 지수"],
+"인플레이션 수혜/피해": ["인플레이션 수혜기업","인플레이션 피해기업"],
+"매출 및 배당성장": ["배당성장주"],
+      "테크": [
+        "반도체",
+        "IT부품",
+        "기타"
+      ],
+      "그린": [
+        "배터리",
+        "재생에너지",
+        "전기차"
+      ],
+      "디지털": [
+        "게임",
+        "반도체",
+        "사이버보안",
+        "핀테크",
+        "AI,로보"
+      ],
+      "라이프스타일": [
+        "내수소비"
+      ],
+      "헬스케어": [
+        "헬스케어"
+      ],
+      "헬스케어": [
+        "제약/바이오",
+        "의료기기"
+      ],
+      "컨텐츠": [
+        "컨텐츠"
+      ],
+    "COMMUNICATION SERVICES": [
+      "MEDIA & ENTERTAINMENT",
+      "TELECOMMUNICATION SERVICES"
+    ],
+    "CONSUMER DISCRETIONARY": [
+      "RETAILING",
+      "CONSUMER SERVICES",
+      "CONSUMER DURABLES & APPAREL",
+      "AUTOMOBILES & COMPONENTS"
+    ],
+    "CONSUMER STAPLES": [
+      "FOOD BEVERAGE & TOBACCO",
+      "FOOD & STAPLES RETAILING",
+      "HOUSEHOLD & PERSONAL PRODUCTS"
+    ],
+    "ENERGY": [
+      "ENERGY"
+    ],
+    "FINANCIALS": [
+      "DIVERSIFIED FINANCIALS",
+      "BANKS",
+      "INSURANCE"
+    ],
+    "HEALTH CARE": [
+      "HEALTH CARE EQUIPMENT & SERVICES",
+      "PHARMACEUTICALS BIOTECHNOLOGY & LIFE SCIENCES"
+    ],
+    "INDUSTRIALS": [
+      "CAPITAL GOODS",
+      "COMMERCIAL & PROFESSIONAL SERVICES",
+      "TRANSPORTATION"
+    ],
+    "INFORMATION TECHNOLOGY": [
+      "SOFTWARE & SERVICES",
+      "TECHNOLOGY HARDWARE & EQUIPMENT",
+      "SEMICONDUCTORS & SEMICONDUCTOR EQUIPMENT"
+    ],
+    "MATERIALS": [
+      "MATERIALS"
+    ],
+    "REAL ESTATE": [
+      "REAL ESTATE",
+      "REAL ESTATE MANAGEMENT & DEVELOPMENT"
+    ],
+    "UTILITIES": [
+      "UTILITIES"
+    ]
 };
 

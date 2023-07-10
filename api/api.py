@@ -4,10 +4,11 @@ from flask_cors import CORS
 import warnings
 from multifactor import *
 from qpmsdb import *
+from get_data import *
 from datetime import datetime
 import random
 import re
-import pickle5 as pickle
+import pickle
 warnings.filterwarnings("ignore")
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -172,42 +173,71 @@ def suggest_port(port, type):
 
 
 
-@app.route('/di_univ/<strategy>_<sector>_<theme>_<rmticker>_<num>_<factor>', methods=['GET', 'POST'])
-def DI_theme_port(strategy, sector , theme, rmticker, num, factor):
+@app.route('/di_univ/<country>_<strategy>_<sector>_<theme>_<rmticker>_<num>_<factor>', methods=['GET', 'POST'])
+def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
     rmticker = list(map(lambda x: x.split(' (')[0], rmticker.split('|')))
     print(rmticker)
-    factor = factor.split('|')
+    factor = factor.split('|')[:6]
 
 
     nm_df = get_all_theme_ticker().dropna()
     nm_df['TICKER_rf'] = nm_df['TICKER'].apply(lambda x: x.replace(' EQUITY', '').replace(' ', '-'))
     bm = ''
-    if strategy=="테마":
+    if strategy=="테마" or strategy=='섹터':
         # df = read_pickle('테마DI스코어')
-        df = read_pickle('model_score_add2')
-        df = df[df['theme']==theme]
+        # df_bf = read_pickle('model_score_add2')
+        if strategy=="테마":
+            df_master = get_global_theme_master()
+            df_ticker = get_global_theme_ticker()
+            df = pd.merge(df_ticker, df_master, left_on=['INDUSTRY', 'SECTOR', 'THEME'],
+                          right_on=['INDUSTRY', 'SECTOR', 'THEME'], how='left')
+            df = df[df['THEME_NM']==theme]
+        elif strategy == "섹터":
+            df = get_sector_univ(country)
+            df = df[df['GICS_LV2_NAME'] == theme]
+            df = df.rename(columns={'GICS_LV1':'SECTOR','GICS_LV2':'THEME', 'GICS_LV3':'INDUSTRY','GICS_LV1_NAME':'SECTOR_NM','GICS_LV2_NAME':'THEME_NM', 'GICS_LV3_NAME':'INDUSTRY_NM'})
 
-        df['TF'] = df.apply(lambda row: row.loc['industry'] not in rmticker and row.loc['ticker'] not in rmticker,axis=1)
+        df['TF'] = df.apply(lambda row: row.loc['INDUSTRY_NM'] not in rmticker and row.loc['TICKER'] not in rmticker,axis=1)
         df = df[df['TF']==True]
-        df = df.dropna(subset=['ticker'])
+        df = df.dropna(subset=['TICKER'])
+        factor_formula = get_factor_formula()
+        factor_formula = factor_formula[['factor', 'descriptor']].groupby(by=['factor']).agg(
+            lambda x: '||'.join(x)).reset_index()
+        factor_formula['descriptor'] = factor_formula['descriptor'].apply(lambda x: x.split('||'))
+        factor_formula = factor_formula[factor_formula['factor'] != 'liquidity']
+        factor_formula = factor_formula[factor_formula['factor'] != 'volatility']
+
+        factor_master = get_global_factor_master()
+        factor_master['AC_NM'] = factor_master['AC_NM'].apply(lambda x: x.replace(",", ""))
+
+        factor_master_dict = factor_master[['AC_CODE', 'AC_NM']].set_index('AC_NM').to_dict()['AC_CODE']
+        factor_formula['descriptor'] = factor_formula['descriptor'].apply(
+            lambda x: [factor_master_dict[xx] for xx in x])
+        factor_formula_dict = factor_formula.set_index('factor').to_dict()['descriptor']
+
+        factor_data = get_factor_data(country, factor_formula, factor_formula_dict)
+
+        df = pd.merge(df, factor_data, left_on='FSYM_ID', right_on='FSYM_ID', how='left')
         nm_df['COUNTRY_NAME'] = nm_df['TICKER_rf'].apply(lambda x: x.split('-')[1])
         nm_dict = nm_df[['COUNTRY_NAME','TICKER_rf']].set_index('TICKER_rf')['COUNTRY_NAME'].to_dict()
         name_dict = nm_df[['NAME','TICKER_rf']].set_index('TICKER_rf')['NAME'].to_dict()
-        df['country'] = df['ticker'].apply(lambda x: nm_dict[x] if x in nm_dict.keys() else 'etc')
-        for idx, fac in enumerate(factor):
-            df['mcap'] += df[df.columns[idx+7]]*float(fac)*0.01
-        df = df.sort_values(by='mcap',ascending=False).iloc[:min(int(num),len(df))]
-        total_sum = float(df['mcap'].sum())
-        df['wgt'] = df['mcap'].apply(lambda x : float(x)/total_sum*100)
+        df['country'] = df['TICKER'].apply(lambda x: nm_dict[x] if x in nm_dict.keys() else 'etc')
+        for val, fac in zip(factor, factor_formula_dict.keys()):
+            df['size'] += df[fac].fillna(0)*float(val)*0.01
+        df = df.sort_values(by='size',ascending=False).iloc[:min(int(num),len(df))]
+        total_sum = float(df['size'].sum())
+        df['wgt'] = df['size'].apply(lambda x : float(x)/total_sum*100)
         sec_explain_2 = read_pickle('sec_explain_2')
         if theme in sec_explain_2.keys():
             explain = read_pickle('sec_explain_2')[theme]
         else:
             explain = ""
-        df['FSYM_ID'] = df['ticker']
+        df['FSYM_ID'] = df['TICKER']
         df['name'] = df['FSYM_ID'].apply(lambda x: name_dict[x] if x in name_dict.keys() else x)
         if theme in read_pickle('테마BM').keys():
             bm = read_pickle('테마BM')[theme]
+
+
     else:
         if theme=="건전한 재무재표 전략지수":
             factor = '400130' # WEBQM..WEB_GQPM_ACCT
@@ -230,38 +260,42 @@ def DI_theme_port(strategy, sector , theme, rmticker, num, factor):
         df['industry'] = df['GICS_INDUSTRYGROUP']
         gics = get_gics()
         gics_dict = gics.set_index('INDUSTRY_GROUP')['INDUSTRY_GROUP_NAME'].to_dict()
-        df['industry'] = df['industry'].apply(lambda x: gics_dict[x] if x in gics_dict.keys() else '기타')
-        df['TF'] = df.apply(lambda row: row.loc['industry'] not in rmticker and row.loc['TICKER'] not in rmticker,
+        df['INDUSTRY_NM'] = df['industry'].apply(lambda x: gics_dict[x] if x in gics_dict.keys() else '기타')
+        df['TF'] = df.apply(lambda row: row.loc['INDUSTRY_NM'] not in rmticker and row.loc['TICKER'] not in rmticker,
                             axis=1)
         df = df[df['TF'] == True]
 
         total_sum = df['WGT'].sum()
         df['wgt'] = df['WGT'].apply(lambda x : x/total_sum*100)
         df['country'] = df['COUNTRY_NAME']
-        df = df.rename(columns={'NAME':'name', 'TICKER':"ticker"})
+        df = df.rename(columns={'NAME':'name'})
         explain = ""
 
     table_list = list()
     for idx, row in df.iterrows():
         part_dict = {
-            'state': row.loc['industry'],
-            'lastName': row.loc['ticker'],
+            'state': row.loc['INDUSTRY_NM'],
+            'lastName': row.loc['TICKER'],
             'lastName2': row.loc['name'],
             'Name': round(row.loc['wgt'],2),
         }
         table_list.append(part_dict)
     area_data = list()
-    for sec in list(set(df['industry'])):
+    for sec in list(set(df['INDUSTRY_NM'])):
         area_data_ch = list()
-        sub_df = df[df['industry']==sec].fillna(0)
-        for t, w, n in zip(sub_df['ticker'], sub_df['wgt'], sub_df['name']):
+        sub_df = df[df['INDUSTRY_NM']==sec].fillna(0)
+        for t, w, n in zip(sub_df['TICKER'], sub_df['wgt'], sub_df['name']):
             child_ch = {"name": str(t)+" ({})".format(str(n)), "color": "hsl({}, 70%, 50%)".format(str(random.randint(5, 200))),"loc": round(w,2)}
             area_data_ch.append(child_ch)
         child = {"name": sec,'id':sec, "color": "hsl({}, 70%, 50%)".format(random.randint(200, 350)), "children": area_data_ch}
         area_data.append(child)
     print({"area" : {"name": "포트폴리오", "color": "hsl(336, 70%, 50%)", "children": area_data}})
 
-    price = get_us_stock_pr_by_ticker(df['ticker'].dropna().tolist()+[bm], td='20220101')
+    if country=='국내 유니버스':
+        price = get_kr_stock_pr(df['TICKER'].dropna().tolist() + [bm], td='20220101')
+    else:
+        price = get_us_stock_pr(df['TICKER'].dropna().tolist()+[bm], td='20220101') #get_us_stock_pr_by_ticker(df['TICKER'].dropna().tolist()+[bm], td='20220101')
+    # kr_price = get_kr_stock_pr(df['TICKER'].dropna().tolist()+[bm], td='20220101')
     if price is not None:
         rtn = price.pct_change().fillna(0)
         total_rtn = None
@@ -269,7 +303,7 @@ def DI_theme_port(strategy, sector , theme, rmticker, num, factor):
         total_wgt = 0
         no_db = list()
         in_db = list()
-        for ticker, wgt in zip(df['ticker'].tolist(), df['wgt'].tolist()):
+        for ticker, wgt in zip(df['TICKER'].tolist(), df['wgt'].tolist()):
             if ticker in rtn.columns:
                 total_wgt += wgt*0.01
                 if idx==0:
@@ -330,7 +364,7 @@ def DI_theme_port(strategy, sector , theme, rmticker, num, factor):
                                round((rtn_val_list[-22 * 2 + 15] / rtn_val_list[-2] - 1) * 100, 2)) + "%"}]
 
         pie = list()
-        pie_data = df.groupby('industry')['wgt'].sum().to_dict()
+        pie_data = df.groupby('TICKER')['wgt'].sum().to_dict()
         for key in pie_data.keys():
             pie.append({
                 "id": key,
@@ -611,9 +645,30 @@ def company_perform(company_nm):
     total_list_op = df2list_line(perform_df_op)
     total_list_ni = df2list_line(perform_df_ni)
 
-
     return { "line_close":total_list_close, "line_sale": total_list_sale,"line_op": total_list_op,"line_ni": total_list_ni }
 
+@app.route('/DI_univ_by_country/<univ_country>_<univ_type>', methods=['GET', 'POST'])
+def DI_univ_by_country(univ_country,univ_type):
+    # if univ_type == "테마":
+    glob = get_theme_univ(univ_country)
+    lv1_theme = list(set(glob['SECTOR_NM'].tolist()))
+    lv_df = glob[['SECTOR_NM', 'THEME_NM']].drop_duplicates()
+    lv_df = lv_df.groupby(by=['SECTOR_NM']).agg(lambda x: '||'.join(x)).reset_index()
+    lv_df['THEME_NM'] = lv_df['THEME_NM'].apply(lambda x: x.split('||'))
+    lv2_theme = lv_df.set_index('SECTOR_NM').to_dict()['THEME_NM']
+    # return {"LV1": {"테마": lv1}, "LV2": lv2}
+    # elif univ_type == "섹터":
+    glob = get_sector_univ(univ_country)
+    lv1_sector = list(set(glob['GICS_LV1_NAME'].tolist()))
+    lv_df = glob[['GICS_LV1_NAME', 'GICS_LV2_NAME']].drop_duplicates()
+    lv_df = lv_df.groupby(by=['GICS_LV1_NAME']).agg(lambda x: '||'.join(x)).reset_index()
+    lv_df['GICS_LV2_NAME'] = lv_df['GICS_LV2_NAME'].apply(lambda x: x.split('||'))
+    lv2_sector = lv_df.set_index('GICS_LV1_NAME').to_dict()['GICS_LV2_NAME']
+    #     return {"LV1":{"섹터": lv1}, "LV2":lv2}
+    # else:
+    #     return {"LV1":{ "전략":[ "펀더멘탈","기업현금흐름","매출 및 배당성장","인플레이션 수혜/피해"]}, "LV2":[]}
+    return {"LV1": {"테마": lv1_theme, "전략": ["펀더멘탈", "기업현금흐름", "매출 및 배당성장", "인플레이션 수혜/피해"], "섹터": lv1_sector},
+            "LV2": {"테마": lv2_theme, "전략":[], "섹터": lv2_sector}}
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=5000)
