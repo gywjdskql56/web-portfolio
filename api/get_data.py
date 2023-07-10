@@ -11,7 +11,7 @@ def read_pickle(file_nm):
         df = pickle.load(file)
     return df
 def get_factor_formula():
-    factor_map = pd.read_excel('/org-data/DI_theme/factor_map.xlsx')
+    factor_map = pd.read_excel('../api/org-data/DI_theme/factor_map.xlsx')
     return factor_map
 
 def get_theme_univ(univ_country):
