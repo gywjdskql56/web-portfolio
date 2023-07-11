@@ -186,6 +186,7 @@ useEffect(() => {
     console.log(rmticker)
     setActive4(categories3[active2][active3][0]);
     setActive5(cate4[active2][active3][active4][0]);
+    getAreaData()
 }, [active2]);
 
 useEffect(() => {
@@ -193,6 +194,7 @@ useEffect(() => {
     console.log(categories3)
     setActive4(categories3[active2][active3][0]);
     setActive5(categories4[active2][active3][active4][0]);
+    getAreaData()
     {/*fetch(url.concat(`/DI_univ_by_country/${active2}_${active3}`), { method: 'GET' })
     .then(data => data.json())
     .then(json => {setCate3(json["LV1"][cate3]); console.log(json);  console.log(json["LV1"][active3][0]);  setActive4(json["LV1"][active3][0])}) // setActive4(json["LV2"][json["LV1"][active3][0]][0])
@@ -218,6 +220,7 @@ useEffect(() => {
     }
     console.log(active5)
     setLoad(true)
+    getAreaData()
 
 }, [active4]);
 
