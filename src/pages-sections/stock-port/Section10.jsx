@@ -125,9 +125,10 @@ console.log("cate3:",categories3)
 console.log("active3:",active3)
 console.log("cate3[active3]:",categories3[active2][active3])
 console.log("cate4:",cate4)
-console.log("cate4:",cate4[active2])
-console.log("cate4:",cate4[active2][active3])
-console.log("cate4:",cate4[active2][active3][active4])
+console.log("cate4:",categories4[active2])
+console.log("cate4:",categories4[active2][active3])
+console.log("cate4:",categories4[active2][active3][active4])
+console.log("cate4:",categories4[active2][active3][active4][0])
 console.log("active2:",active2)
 console.log("active3:",active3)
 console.log("active4:",active4)
@@ -190,11 +191,12 @@ useEffect(() => {
 useEffect(() => {
     console.log(active3)
     console.log(categories3)
-    console.log(categories3[active2][active3][0])
-    setActive4(categories3[active2][active3][0])
-    fetch(url.concat(`/DI_univ_by_country/${active2}_${active3}`), { method: 'GET' })
+    setActive4(categories3[active2][active3][0]);
+    setActive5(categories4[active2][active3][active4][0]);
+    {/*fetch(url.concat(`/DI_univ_by_country/${active2}_${active3}`), { method: 'GET' })
     .then(data => data.json())
     .then(json => {setCate3(json["LV1"][cate3]); console.log(json);  console.log(json["LV1"][active3][0]);  setActive4(json["LV1"][active3][0])}) // setActive4(json["LV2"][json["LV1"][active3][0]][0])
+*/}
 }, [active3]);
 
 useEffect(() => {
@@ -370,7 +372,10 @@ const state = {
         <Grid item lg={4} md={6} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
-                    onClick={() => { console.log(item);setActive3(item); setActive4(categories3[active2][item][0]); setActive5(categories4[active2][item][active4][0]); }}
+                    onClick={() => { console.log(item);
+                    setActive3(item);
+                    setActive4(categories3[active2][item][0]);
+                    setActive5(categories4[active2][active3][active4][0]); }}
                     style={{ backgroundColor: active3==item ? "#043B72" : "", color: active3==item ? "white" : "black"  }}
                 elevation={1}>
                   <Box fontWeight="600" ml={1.25} fontSize={20}>

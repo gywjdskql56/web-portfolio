@@ -267,7 +267,7 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
         df['TF'] = df.apply(lambda row: row.loc['INDUSTRY_NM'] not in rmticker and row.loc['TICKER'] not in rmticker,
                             axis=1)
         df = df[df['TF'] == True]
-        df = df.iloc[:min(len(df.index), num)]
+        df = df.iloc[:min(len(df.index), int(num))]
 
         total_sum = df['WGT'].fillna(0).sum()
         df['wgt'] = df['WGT'].apply(lambda x : x/total_sum*100)
