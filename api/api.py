@@ -225,8 +225,11 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
         for val, fac in zip(factor, factor_formula_dict.keys()):
             df['size'] += df[fac].fillna(0)*float(val)*0.01
         df = df.sort_values(by='size',ascending=False)
+        df['size'] += 0.02
+        df = df.iloc[:min(len(df.index), int(num))]
         total_sum = float(df['size'].sum())
         df['wgt'] = df['size'].apply(lambda x : float(x)/total_sum*100)
+        df['wgt'] = df['wgt'].fillna(0)
         sec_explain_2 = read_pickle('sec_explain_2')
         if theme in sec_explain_2.keys():
             explain = read_pickle('sec_explain_2')[theme]
@@ -264,12 +267,14 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
         df['TF'] = df.apply(lambda row: row.loc['INDUSTRY_NM'] not in rmticker and row.loc['TICKER'] not in rmticker,
                             axis=1)
         df = df[df['TF'] == True]
+        df = df.iloc[:min(len(df.index), num)]
 
-        total_sum = df['WGT'].sum()
+        total_sum = df['WGT'].fillna(0).sum()
         df['wgt'] = df['WGT'].apply(lambda x : x/total_sum*100)
         df['country'] = df['COUNTRY_NAME']
         df = df.rename(columns={'NAME':'name'}).fillna(0)
         explain = ""
+
 
     table_list = list()
     for idx, row in df.iterrows():
