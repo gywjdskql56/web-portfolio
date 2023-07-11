@@ -17,13 +17,30 @@ def get_factor_formula():
 
 def get_theme_univ(univ_country):
     if univ_country == "국내 유니버스":
-        glob = get_kr_theme_univ().rename(columns={'LV1_NM':'SECTOR_NM', 'LV2_NM':'THEME_NM'})
+        glob = get_kr_theme_univ().rename(columns={'LV1':'SECTOR','LV1_NM':'SECTOR_NM', 'LV2':'THEME', 'LV2_NM':'THEME_NM', 'LV3':'INDUSTRY', 'LV3_NM':'INDUSTRY_NM'})
     elif univ_country == "글로벌 유니버스":
         glob = get_global_theme_master()
     elif univ_country == "중국 유니버스":
-        glob = get_ch_theme_master().rename(columns={'sector':'SECTOR_NM', 'theme':'THEME_NM'})
+        glob = get_ch_theme_master().rename(columns={'sector':'SECTOR_NM', 'theme':'THEME_NM', 'industry':"INDUSTRY_NM"})
+        glob['INDUSTRY'] = glob["INDUSTRY_NM"]
     return glob
+def get_theme_ticker(univ_country):
+    master = get_theme_univ(univ_country)
+    if univ_country == "국내 유니버스":
+        glob = get_kr_theme_ticker().rename(columns={'THEME_CODE':'INDUSTRY'})
+        glob['TICKER'] = glob['CODE'].apply(lambda x: x+"-KR")
+    elif univ_country == "글로벌 유니버스":
+        glob = get_global_theme_ticker()
+        del glob['SECTOR']
+        del glob['THEME']
+        del glob['FSYM_ID']
+        del glob['NAME']
+    elif univ_country == "중국 유니버스":
+        glob = get_ch_theme_mapping().rename(columns={'industry':'INDUSTRY','sector':'SECTOR', 'theme':'THEME', 'FACTSET_TICKER':'TICKER'})
+        del glob['FSYM_ID']
+    glob_t = pd.merge(glob, master, left_on='INDUSTRY', right_on='INDUSTRY', how='left')
 
+    return glob_t
 def get_sector_univ(univ_country):
     if univ_country == "국내 유니버스":
         glob = get_kr_sector_master()#.rename(columns={'LV1_NM':'SECTOR_NM', 'LV2_NM':'THEME_NM'})
@@ -76,6 +93,10 @@ def get_factor_data(country, factor_formula, factor_formula_dict):
 
 
 if __name__=="__main__":
+    g1= get_theme_ticker(univ_country="국내 유니버스")
+    g2= get_theme_ticker(univ_country="글로벌 유니버스")
+    g3= get_theme_ticker(univ_country="중국 유니버스")
+    get_theme_univ(univ_country="국내 유니버스")
     get_sector_univ(univ_country="국내 유니버스")
     factor_formula = get_factor_formula()
     factor_formula = factor_formula[['factor', 'descriptor']].groupby(by=['factor']).agg(

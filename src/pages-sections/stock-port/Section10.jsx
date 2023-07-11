@@ -186,7 +186,6 @@ useEffect(() => {
     console.log(rmticker)
     setActive4(categories3[active2][active3][0]);
     setActive5(cate4[active2][active3][active4][0]);
-    getAreaData()
 }, [active2]);
 
 useEffect(() => {
@@ -220,7 +219,6 @@ useEffect(() => {
     }
     console.log(active5)
     setLoad(true)
-    getAreaData()
 
 }, [active4]);
 
