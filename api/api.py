@@ -188,10 +188,12 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
         # df_bf = read_pickle('model_score_add2')
         if strategy=="테마":
             df_master = get_global_theme_master()
+            # df_master = get_theme_ticker(country)
             df_ticker = get_global_theme_ticker()
             df = pd.merge(df_ticker, df_master, left_on=['INDUSTRY', 'SECTOR', 'THEME'],
-                          right_on=['INDUSTRY', 'SECTOR', 'THEME'], how='left')
+                          right_on=['INDUSTRY', 'SECTOR', 'THEME'], how='inner')
             df = df[df['THEME_NM']==theme]
+            print(df)
         elif strategy == "섹터":
             df = get_sector_univ(country)
             df = df[df['GICS_LV2_NAME'] == theme]
@@ -242,15 +244,16 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
 
 
     else:
+        factor_nm = '400130'
         if theme=="건전한 재무재표 전략지수":
-            factor = '400130' # WEBQM..WEB_GQPM_ACCT
+            factor_nm = '400130' # WEBQM..WEB_GQPM_ACCT
         elif theme=="주주환원지수":
-            factor = '600100'
+            factor_nm = '600100'
         elif theme=="Capex와 R&D 지수":
-            factor = '400100'
+            factor_nm = '400100'
         elif theme == "배당성장주":
-            factor = '400120'
-        df = get_factor(factor, td='20230201')
+            factor_nm = '400120'
+        df = get_factor(factor_nm, td='20230201')
         wgt_df = get_factor('600100', td='20230201')
         df = df.drop_duplicates(subset=['FSYM_ID'])
         wgt_df = wgt_df.drop_duplicates(subset=['FSYM_ID'])
