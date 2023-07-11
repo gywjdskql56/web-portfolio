@@ -1,6 +1,6 @@
 import pandas as pd
 # import pickle
-import pickle5 as pickle
+import pickle
 import pymssql
 from qpmsdb import *
 def save_pickle(df, file_nm):

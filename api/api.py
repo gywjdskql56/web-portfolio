@@ -224,7 +224,7 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
         df['country'] = df['TICKER'].apply(lambda x: nm_dict[x] if x in nm_dict.keys() else 'etc')
         for val, fac in zip(factor, factor_formula_dict.keys()):
             df['size'] += df[fac].fillna(0)*float(val)*0.01
-        df = df.sort_values(by='size',ascending=False).iloc[:min(int(num),len(df))]
+        df = df.sort_values(by='size',ascending=False)
         total_sum = float(df['size'].sum())
         df['wgt'] = df['size'].apply(lambda x : float(x)/total_sum*100)
         sec_explain_2 = read_pickle('sec_explain_2')
@@ -268,7 +268,7 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
         total_sum = df['WGT'].sum()
         df['wgt'] = df['WGT'].apply(lambda x : x/total_sum*100)
         df['country'] = df['COUNTRY_NAME']
-        df = df.rename(columns={'NAME':'name'})
+        df = df.rename(columns={'NAME':'name'}).fillna(0)
         explain = ""
 
     table_list = list()
@@ -294,9 +294,10 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
     if country=='국내 유니버스':
         price = get_kr_stock_pr(df['TICKER'].dropna().tolist() + [bm], td='20220101')
     else:
-        price = get_us_stock_pr(df['TICKER'].dropna().tolist()+[bm], td='20220101') #get_us_stock_pr_by_ticker(df['TICKER'].dropna().tolist()+[bm], td='20220101')
+        price = get_us_stock_pr_by_ticker(df['TICKER'].dropna().tolist()+[bm], td='20220101') #get_us_stock_pr_by_ticker(df['TICKER'].dropna().tolist()+[bm], td='20220101')
     # kr_price = get_kr_stock_pr(df['TICKER'].dropna().tolist()+[bm], td='20220101')
-    if price is not None:
+    price = price[price.columns[:min(int(num), len(price.columns))]]
+    if price is not None and len(price) !=0:
         rtn = price.pct_change().fillna(0)
         total_rtn = None
         idx = 0

@@ -121,10 +121,15 @@ const [value, setValue] = useState(10);
 const [cate2, setCate2] = useState(categories2);
 const [cate3, setCate3] = useState(categories3);
 const [cate4, setCate4] = useState(categories4);
-console.log("cate3:",cate3)
+console.log("cate3:",categories3)
 console.log("active3:",active3)
-console.log("cate3[active3]:",cate3[active3])
+console.log("cate3[active3]:",categories3[active2][active3])
 console.log("cate4:",cate4)
+console.log("cate4:",cate4[active2])
+console.log("cate4:",cate4[active2][active3])
+console.log("cate4:",cate4[active2][active3][active4])
+console.log("active2:",active2)
+console.log("active3:",active3)
 console.log("active4:",active4)
 const [portdata, setPortData] = useState("");
 const [rmticker, setRMticker] = useState(["제외종목"]);
@@ -134,7 +139,7 @@ function getAreaData() {
     console.log(url.concat(`/di_univ/${active2}_${active3}_${active4}_${active5}_${rmticker.join('|')}_${value}_${valuelist.join('|')}`))
     fetch(url.concat(`/di_univ/${active2}_${active3}_${active4}_${active5}_${rmticker.join('|')}_${value}_${valuelist.join('|')}`), { method: 'GET' })
     .then(data => data.json())
-    .then(json => {setPortData(json); console.log(active3);console.log(cate3);console.log(cate3[active3]); })
+    .then(json => {setPortData(json); console.log(active3);console.log(categories3);console.log(categories3[active2][active3]); })
     .then(json => {setOpen(true);})
 
 }
@@ -142,7 +147,7 @@ function getUniv(item){
     console.log("getUniv")
     fetch(url.concat(`/DI_univ_by_country/${active2}_${item}`), { method: 'GET' })
     .then(data => data.json())
-    .then(json => {setCate3(json["LV1"]); console.log(json);  console.log(json["LV1"][active3][0]);  setActive4(json["LV1"][active3][0]); setActive3(item)})
+    .then(json => {setCate3(json["LV1"][cate3]); console.log(json);  console.log(json["LV1"][active3][0]);  setActive4(json["LV1"][active3][0]); setActive3(item)})
 }
   const handleSliderChange = (event, newValue) => {
     setValue(newValue);
@@ -178,26 +183,28 @@ const factors = ['GROWTH','PRICE_MOM','QUALITY','SENTIMENT','SIZE','VALUE']
 
 useEffect(() => {
     console.log(rmticker)
+    setActive4(categories3[active2][active3][0]);
+    setActive5(cate4[active2][active3][active4][0]);
 }, [active2]);
 
 useEffect(() => {
     console.log(active3)
     console.log(categories3)
-    console.log(categories3[active3][0])
-    setActive4(categories3[active3][0])
+    console.log(categories3[active2][active3][0])
+    setActive4(categories3[active2][active3][0])
     fetch(url.concat(`/DI_univ_by_country/${active2}_${active3}`), { method: 'GET' })
     .then(data => data.json())
-    .then(json => {setCate3(json["LV1"]); console.log(json);  console.log(json["LV1"][active3][0]);  setActive4(json["LV1"][active3][0])}) // setActive4(json["LV2"][json["LV1"][active3][0]][0])
+    .then(json => {setCate3(json["LV1"][cate3]); console.log(json);  console.log(json["LV1"][active3][0]);  setActive4(json["LV1"][active3][0])}) // setActive4(json["LV2"][json["LV1"][active3][0]][0])
 }, [active3]);
 
 useEffect(() => {
-    console.log(cate4[active4])
+    console.log(cate4[active2][active3][active4])
     console.log({'name': active5})
     console.log({name: active5})
-    console.log((cate4[active4]).includes({'name': active5}))
-    console.log((cate4[active4]).includes({name: active5}))
+    console.log((cate4[active2][active3][active4]).includes({'name': active5}))
+    console.log((cate4[active2][active3][active4]).includes({name: active5}))
     var tf = false
-    for (var ac5 of (cate4[active4])){
+    for (var ac5 of (cate4[active2][active3][active4])){
     if (ac5 ==active5){
     tf=true
     }
@@ -205,7 +212,7 @@ useEffect(() => {
     console.log('tf')
     console.log(tf)
     if (tf==false){
-    setActive5(cate4[active4][0])
+    setActive5(cate4[active2][active3][active4][0])
     }
     console.log(active5)
     setLoad(true)
@@ -347,7 +354,7 @@ const state = {
         <Grid item lg={4} md={6} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
-                    onClick={() => {setActive2(item);}}
+                    onClick={() => {setActive2(item); setActive4(categories3[active2][active3][0]); setActive5(cate4[active2][active3][active4][0]); }}
                     style={{ backgroundColor: active2==item ? "#043B72" : "", color: active2==item ? "white" : "black"  }}
                 elevation={1}>
                   <Box fontWeight="600" ml={1.25} fontSize={20}>
@@ -363,7 +370,7 @@ const state = {
         <Grid item lg={4} md={6} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
-                    onClick={() => { getUniv(item); console.log(item); }}
+                    onClick={() => { setActive3(item); setActive4(categories3[active2][active3][0]); setActive5(cate4[active2][active3][active4][0]); }}
                     style={{ backgroundColor: active3==item ? "#043B72" : "", color: active3==item ? "white" : "black"  }}
                 elevation={1}>
                   <Box fontWeight="600" ml={1.25} fontSize={20}>
@@ -375,11 +382,11 @@ const state = {
           )}
           <Container sx={{ mb: "20px" }} />
           <HorizonLine text="투자 유니버스 선택 (대분류)" />
-         {cate3[active3].map((item, ind) =>
+         {categories3[active2][active3].map((item, ind) =>
         <Grid item lg={3} md={6} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
-                    onClick={() => {setActive4(item); setActive5(cate4[active4][0]);  console.log('click 4'); }}
+                    onClick={() => {setActive4(item); setActive5(cate4[active2][active3][active4][0]);  console.log('click 4'); }}
                     style={{ backgroundColor: active4==item ? "#043B72" : "", color: active4==item ? "white" : "black"  }}
                 elevation={1}>
                   <Box fontWeight="600" ml={1.25} fontSize={20}>
@@ -416,7 +423,7 @@ const state = {
           </Typography>
         </Box>
       </Modal>
-         {cate4[active4].map((item, ind) =>
+         {cate4[active2][active3][active4].map((item, ind) =>
         <Grid item lg={12/5} md={3} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
