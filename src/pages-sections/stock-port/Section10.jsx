@@ -354,7 +354,7 @@ const state = {
         <Grid item lg={4} md={6} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
-                    onClick={() => {setActive2(item); setActive4(categories3[item][active3][0]); setActive5(cate4[item][active3][active4][0]); }}
+                    onClick={() => {setActive2(item); setActive4(categories3[item][active3][0]); setActive5(categories4[item][active3][active4][0]); }}
                     style={{ backgroundColor: active2==item ? "#043B72" : "", color: active2==item ? "white" : "black"  }}
                 elevation={1}>
                   <Box fontWeight="600" ml={1.25} fontSize={20}>
@@ -370,7 +370,7 @@ const state = {
         <Grid item lg={4} md={6} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
-                    onClick={() => { setActive3(item); setActive4(categories3[active2][item][0]); setActive5(cate4[active2][item][active4][0]); }}
+                    onClick={() => { console.log(item);setActive3(item); setActive4(categories3[active2][item][0]); setActive5(categories4[active2][item][active4][0]); }}
                     style={{ backgroundColor: active3==item ? "#043B72" : "", color: active3==item ? "white" : "black"  }}
                 elevation={1}>
                   <Box fontWeight="600" ml={1.25} fontSize={20}>
