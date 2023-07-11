@@ -35,7 +35,7 @@ def get_sector_univ(univ_country):
         glob = glob[glob['GICS_LV1']!='']
     elif univ_country == "중국 유니버스":
         glob = get_ch_sector_master().rename(columns={'name_en':'NAME'})
-        glob['TICKER'] = glob['FSYM_ID']
+        glob['TICKER'] = glob['FACTSET_TICKER']
     gics_master = get_gics_master()
     sector_dict = gics_master[['SECTOR', 'SECTOR_NAME']].drop_duplicates(['SECTOR']).set_index('SECTOR')['SECTOR_NAME'].to_dict()
     industry_dict = gics_master[['INDUSTRY_GROUP', 'INDUSTRY_GROUP_NAME']].drop_duplicates(['INDUSTRY_GROUP']).set_index('INDUSTRY_GROUP')['INDUSTRY_GROUP_NAME'].to_dict()

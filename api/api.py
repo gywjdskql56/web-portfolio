@@ -225,11 +225,11 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
         for val, fac in zip(factor, factor_formula_dict.keys()):
             df['size'] += df[fac].fillna(0)*float(val)*0.01
         df = df.sort_values(by='size',ascending=False)
-        df['size'] += 0.02
+        df['size'] = df['size'].fillna(0.02)
         df = df.iloc[:min(len(df.index), int(num))]
         total_sum = float(df['size'].sum())
-        df['wgt'] = df['size'].apply(lambda x : float(x)/total_sum*100)
-        df['wgt'] = df['wgt'].fillna(0)
+        df['wgt'] = df['size'].apply(lambda x : float(x)/total_sum*100).fillna(0.5)
+        df['wgt'] = df['wgt']
         sec_explain_2 = read_pickle('sec_explain_2')
         if theme in sec_explain_2.keys():
             explain = read_pickle('sec_explain_2')[theme]
@@ -268,8 +268,8 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
                             axis=1)
         df = df[df['TF'] == True]
         df = df.iloc[:min(len(df.index), int(num))]
-
-        total_sum = df['WGT'].fillna(0).sum()
+        df['WGT'] = df['WGT'].fillna(0)
+        total_sum = df['WGT'].sum()
         df['wgt'] = df['WGT'].apply(lambda x : x/total_sum*100)
         df['country'] = df['COUNTRY_NAME']
         df = df.rename(columns={'NAME':'name'}).fillna(0)
@@ -299,6 +299,7 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
     if country=='국내 유니버스':
         price = get_kr_stock_pr(df['TICKER'].dropna().tolist() + [bm], td='20220101')
     else:
+        print(df['TICKER'].dropna().tolist()+[bm])
         price = get_us_stock_pr_by_ticker(df['TICKER'].dropna().tolist()+[bm], td='20220101') #get_us_stock_pr_by_ticker(df['TICKER'].dropna().tolist()+[bm], td='20220101')
     # kr_price = get_kr_stock_pr(df['TICKER'].dropna().tolist()+[bm], td='20220101')
     price = price[price.columns[:min(int(num), len(price.columns))]]
@@ -370,7 +371,7 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
                                round((rtn_val_list[-22 * 2 + 15] / rtn_val_list[-2] - 1) * 100, 2)) + "%"}]
 
         pie = list()
-        pie_data = df.groupby('TICKER')['wgt'].sum().to_dict()
+        pie_data = df.groupby('INDUSTRY_NM')['wgt'].sum().to_dict()
         for key in pie_data.keys():
             pie.append({
                 "id": key,
