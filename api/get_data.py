@@ -36,8 +36,9 @@ def get_theme_ticker(univ_country):
         del glob['FSYM_ID']
         del glob['NAME']
     elif univ_country == "중국 유니버스":
+        nm = get_ch_sector_master()
         glob = get_ch_theme_mapping().rename(columns={'industry':'INDUSTRY','sector':'SECTOR', 'theme':'THEME', 'FACTSET_TICKER':'TICKER'})
-        del glob['FSYM_ID']
+        glob = pd.merge(nm, glob, left_on='FACTSET_TICKER', right_on='TICKER').rename(columns={'name_en': "NAME"})
     glob_t = pd.merge(glob, master, left_on='INDUSTRY', right_on='INDUSTRY', how='left')
 
     return glob_t
