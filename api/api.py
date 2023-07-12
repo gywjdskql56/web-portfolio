@@ -192,7 +192,7 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
             df_ticker = get_global_theme_ticker()
             if country=="중국 유니버스":
                 del df_ticker['NAME']
-                df_ticker['name'] = df_ticker['NAME']
+                df_master['name'] = df_master['NAME']
             df = pd.merge(df_ticker, df_master, left_on=['INDUSTRY', 'SECTOR', 'THEME', 'TICKER'],
                           right_on=['INDUSTRY', 'SECTOR', 'THEME', 'TICKER'], how='right')
             df = df[df['THEME_NM']==theme]
