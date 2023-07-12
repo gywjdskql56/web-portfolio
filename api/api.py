@@ -187,11 +187,11 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
         # df = read_pickle('테마DI스코어')
         # df_bf = read_pickle('model_score_add2')
         if strategy=="테마":
-            df_master = get_global_theme_master()
-            # df_master = get_theme_ticker(country)
+            # df_master = get_global_theme_master()
+            df_master = get_theme_ticker(country)
             df_ticker = get_global_theme_ticker()
-            df = pd.merge(df_ticker, df_master, left_on=['INDUSTRY', 'SECTOR', 'THEME'],
-                          right_on=['INDUSTRY', 'SECTOR', 'THEME'], how='inner')
+            df = pd.merge(df_ticker, df_master, left_on=['INDUSTRY', 'SECTOR', 'THEME', 'TICKER'],
+                          right_on=['INDUSTRY', 'SECTOR', 'THEME', 'TICKER'], how='right')
             df = df[df['THEME_NM']==theme]
             print(df)
         elif strategy == "섹터":
@@ -230,7 +230,7 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
         df['size'] = df['size'].fillna(0.02)
         df = df.iloc[:min(len(df.index), int(num))]
         total_sum = float(df['size'].sum())
-        df['wgt'] = df['size'].apply(lambda x : float(x)/total_sum*100).fillna(0.5)
+        df['wgt'] = df['size'].apply(lambda x : float(x)/total_sum*100).fillna(0.02)
         df['wgt'] = df['wgt']
         sec_explain_2 = read_pickle('sec_explain_2')
         if theme in sec_explain_2.keys():
@@ -277,6 +277,7 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
         df['country'] = df['COUNTRY_NAME']
         df = df.rename(columns={'NAME':'name'}).fillna(0)
         explain = ""
+        df['CODE'] = df['TICKER'].apply(lambda x: x.replace('-KR',''))
 
 
     table_list = list()
@@ -300,7 +301,8 @@ def DI_theme_port(country, strategy, sector, theme, rmticker, num, factor):
     print({"area" : {"name": "포트폴리오", "color": "hsl(336, 70%, 50%)", "children": area_data}})
 
     if country=='국내 유니버스':
-        price = get_kr_stock_pr(df['TICKER'].dropna().tolist() + [bm], td='20220101')
+
+        price = get_kr_stock_pr(df['CODE'].dropna().tolist() + [bm], td='20220101')
     else:
         print(df['TICKER'].dropna().tolist()+[bm])
         price = get_us_stock_pr_by_ticker(df['TICKER'].dropna().tolist()+[bm], td='20220101') #get_us_stock_pr_by_ticker(df['TICKER'].dropna().tolist()+[bm], td='20220101')

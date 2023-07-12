@@ -43,7 +43,7 @@ def get_theme_ticker(univ_country):
     return glob_t
 def get_sector_univ(univ_country):
     if univ_country == "국내 유니버스":
-        glob = get_kr_sector_master()#.rename(columns={'LV1_NM':'SECTOR_NM', 'LV2_NM':'THEME_NM'})
+        glob = get_kr_sector_master() #.rename(columns={'LV1_NM':'SECTOR_NM', 'LV2_NM':'THEME_NM'})
         glob['FSYM_ID'] = glob['CODE']
         glob['TICKER'] = glob['CODE']
         glob['NAME'] = glob['BBG_TICKER']

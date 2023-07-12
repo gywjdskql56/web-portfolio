@@ -137,6 +137,11 @@ const [rmticker, setRMticker] = useState(["제외종목"]);
 const [valuelist, setValueList] = React.useState([0,0,0,0,0,0]);
 
 function getAreaData() {
+    console.log("getAreaData")
+    console.log(active2)
+    console.log(active3)
+    console.log(active4)
+    console.log(active5)
     console.log(url.concat(`/di_univ/${active2}_${active3}_${active4}_${active5}_${rmticker.join('|')}_${value}_${valuelist.join('|')}`))
     fetch(url.concat(`/di_univ/${active2}_${active3}_${active4}_${active5}_${rmticker.join('|')}_${value}_${valuelist.join('|')}`), { method: 'GET' })
     .then(data => data.json())
@@ -192,8 +197,9 @@ useEffect(() => {
     console.log(active3)
     console.log(categories3)
     setActive4(categories3[active2][active3][0]);
-    setActive5(categories4[active2][active3][active4][0]);
-    getAreaData()
+    setActive5(categories4[active2][active3][categories3[active2][active3][0]][0]);
+    console.log("getAreaData - active3")
+    {/*getAreaData()*/}
     {/*fetch(url.concat(`/DI_univ_by_country/${active2}_${active3}`), { method: 'GET' })
     .then(data => data.json())
     .then(json => {setCate3(json["LV1"][cate3]); console.log(json);  console.log(json["LV1"][active3][0]);  setActive4(json["LV1"][active3][0])}) // setActive4(json["LV2"][json["LV1"][active3][0]][0])
@@ -226,17 +232,23 @@ useEffect(() => {
 useEffect(() => {
     console.log(active4)
     console.log(active5)
+    console.log("getAreaData - active5")
     getAreaData()
+
 }, [active5]);
 
 useEffect(() => {
     console.log(value)
+    console.log("getAreaData - value")
     getAreaData()
+
 }, [value]);
 
 useEffect(() => {
     console.log(value)
+    console.log("getAreaData - valuelist")
     getAreaData()
+
 }, [valuelist]);
 
 
@@ -357,7 +369,19 @@ const state = {
         <Grid item lg={4} md={6} sm={6} xs={12} key={ind}>
                 <a>
                 <StyledBazaarCard
-                    onClick={() => {setActive2(item); setActive4(categories3[item][active3][0]); setActive5(categories4[item][active3][active4][0]); }}
+                    onClick={() => {
+                    setActive2(item);
+                    setActive4(categories3[item][active3][0]);
+                    console.log(categories3[item][active3][0]);
+                    console.log(categories3[item][active3][0]);
+                    console.log(categories4[item][active3]);
+                    console.log(active4);
+                    console.log(categories4[item][active3][active4]);
+                    console.log(categories4[item][active3][categories3[item][active3][0]][0]);
+                    setActive5(categories4[item][active3][categories3[item][active3][0]][0]);
+                    console.log("getAreaData - 382")
+                    getAreaData()
+                    }}
                     style={{ backgroundColor: active2==item ? "#043B72" : "", color: active2==item ? "white" : "black"  }}
                 elevation={1}>
                   <Box fontWeight="600" ml={1.25} fontSize={20}>

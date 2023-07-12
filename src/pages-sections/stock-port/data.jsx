@@ -1,5 +1,5 @@
 // 카테고리 데이터
-export const categories1 = [ "글로벌 유니버스", "국내 유니버스" ];
+export const categories1 = [ "글로벌 유니버스", "국내 유니버스", "중국 유니버스" ];
 export const categories2 = [ "테마", "전략","섹터" ];
 
 export const categories3 = {

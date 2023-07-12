@@ -165,7 +165,13 @@ def get_ch_theme_master():
     '''
     result = get_df(sql)
     return result
-
+def get_ch_theme_mapping():
+    sql = '''
+    select *
+    from WEBQM..STOCK_THEME_MAPPING_CHN
+    '''
+    result = get_df(sql)
+    return result
 # todo :
 def get_global_theme_master(): #글로벌 테마
     sql = '''SELECT * FROM WEBQM..THEME_MAST '''
@@ -234,7 +240,8 @@ def get_kr_stock_pr(id_list, td):
     '''.format(td, '\',\''.join(id_list))
     result = get_df(sql)
     result = result.rename(columns={"CODE":"FSYM_ID", "TD":"BASE_DT", "CLOSE_AP":"P_PRICE"})
-    # result["FSYM_ID"] = result["FSYM_ID"].apply(lambda x: x+'-KS')
+    result["TICKER"] = result["FSYM_ID"].apply(lambda x: x+'-KR')
+    result["FSYM_ID"] = result["FSYM_ID"].apply(lambda x: x+'-KR')
     result = result.pivot(index='BASE_DT', columns='FSYM_ID', values='P_PRICE').bfill().ffill()
     return result
 
