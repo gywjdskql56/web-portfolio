@@ -240,7 +240,7 @@ useEffect(() => {
       >
         <Box sx={style}>
           <CardMedia
-            src={"/assets/images/port/port_"+image+".png"}
+            src={"/assets/images/port/port_"+image+"_v2.png"}
             component="img"
             title={"title"}
             sx={{
