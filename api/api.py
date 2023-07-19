@@ -8,7 +8,7 @@ from get_data import *
 from datetime import datetime
 import random
 import re
-import pickle5 as pickle
+import pickle
 warnings.filterwarnings("ignore")
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -81,6 +81,7 @@ def suggest_port(port, type):
             magi_port_pre['코드2'] = magi_port_pre['코드'].apply(lambda x: x+"-KS" if len(str(re.sub('[0-9]','',str(x))))==0 else x+'-US' )
             pr_df_pre = get_us_stock_pr_by_ticker(magi_port_pre['코드2'].tolist(), td='20221231')
             returns_pre = pr_df_pre.pct_change().fillna(0)
+
             magi_port = pd.read_excel('org-data/suggest/{}.xlsx'.format(port), sheet_name=type)
             magi_port['코드'] = magi_port['코드'].apply(
                 lambda x: '0' * (6 - len(str(x))) + str(x) if len(str(re.sub('[0-9]', '', str(x)))) == 0 else str(x))
@@ -88,6 +89,15 @@ def suggest_port(port, type):
                 lambda x: x + "-KS" if len(str(re.sub('[0-9]', '', str(x)))) == 0 else x + '-US')
             pr_df = get_us_stock_pr_by_ticker(magi_port['코드2'].tolist(), td='20221231')
             returns = pr_df.pct_change().fillna(0)
+
+            magi_port_ft = pd.read_excel('org-data/suggest/{}_33.xlsx'.format(port), sheet_name=type)
+            magi_port_ft['코드'] = magi_port_ft['코드'].apply(
+                lambda x: '0' * (6 - len(str(x))) + str(x) if len(str(re.sub('[0-9]', '', str(x)))) == 0 else str(x))
+            magi_port_ft['코드2'] = magi_port_ft['코드'].apply(
+                lambda x: x + "-KS" if len(str(re.sub('[0-9]', '', str(x)))) == 0 else x + '-US')
+            pr_df = get_us_stock_pr_by_ticker(magi_port_ft['코드2'].tolist(), td='20221231')
+            returns_ft = pr_df.pct_change().fillna(0)
+
         elif port[-4:] == "(국내)":
             magi_port_pre = pd.read_excel('org-data/suggest/{}_22.xlsx'.format(port), sheet_name=type)
             magi_port_pre['코드'] = magi_port_pre['코드'].apply(lambda x: '0' * (6 - len(str(x))) + str(x) if len(str(re.sub('[0-9]','',str(x))))==0 else str(x))
@@ -100,6 +110,12 @@ def suggest_port(port, type):
             magi_port['코드2'] = magi_port['코드'].apply(lambda x: x if len(str(re.sub('[0-9]','',str(x))))==0 else x+'-US' )
             pr_df = get_kr_stock_pr_by_ticker(magi_port['코드2'].tolist(), td='20221231')
             returns = pr_df.pct_change().fillna(0)
+
+            magi_port_ft = pd.read_excel('org-data/suggest/{}_33.xlsx'.format(port), sheet_name=type)
+            magi_port_ft['코드'] = magi_port_ft['코드'].apply(lambda x: '0' * (6 - len(str(x))) + str(x) if len(str(re.sub('[0-9]','',str(x))))==0 else str(x))
+            magi_port_ft['코드2'] = magi_port_ft['코드'].apply(lambda x: x if len(str(re.sub('[0-9]','',str(x))))==0 else x+'-US' )
+            pr_df = get_kr_stock_pr_by_ticker(magi_port_ft['코드2'].tolist(), td='20221231')
+            returns_ft = pr_df.pct_change().fillna(0)
         else:
             magi_port_pre = pd.read_excel('org-data/suggest/{}_22.xlsx'.format(port), sheet_name=type)
             magi_port_pre['코드'] = magi_port_pre['코드'].apply(lambda x: '0' * (6 - len(str(x))) + str(x) if len(str(re.sub('[0-9]','',str(x))))==0 else str(x))
@@ -122,6 +138,19 @@ def suggest_port(port, type):
                 pr_df = pr_df_kr
             returns = pr_df.pct_change().fillna(0)
 
+            magi_port_ft = pd.read_excel('org-data/suggest/{}.xlsx'.format(port), sheet_name=type)
+            magi_port_ft['코드'] = magi_port_ft['코드'].apply(lambda x: '0' * (6 - len(str(x))) + str(x) if len(str(re.sub('[0-9]','',str(x))))==0 else str(x))
+            magi_port_ft['코드2'] = magi_port_ft['코드'].apply(lambda x: x if len(str(re.sub('[0-9]','',str(x))))==0 else x+'-US' )
+            pr_df_us = get_us_stock_pr_by_ticker(magi_port_ft['코드2'].tolist(), td='20221231')
+            pr_df_kr = get_kr_stock_pr_by_ticker(list(map(lambda x:x.replace("-KS",'') ,magi_port_pre['코드2'].tolist())), td='20221231')
+            if len(pr_df_us) > 0 and len(pr_df_kr)>0:
+                pr_df = pd.merge(pr_df_us, pr_df_kr,left_index=True,right_index=True)
+            elif len(pr_df_us) > 0:
+                pr_df = pr_df_us
+            elif len(pr_df_kr) > 0:
+                pr_df = pr_df_kr
+            returns_ft = pr_df.pct_change().fillna(0)
+
         # returns_pre = (returns_pre+1).cumprod()
         returns_pre['total'] = 0
         wgt_dict = magi_port_pre[['코드2', '비중2']].set_index('코드2')['비중2'].to_dict()
@@ -133,7 +162,13 @@ def suggest_port(port, type):
         wgt_dict = magi_port[['코드2', '비중2']].set_index('코드2')['비중2'].to_dict()
         for col in list(set(wgt_dict.keys()) & set(returns.columns)):
             returns['total'] += returns[col] * wgt_dict[col]
-        total_returns = pd.concat([returns_pre.loc[:'20230401'][['total']], returns.loc['20230401':][['total']]])
+
+        returns_ft['total'] = 0
+        wgt_dict = magi_port[['코드2', '비중2']].set_index('코드2')['비중2'].to_dict()
+        for col in list(set(wgt_dict.keys()) & set(returns_ft.columns)):
+            returns_ft['total'] += returns_ft[col] * wgt_dict[col]
+
+        total_returns = pd.concat([returns_pre.loc[:'20230401'][['total']], returns.loc['20230401':][['total']], returns_ft.loc['20230701':][['total']]])
         total_returns = (total_returns + 1).cumprod()
         rows = list()
         count = 0
