@@ -1,5 +1,6 @@
 import pandas as pd
 # import pickle
+from config import *
 import pymssql
 from qpmsdb import *
 def save_pickle(df, file_nm):

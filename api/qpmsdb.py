@@ -1,4 +1,4 @@
-import pickle5 as pickle
+from config import *
 import pandas as pd
 import pymssql
 
@@ -227,6 +227,15 @@ def get_gics():
     sql = '''
     SELECT DISTINCT INDUSTRY_GROUP, INDUSTRY_GROUP_NAME 
     FROM AGGR..MSCI_GICS_CODE 
+    '''
+    result = get_df(sql)
+    return result
+def temp():
+    sql = '''
+    select top 100 * 
+    from MARKET..CA
+    where 1=1
+    and CODE in ('396500','143860','267300','088990','334890','088260','137610','319640','394670','139310','114820')  
     '''
     result = get_df(sql)
     return result
@@ -736,7 +745,15 @@ def get_perform_table():
     return result
 
 if __name__ == "__main__":
-    # china = get_all_theme_ch()
+    ticker_list = ["058470","005290","357780","272290","365340","361610","093370","079550","064960","00088K"]
+    kr_pr = get_kr_stock_pr(ticker_list, td='20230101')
+    id_list = ["BLDR-US","KLAC-US","HSY-US","ADI-US","OC-US","CAT-US","ABBV-US","6988-JP","8058-JP","8031-JP"]
+    us_pr = get_us_stock_pr_by_ticker(id_list, td='20230101')
+    tiger_etf = ["396500","143860","174350","088980","334890","088260","137610","319640","394670","139310","114820","411060", "160580"]
+    etf_pr = get_kr_stock_pr(tiger_etf, td='20230101')
+    ex_etf = set(list(map(lambda x: x + "-KR", tiger_etf))) - set(etf_pr.columns)
+
+
     kr_ticker = get_kr_theme_ticker()
     kr = get_kr_theme_univ()
     kr_univ = pd.merge(kr, kr_ticker, left_on='LV3', right_on='THEME_CODE', how='right')

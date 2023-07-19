@@ -1,5 +1,6 @@
 from qpmsdb import *
 import redis
+from config import *
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 def save_pickle(df, file_nm):

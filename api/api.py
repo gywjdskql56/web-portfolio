@@ -8,7 +8,7 @@ from get_data import *
 from datetime import datetime
 import random
 import re
-import pickle
+from config import *
 warnings.filterwarnings("ignore")
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False

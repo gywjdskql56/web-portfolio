@@ -25,7 +25,10 @@ import plotly.graph_objs as go
 import seaborn as sns
 import plotly.graph_objects as go
 import ipywidgets as widgets
-import pickle5 as pickle
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+from config import *
 # notebook formatting
 from IPython.display import clear_output
 from IPython.core.display import HTML, display
